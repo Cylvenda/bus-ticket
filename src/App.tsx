@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   return (
-    <ThemeProvider defaultTheme="dark" >
+    <ThemeProvider defaultTheme="light" >
       <ToastContainer theme="colored" />
       <AppRoutes />
     </ThemeProvider>

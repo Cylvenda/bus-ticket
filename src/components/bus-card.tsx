@@ -55,7 +55,7 @@ const BusCard = ({
                         <p className="font-semibold text-lg">
                             TZS {price.toLocaleString()}
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs ">
                             {seatsLeft} seats left
                         </p>
                     </div>
