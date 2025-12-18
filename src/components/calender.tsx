@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ChevronDownIcon } from "lucide-react"
+import {CalendarDays} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -27,7 +27,7 @@ export function SetCalendar() {
                         className="w-full md:w-48 justify-between font-normal"
                     >
                         {date ? date.toLocaleDateString() : "Select date"}
-                        <ChevronDownIcon />
+                        <CalendarDays   />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto overflow-hidden p-0" align="start">
@@ -40,6 +40,8 @@ export function SetCalendar() {
                             setOpen(false)
 
                         }}
+                        disabled={{ before: new Date() }} 
+                        toYear={new Date().getFullYear() + 2} 
                     />
                 </PopoverContent>
             </Popover>

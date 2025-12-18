@@ -17,44 +17,27 @@ import {
 } from "@/components/ui/command"
 import { Label } from "@/components/ui/label"
 
-const routes = [
-    { value: "dar-es-salaam", label: "Dar es Salaam" },
-    { value: "dodoma", label: "Dodoma" },
-    { value: "arusha", label: "Arusha" },
-    { value: "moshi", label: "Moshi" },
-    { value: "mwanza", label: "Mwanza" },
-    { value: "tanga", label: "Tanga" },
-    { value: "morogoro", label: "Morogoro" },
-    { value: "iringa", label: "Iringa" },
-    { value: "mbeya", label: "Mbeya" },
-    { value: "songea", label: "Songea" },
-    { value: "singida", label: "Singida" },
-    { value: "tabora", label: "Tabora" },
-    { value: "kigoma", label: "Kigoma" },
-    { value: "shinyanga", label: "Shinyanga" },
-    { value: "kahama", label: "Kahama" },
-    { value: "bukoba", label: "Bukoba" },
-    { value: "musoma", label: "Musoma" },
-    { value: "babati", label: "Babati" },
-    { value: "njombe", label: "Njombe" },
-    { value: "lindi", label: "Lindi" },
-    { value: "mtwara", label: "Mtwara" },
-    { value: "rombo", label: "Rombo" },
-]
+type routesType = {
+    value: string,
+    label: string
+}
 
-export function SearchableSelect({
-                                     label,
-                                     placeholder,
-                                     value,
-                                     onChange,
-                                     disabledValue,
-                                 }: {
+type selectableProps = {
     label: string
     placeholder: string
     value: string
     onChange: (value: string) => void
     disabledValue?: string
-}) {
+    routes: routesType[]
+}
+export function SearchableSelect({
+    label,
+    placeholder,
+    value,
+    onChange,
+    disabledValue,
+    routes = [],
+}: selectableProps) {
     const [open, setOpen] = React.useState(false)
 
     const selectedLabel =

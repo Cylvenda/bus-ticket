@@ -10,6 +10,7 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
+import {assets} from "@/assets/assets.ts";
 
 /* =========================
    Menu Data
@@ -68,22 +69,23 @@ export function NavigationMenuHome() {
             <NavigationMenuList className="flex-wrap">
                 {/* HOME */}
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger aria-label="Home menu">
+                    <NavigationMenuTrigger aria-label="Home menu" className={"cursor-pointer"}>
                         Home
                     </NavigationMenuTrigger>
 
                     <NavigationMenuContent>
-                        <ul className="grid gap-2 md:w-100 lg:w-125 lg:grid-cols-[.75fr_1fr] bg-primary-foreground">
+                        <ul className="grid gap-2 md:w-100 lg:w-125 lg:grid-cols-[.75fr_1fr] ">
                             <li className="row-span-3">
                                 <NavigationMenuLink asChild>
                                     <Link
                                         to="/"
                                         className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none hover:bg-muted focus:shadow-md md:p-6"
                                     >
-                                        <div className="mb-2 text-lg font-medium sm:mt-4">
+                                        <img src={assets.busEmpty} alt="" width={400} height={100}/>
+                                        <div className="mb-2 text-sm font-medium sm:mt-4">
                                             Bus Ticket Booking
                                         </div>
-                                        <p className="text-muted-foreground text-sm leading-tight">
+                                        <p className="text-muted-foreground text-[12px] text-justify leading-tight">
                                             Book bus tickets easily, choose seats, and pay securely.
                                         </p>
                                     </Link>
@@ -107,12 +109,12 @@ export function NavigationMenuHome() {
 
                 {/* FEATURES */}
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger aria-label="Features menu">
+                    <NavigationMenuTrigger aria-label="Features menu" className={"cursor-pointer"}>
                         Get More
                     </NavigationMenuTrigger>
 
                     <NavigationMenuContent>
-                        <ul className="grid gap-2 sm:w-100 md:w-125 md:grid-cols-2 lg:w-150 bg-primary-foreground">
+                        <ul className="grid gap-2 sm:w-100 md:w-125 md:grid-cols-2 lg:w-150 ">
                             {components.map((item) => (
                                 <ListItem
                                     key={item.title}
@@ -128,12 +130,12 @@ export function NavigationMenuHome() {
 
                 {/* CUSTOMERS */}
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger aria-label="Customer menu">
+                    <NavigationMenuTrigger aria-label="Customer menu" className={"cursor-pointer"}>
                         Customers
                     </NavigationMenuTrigger>
 
                     <NavigationMenuContent>
-                        <ul className="grid gap-2 sm:w-100 md:w-125 md:grid-cols-2 lg:w-150 bg-primary-foreground">
+                        <ul className="grid gap-2 sm:w-100 md:w-125 md:grid-cols-2 lg:w-150 ">
                             {accountMenu.map((item) => (
                                 <ListItem
                                     key={item.title}
