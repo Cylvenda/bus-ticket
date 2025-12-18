@@ -1,9 +1,8 @@
 import { useState } from "react"
 import { SquareArrowLeft, LifeBuoy } from "lucide-react"
 import { Card } from "./ui/card"
-import { SearchableSelect } from "./searchable-select"
+import SeatSelectForm from "./seat-select-form"
 
-/* ================= TYPES ================= */
 type SeatStatus = "available" | "booked" | "selected"
 
 type Seat = {
@@ -81,31 +80,6 @@ const seatLayout: Row[] = [
     },
 ]
 
-const routes = [
-    { value: "dar-es-salaam", label: "Dar es Salaam" },
-    { value: "dodoma", label: "Dodoma" },
-    { value: "arusha", label: "Arusha" },
-    { value: "moshi", label: "Moshi" },
-    { value: "mwanza", label: "Mwanza" },
-    { value: "tanga", label: "Tanga" },
-    { value: "morogoro", label: "Morogoro" },
-    { value: "iringa", label: "Iringa" },
-    { value: "mbeya", label: "Mbeya" },
-    { value: "songea", label: "Songea" },
-    { value: "singida", label: "Singida" },
-    { value: "tabora", label: "Tabora" },
-    { value: "kigoma", label: "Kigoma" },
-    { value: "shinyanga", label: "Shinyanga" },
-    { value: "kahama", label: "Kahama" },
-    { value: "bukoba", label: "Bukoba" },
-    { value: "musoma", label: "Musoma" },
-    { value: "babati", label: "Babati" },
-    { value: "njombe", label: "Njombe" },
-    { value: "lindi", label: "Lindi" },
-    { value: "mtwara", label: "Mtwara" },
-    { value: "rombo", label: "Rombo" },
-]
-
 
 const Seat = ({
     seat,
@@ -141,10 +115,6 @@ const BusSeatMap = () => {
     const handleSelect = (id: string) => {
         setSelectedSeat(id)
     }
-
-
-    const [from, setFrom] = useState("")
-    const [to, setTo] = useState("")
 
 
     return (
@@ -240,25 +210,9 @@ const BusSeatMap = () => {
                     )}
                 </div>
 
-                <div className="w-full flex flex-row gap-3 items-center justify-center">
-                    <SearchableSelect
-                        label="Select Your Starting Point"
-                        placeholder="Select To"
-                        value={from}
-                        onChange={setFrom}
-                        disabledValue={to}
-                        routes={routes}
-                    />
+                    {/* User Form details filling goes here  */}
+                <SeatSelectForm />
 
-                    <SearchableSelect
-                        label="Select Your Starting Point"
-                        placeholder="Select To"
-                        value={to}
-                        onChange={setTo}
-                        disabledValue={from}
-                        routes={routes}
-                    />
-                </div>
 
             </div>
         </Card>

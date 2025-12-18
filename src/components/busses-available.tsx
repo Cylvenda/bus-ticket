@@ -63,10 +63,10 @@ const buses = [
     },
 ]
 
-const mockSeats = Array.from({ length: 40 }).map((_, i) => ({
-    number: `A${i + 1}`,
-    status: Math.random() > 0.75 ? "booked" : "available",
-}))
+// type seatDeailProps = {
+//     getSeatNumber: string,
+//     getSeatPrice: number
+// } 
 
 const BussesAvailable = () => {
 
@@ -88,7 +88,7 @@ const BussesAvailable = () => {
                         <EmptyState image={assets.busEmpty} title={"No Bus Available"} description={"Sorry, no bus available for this route right now. Try again later."} />
 
                         {buses.map((bus) => (
-                            <div className="flex flex-col gap-2">
+                            <div key={bus.id} className="flex flex-col gap-2">
                                 <Card key={bus.id} className="rounded-sm border-dashed border-primary flex flex-col md:flex-row items-start md:items-center justify-center px-4 md:px-8 gap-3 md:gap-10">
 
                                     {/* LEFT */}
@@ -176,7 +176,6 @@ const BussesAvailable = () => {
                                         </div>
                                     </div>
 
-
                                     {/*THIRD*/}
                                     <div className="flex flex-row gap-3 md:gap-6 items-center justify-between w-full">
 
@@ -184,7 +183,6 @@ const BussesAvailable = () => {
                                             <p className="text-[15px] font-medium ">AVAILABLE SEATS</p>
                                             <span>40</span>
                                         </div>
-
 
                                         <div className="flex flex-col gap-4 items-center justify-center ">
                                             <p className="font-medium">{bus.price}</p>
@@ -203,9 +201,11 @@ const BussesAvailable = () => {
                                 </Card>
 
                                 {/* List of seats available goes here  */}
-                                <SeatModel />
-                            </div>
+                                {
+                                    activeBus && openSeats ? <SeatModel activeBus={activeBus} /> : <></>
+                                }
 
+                            </div>
                         ))}
                     </CardContent>
                 </Card>
@@ -214,5 +214,4 @@ const BussesAvailable = () => {
         </>
     )
 }
-
 export default BussesAvailable
