@@ -55,4 +55,8 @@ export type SeatLayout = {
     special?: "door" | "driver" | "toilet"
 }
 
-
+export type PassengerRoute = {
+    selectedRouteFrom: string,
+    selectedRouteTo: string,
+    selecteDate: string
+}

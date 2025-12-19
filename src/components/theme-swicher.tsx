@@ -20,8 +20,8 @@ export function ThemeSwitcher() {
                     variant="default"
                     className="flex items-center gap-2 capitalize cursor-pointer"
                 >
-                    {theme === "light" && <Sun className="w-4 h-4" />}
-                    {theme === "dark" && <Moon color="black" className="w-4 h-4" />}
+                    {theme === "light" && <Sun color="black"  className="w-4 h-4" />}
+                    {theme === "dark" && <Moon color="white" className="w-4 h-4" />}
                     {theme === "system" && <Laptop className="w-4 h-4" />}
 
                 </Button>

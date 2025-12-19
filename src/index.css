@@ -45,6 +45,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);
@@ -119,9 +120,94 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     font-family: 'Poppins', sans-serif;
     font-style: normal;
     @apply bg-background text-foreground;
   }
+}
+
+/* Add these animations to your global CSS file or tailwind.config.js */
+
+@keyframes drive {
+  0% {
+    left: 110%;
+    transform: translateY(-50%);
+  }
+
+  100% {
+    left: -20%;
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 0.5;
+    left: 0;
+  }
+
+  100% {
+    opacity: 0;
+    left: 20%;
+  }
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+
+  50% {
+    width: 70%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+/* Tailwind CSS custom animation classes */
+.animate-drive {
+  animation: drive 3s ease-in-out infinite;
+}
+
+.animate-scroll {
+  animation: scroll 2s linear infinite;
+}
+
+.animate-fade-out {
+  animation: fade-out 1.5s ease-out infinite;
+}
+
+.animate-progress {
+  animation: progress 2s ease-in-out infinite;
+}
+
+/* Delay utilities for staggered animations */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-150 {
+  animation-delay: 0.15s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
 }

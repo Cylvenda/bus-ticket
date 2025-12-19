@@ -9,6 +9,7 @@ const LandingPage = () => {
             <section className="min-h-[85vh] bg-[url('./assets/bg.jpeg')] bg-cover bg-center bg-no-repeat flex items-center">
                 <Booking />
             </section>
+
             <Footer />
         </>
     )

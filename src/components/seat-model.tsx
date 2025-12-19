@@ -11,7 +11,7 @@ const BusSeatMap = () => {
     const selectedSeat = useBusBookingStore(state => state.selectedSeat)
 
     return (
-        <Card className="flex flex-col md:flex-row gap-5 md:gap-10 items-center justify-center p-0 md:p-5 border border-dashed border-primary w-full">
+        <Card className="flex flex-col md:flex-row gap-0 md:gap-10 items-center justify-center p-0 md:p-5 border border-dashed border-primary w-full">
 
             {/* BUS */}
             <div className=" border-none md:border-md md:border-primary rounded-none md:rounded-xl p-5 w-full md:w-90 ml-2.5 md:ml-0">
@@ -50,7 +50,7 @@ const BusSeatMap = () => {
                             ))}
                         </div>
 
-                        <div className="flex gap-2 items-center mr-4.5 md:mr-3">
+                        <div className="flex gap-2 md:mr-3">
                             {row.last?.map(seat => (
                                 <Seat key={seat.id} seat={seat} />
                             ))}
@@ -64,12 +64,14 @@ const BusSeatMap = () => {
 
                 {selectedSeat ? (
                     <>
-                        <div className="p-5" >
+                        <div className="p-3 -mb-5" >
+                            <div className="rounded-md border border-primary border-dashed p-2 ">
                             <h3 className="font-semibold text-center ">Seat Details</h3>
-                            <p>
+                            <p className="pt-5">
                                 Selected Seats:{" "}
-                                <b>{selectedSeat?.seatNumber ?? "None"}</b>
+                                <b className="text-primary">{selectedSeat?.seatNumber ?? "None"}</b>
                             </p>
+                            </div>
                         </div>
                         <SeatSelectForm />
                     </>

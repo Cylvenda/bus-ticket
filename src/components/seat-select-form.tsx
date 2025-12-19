@@ -203,7 +203,7 @@ const SeatSelectForm = () => {
                     <div className="flex flex-col items-center justify-center">
                         <div className="flex flex-row items-center justify-between w-full mb-4 mt-2 px-5 py-4 border border-primary rounded-sm">
                             <span>Total</span>
-                            <span>TZS{getTotalPrice()}</span>
+                            <span>TZS {Number(getTotalPrice()).toLocaleString()}</span>
                         </div>
                         <Button className="w-70 cursor-pointer"> Continue </Button>
                     </div>

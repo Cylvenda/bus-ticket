@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { devtools, persist } from "zustand/middleware"
-import type { Bus, SelectedSeat, PassengerInfo, Seat, SeatLayout } from "@/types/bus"
+import type { Bus, SelectedSeat, PassengerInfo, Seat, SeatLayout, PassengerRoute } from "@/types/bus"
 
 interface BusBookingState {
     availableBuses: Bus[] | null
@@ -11,12 +11,19 @@ interface BusBookingState {
     isSeatsOpen: boolean
 
     // Seat selection (SINGLE SEAT)
-    selectedSeat?: SelectedSeat | null
+    selectedSeat: SelectedSeat | null
     availableSeats: Seat[]
 
     // Passenger forms
     passengerData: PassengerInfo[]
     showForms: boolean
+
+    // Passenger route From and To 
+    passengerRoute: PassengerRoute | null  // Changed from PassengerRoute[] | null
+    filteredBuses: Bus[]  // Changed from []
+
+    // setting passenger route
+    setSelectedRoute: (passengerRoute: PassengerRoute) => void
 
     // Setters
     setAvailableBuses: (bus: Bus[]) => void
@@ -53,6 +60,8 @@ export const useBusBookingStore = create<BusBookingState>()(
             (set, get) => ({
                 // Initial state
                 availableBuses: [],
+                passengerRoute: null,  // Changed initialization
+                filteredBuses: [],
                 seatLayout: [],
                 activeBus: null,
                 isSeatsOpen: false,
@@ -66,6 +75,20 @@ export const useBusBookingStore = create<BusBookingState>()(
                 setSeatLayout: (layout) => set({ seatLayout: layout }),
 
                 setActiveBus: (bus) => set({ activeBus: bus }),
+
+                setSelectedRoute: (route) => {
+                    const { availableBuses } = get()
+                    const filtered = availableBuses?.filter(
+                        bus => bus.from === route.selectedRouteFrom &&
+                            bus.to === route.selectedRouteTo &&
+                            bus.startDate === route.selecteDate
+                    ) || []  // Provide fallback empty array
+
+                    set({
+                        passengerRoute: route,  // Now correctly a single object
+                        filteredBuses: filtered
+                    })
+                },
 
                 openSeats: (bus) =>
                     set({

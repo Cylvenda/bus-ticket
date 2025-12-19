@@ -10,11 +10,11 @@ type LinkType = {
 
 const Footer = () => {
     const links: LinkType[] = [
-        { value: "Home", location: "#" },
-        { value: "Book Now", location: "#" },
-        { value: "About", location: "#" },
-        { value: "Contact", location: "#" },
-        { value: "Call Center", location: "#" },
+        { value: "Home", location: "/" },
+        { value: "Book Now", location: "/schedule" },
+        { value: "About", location: "#about" },
+        { value: "Contact", location: "#contact" },
+        { value: "Call Center", location: "#call-center" },
     ];
 
     const companyLinks: LinkType[] = [

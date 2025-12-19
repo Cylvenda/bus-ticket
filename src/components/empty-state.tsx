@@ -4,17 +4,22 @@ type EmptyStateProps = {
     image?: string,
     title?: string,
     description?: string,
+    classNameTitle?: string
 }
 
 const EmptyState = ({
     image,
     title = "No data available",
     description = "Please try again later",
+    classNameTitle,
 }: EmptyStateProps) => (
     <Card
-        className="rounded-sm border-dashed border-primary flex flex-col gap-3 items-center justify-center p-6 text-center">
+        className={`rounded-sm border-dashed border-primary flex flex-col gap-3 items-center justify-center p-6 text-center`}>
         {
-            image === "" ?
+            !image ?
+                <>
+                </>
+                :
                 <img
                     src={image}
                     alt={title}
@@ -22,10 +27,9 @@ const EmptyState = ({
                     height={200}
                     className="animate-bounce animation-duration-[2s]"
                 />
-                : ""
         }
 
-        <p className="font-medium">{title}</p>
+        <p className={`font-medium ${classNameTitle}`}>{title}</p>
         <p className="text-sm text-muted-foreground">{description}</p>
     </Card>
 )

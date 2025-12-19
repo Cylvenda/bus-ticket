@@ -15,7 +15,7 @@ type routesType = {
 
 const Booking = () => {
 
-    const { availableBuses } = useBusBookingStore()
+    const { availableBuses, setSelectedRoute } = useBusBookingStore()
 
     useMockData()
 
@@ -31,11 +31,25 @@ const Booking = () => {
 
     const [from, setFrom] = useState("")
     const [to, setTo] = useState("")
+    const [date, setDate] = useState<string>("")
 
 
     const handleSwap = () => {
         setFrom(to)
         setTo(from)
+    }
+
+    console.log(date)
+    const handleSearchBus = () => {
+        if (from && to) {
+            setSelectedRoute({
+                selectedRouteFrom: from,
+                selectedRouteTo: to,
+                selecteDate: date
+            })
+
+            // navigation logic
+        }
     }
 
     return (
@@ -86,13 +100,19 @@ const Booking = () => {
                         />
 
                         {/* DATE */}
-                        <SetCalendar />
+                       <SetCalendar date={date} setDate={setDate} />
                     </div>
 
                     <div className="text-center">
-                        <Button variant="secondary" className=" w-full md:w-70 ">
+                        <Button
+                            variant="secondary"
+                            className="w-full md:w-70 disabled:cursor-not-allowed"
+                            onClick={handleSearchBus}
+                            disabled={!from || !to}
+                        >
                             Search For Bus
                         </Button>
+
                     </div>
                 </CardContent>
             </Card>
