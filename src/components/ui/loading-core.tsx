@@ -74,7 +74,7 @@ const LoadingCore = ({
     return (
         <Card className="rounded-sm border-dashed border-primary flex flex-col gap-4 items-center justify-center p-6 text-center">
             {image ? (
-                <div className="relative w-full h-40 bg-gradient-to-r from-muted/20 via-muted/40 to-muted/20 rounded-lg">
+                <div className="relative w-full h-40 bg-linear-to-r from-muted/20 via-muted/40 to-muted/20 rounded-lg">
                     {/* Road lines animation */}
                     <div className="absolute inset-x-0 bottom-8 flex justify-around overflow-hidden">
                         <div className="w-12 h-1 bg-muted-foreground/30 animate-scroll" />
