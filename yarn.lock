@@ -1831,6 +1831,11 @@ react-dom@^19.2.0:
   dependencies:
     scheduler "^0.27.0"
 
+react-fast-compare@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.2.tgz#929a97a532304ce9fee4bcae44234f1ce2c21d49"
+  integrity sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==
+
 react-hook-form@^7.68.0:
   version "7.68.0"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.68.0.tgz#733c6871fa4ec5e5bfb13e7650a3a912eafe1721"
@@ -1874,6 +1879,13 @@ react-router@7.10.1:
   dependencies:
     cookie "^1.0.1"
     set-cookie-parser "^2.6.0"
+
+react-snowfall@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-snowfall/-/react-snowfall-2.4.0.tgz#79ad34431f2353e842a87be1af3f1f5355e25806"
+  integrity sha512-KAPMiGnxt11PEgC2pTVrTQsvk5jt1kLUtG+ZamiKLphTZ7GiYT1Aa5kX6jp4jKWq1kqJHchnGT9CDm4g86A5Gg==
+  dependencies:
+    react-fast-compare "^3.2.2"
 
 react-style-singleton@^2.2.2, react-style-singleton@^2.2.3:
   version "2.2.3"
@@ -2123,3 +2135,8 @@ zod@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/zod/-/zod-4.2.1.tgz#07f0388c7edbfd5f5a2466181cb4adf5b5dbd57b"
   integrity sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==
+
+zustand@^5.0.9:
+  version "5.0.9"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.9.tgz#389dcd0309b9c545d7a461bd3c54955962847654"
+  integrity sha512-ALBtUj0AfjJt3uNRQoL1tL2tMvj6Gp/6e39dnfT6uzpelGru8v1tPOGBzayOWbPJvujM8JojDk3E1LxeFisBNg==

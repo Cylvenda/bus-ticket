@@ -5,6 +5,7 @@ import { FieldInput, FieldSelect, FormInput } from "./field-input"
 import { countryOptions } from "@/lib/countries-helper"
 import { Button } from "./ui/button"
 import { FormTicketUserInfoSchema } from "@/schema/ticketSchema"
+import { useBusBookingStore } from "@/store/useBusBookingStore"
 
 const routes = [
     { value: "dar-es-salaam", label: "Dar es Salaam" },
@@ -30,11 +31,10 @@ const routes = [
     { value: "mtwara", label: "Mtwara" },
     { value: "rombo", label: "Rombo" },
 ]
-type seatDeailProps = {
-    getSeatNumber: string,
-    getSeatPrice: number
-}
+
 const SeatSelectForm = () => {
+
+    const { getTotalPrice, } = useBusBookingStore()
 
     const form = useForm<z.infer<typeof FormTicketUserInfoSchema>>({
         resolver: zodResolver(FormTicketUserInfoSchema),
@@ -60,57 +60,43 @@ const SeatSelectForm = () => {
     }
 
     return (
-        <div className="flex flex-col w-full gap-3">
-            <form onSubmit={form.handleSubmit(submitFormHandler)} className="w-full">
-                
-                <div className="hidden">
-                    <FieldInput
-                        control={form.control}
-                        type="text"
-                        name="seatNumber"
-                        value={getSeatNumber}
-                    />
+        <div>
 
-                    <FieldInput
-                        control={form.control}
-                        type="number"
-                        name="seatPrice"
-                        value={getSeatPrice}
-                    />
-                </div>
-
-                <div className="w-full flex flex-row gap-3 items-center justify-center">
-
-                    <FieldSelect
-                        control={form.control}
-                        name="startJournal"
-                        label="Select Your Starting Point"
-                        options={routes}
-                        placeHolder="Select From"
-                    />
-
-                    <FieldSelect
-                        control={form.control}
-                        name="endJournal"
-                        label="Select Your Ending Point"
-                        options={routes}
-                        placeHolder="Select To"
-                    />
-
-                </div>
+            <form onSubmit={form.handleSubmit(submitFormHandler)} className=" flex flex-col w-full gap-3">
 
                 <FormInput
                     title="Passenger Form details"
                     description="Please fill in your details to complete the booking."
+                    className="border-none md:border"
                 >
 
-                    <div className="flex flex-row gap-3">
+                    <div className="w-full flex flex-col md:flex-row gap-3 items-center justify-center">
+
+                        <FieldSelect
+                            control={form.control}
+                            name="startJournal"
+                            label="Select Your Starting Point"
+                            options={routes}
+                            placeHolder="Select From"
+                        />
+
+                        <FieldSelect
+                            control={form.control}
+                            name="endJournal"
+                            label="Select Your Ending Point"
+                            options={routes}
+                            placeHolder="Select To"
+                        />
+
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-3">
                         <FieldInput
                             control={form.control}
                             type="text"
                             label="First Name"
                             name="firstName"
-                            placeholder="Enter your first name"
+                            placeholder="Enter First Name"
                             id="firstName"
                         />
 
@@ -119,12 +105,12 @@ const SeatSelectForm = () => {
                             type="text"
                             label="Last Name"
                             name="lastName"
-                            placeholder="Enter your last name"
+                            placeholder="Enter Last Name"
                             id="lastName"
                         />
                     </div>
 
-                    <div className="flex flex-row gap-3">
+                    <div className="flex flex-col md:flex-row gap-3">
                         <FieldInput
                             control={form.control}
                             type="email"
@@ -139,16 +125,16 @@ const SeatSelectForm = () => {
                             type="phone"
                             label="Phone Number"
                             name="phone"
-                            placeholder="Enter your Phone Number"
+                            placeholder="Enter Phone Number"
                             id="phone"
                         />
                     </div>
 
-                    <div className="flex flex-row gap-3">
+                    <div className="flex flex-col md:flex-row gap-3">
                         <FieldSelect
-                            placeHolder="Select your Gender"
+                            placeHolder="Select Gender"
                             control={form.control}
-                            label="Select Your Gender"
+                            label="Gender"
                             name="gender"
                             options={[
                                 { value: "male", label: "Male" },
@@ -160,7 +146,7 @@ const SeatSelectForm = () => {
                             name="ageGroup"
                             control={form.control}
                             label="Age Group"
-                            placeHolder="Age Group"
+                            placeHolder="Select Age Group"
                             options={[
                                 { value: "adult", label: "Adult", default: true },
                                 { value: "child", label: "Child" },
@@ -171,11 +157,11 @@ const SeatSelectForm = () => {
 
                     </div>
 
-                    <div className="flex flex-row gap-3">
+                    <div className="flex flex-col md:flex-row gap-3">
                         <FieldSelect
                             control={form.control}
                             label="ID Type"
-                            placeHolder="Chooce Your ID Type"
+                            placeHolder="Chooce ID Type"
                             name="idType"
                             options={[
                                 { value: "nida", label: "NIDA" },
@@ -189,7 +175,7 @@ const SeatSelectForm = () => {
                         <FieldSelect
                             name="country"
                             control={form.control}
-                            label="Select Your Nationality"
+                            label="Select Nationality"
                             placeHolder="Nationality"
                             options={
                                 countryOptions.map((country) => ({
@@ -202,13 +188,13 @@ const SeatSelectForm = () => {
 
                     </div>
 
-                    <div className="flex flex-row gap-3">
+                    <div className="flex flex-col md:flex-row gap-3">
                         <FieldInput
                             control={form.control}
                             type="text"
-                            label="Enter Your ID Number"
+                            label="ID Number"
                             name="idNumber"
-                            placeholder="Enter your ID Number"
+                            placeholder="Enter ID number"
                             id="idNumber"
                         />
 
@@ -217,7 +203,7 @@ const SeatSelectForm = () => {
                     <div className="flex flex-col items-center justify-center">
                         <div className="flex flex-row items-center justify-between w-full mb-4 mt-2 px-5 py-4 border border-primary rounded-sm">
                             <span>Total</span>
-                            <span>{"TZS 50,000.00"}</span>
+                            <span>TZS{getTotalPrice()}</span>
                         </div>
                         <Button className="w-70 cursor-pointer"> Continue </Button>
                     </div>

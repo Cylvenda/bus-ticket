@@ -1,7 +1,7 @@
 import * as React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
- // import { useIsMobile } from "@/hooks/use-mobile"
+// import { useIsMobile } from "@/hooks/use-mobile"
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -10,7 +10,8 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import {assets} from "@/assets/assets.ts";
+import { assets } from "@/assets/assets.ts";
+import { Button } from "./ui/button";
 
 /* =========================
    Menu Data
@@ -64,6 +65,8 @@ const accountMenu = [
 export function NavigationMenuHome() {
     // const isMobile = useIsMobile()
 
+    const navigate = useNavigate()
+
     return (
         <NavigationMenu className="hidden md:block" >
             <NavigationMenuList className="flex-wrap">
@@ -81,7 +84,7 @@ export function NavigationMenuHome() {
                                         to="/"
                                         className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none hover:bg-muted focus:shadow-md md:p-6"
                                     >
-                                        <img src={assets.busEmpty} alt="" width={400} height={100}/>
+                                        <img src={assets.busEmpty} alt="" width={400} height={100} />
                                         <div className="mb-2 text-sm font-medium sm:mt-4">
                                             Bus Ticket Booking
                                         </div>
@@ -147,6 +150,13 @@ export function NavigationMenuHome() {
                             ))}
                         </ul>
                     </NavigationMenuContent>
+
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem >
+                    <Button className="cursor-pointer text-black dark:text-white " onClick={() => navigate("/schedule")} >
+                        Schedule
+                    </Button>
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
@@ -158,11 +168,11 @@ export function NavigationMenuHome() {
 ========================= */
 
 function ListItem({
-                      title,
-                      children,
-                      href,
-                      ...props
-                  }: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
+    title,
+    children,
+    href,
+    ...props
+}: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
     return (
         <li {...props}>
             <NavigationMenuLink asChild>

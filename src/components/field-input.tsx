@@ -13,17 +13,18 @@ import {
 type FormInputProps = {
     title?: string,
     description?: string,
+    className?: string
     children: React.ReactNode
 }
 
-export const FormInput = ({ title, description, children }: FormInputProps): React.ReactElement => {
+export const FormInput = ({ title, description, children, className }: FormInputProps): React.ReactElement => {
     return (
-        <Card>
+        <Card className={className}>
             <CardContent>
                 <FieldGroup>
                     <FieldSet>
-                        <FieldLegend>{title}</FieldLegend>
-                        <FieldDescription>
+                        <FieldLegend className='text-center'>{title}</FieldLegend>
+                        <FieldDescription className='text-center'>
                             {description}
                         </FieldDescription>
                         {children}
@@ -39,7 +40,7 @@ type FieldInputProps<T extends FieldValues> = {
     label?: string,
     name: FieldPath<T>,
     placeholder?: string,
-    value?: string,
+    value?: string | number,
     id?: string,
     required?: boolean,
     error?: string
