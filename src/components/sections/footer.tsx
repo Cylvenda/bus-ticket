@@ -26,7 +26,7 @@ const Footer = () => {
 
     return (
         <footer>
-            <Card className="rounded-none border-none bg-primary text-primary-foreground">
+            <Card className="rounded-none border-none bg-primary  ">
                 <CardContent className="max-w-7xl mx-auto px-1 md:px-5 py-3 md:py-12">
                     {/* Top Section */}
                     <div className="grid gap-15 md:grid-cols-4">
