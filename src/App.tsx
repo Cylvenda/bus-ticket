@@ -5,7 +5,7 @@ import Snowfall from 'react-snowfall'
 
 const App = () => {
   return (
-    <ThemeProvider defaultTheme="light" >
+    <ThemeProvider defaultTheme="system" >
       <Snowfall
         style={{
           position: 'fixed',
