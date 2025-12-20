@@ -1,6 +1,6 @@
 import { type Control, Controller, type FieldValues, type FieldPath } from 'react-hook-form'
 import { Card, CardContent } from './ui/card'
-import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet, } from './ui/field'
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet, } from './ui/field'
 import { Input } from './ui/input'
 import {
     Select,
@@ -9,6 +9,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { Eye, EyeClosed } from 'lucide-react'
+import { useState } from 'react'
 
 type FormInputProps = {
     title?: string,
@@ -69,6 +71,58 @@ export const FieldInput = <T extends FieldValues>({ label, name, type, placehold
                         aria-invalid={fieldState.invalid}
                         className="focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500"
                     />
+
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                </Field>
+            )}
+        />
+    )
+}
+
+type FieldPasswordProps<T extends FieldValues> = {
+    label?: string,
+    placeholder?: string,
+    id?: string,
+    control: Control<T>
+    name: FieldPath<T>,
+}
+
+export const PasswordInput = <T extends FieldValues>({ label, name, placeholder, id, control, }: FieldPasswordProps<T>): React.ReactElement => {
+
+    const [show, setShow] = useState<boolean>(false)
+
+    const type = show ? "text" : "password"
+
+    return (
+        <Controller
+            name={name}
+            control={control}
+            render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={name}>
+                        {label}
+                    </FieldLabel>
+                    <div className='flex flex-row justify-between items-center gap-1'>
+                        <Input
+                            {...field}
+                            id={id}
+                            type={type}
+                            placeholder={placeholder}
+                            aria-invalid={fieldState.invalid}
+                            className="focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500"
+                        />
+                    
+                        <span className='border border-gray-300 dark:border-gray-700 cursor-pointer p-1.5 rounded '>
+                            {
+                                show ?
+                                    <EyeClosed onClick={() => setShow(false)} />
+                                    :
+                                    <Eye onClick={() => setShow(true)} />
+                            }
+                        </span>
+                    </div>
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+
                 </Field>
             )}
         />
@@ -115,6 +169,7 @@ export const FieldSelect = <T extends FieldValues>({ label, name, options, contr
                         </SelectContent>
 
                     </Select>
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
                 </Field>
             )}
 
