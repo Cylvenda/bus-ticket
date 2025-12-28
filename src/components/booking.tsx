@@ -18,6 +18,7 @@ const Booking = () => {
     const { availableBuses, setSelectedRoute } = useBusBookingStore()
 
     useMockData()
+    
 
     const routesFrom: routesType[] = availableBuses?.map((data) => ({
         value: data.from,
@@ -39,7 +40,6 @@ const Booking = () => {
         setTo(from)
     }
 
-    console.log(date)
     const handleSearchBus = () => {
         if (from && to) {
             setSelectedRoute({
@@ -75,7 +75,7 @@ const Booking = () => {
                         />
 
                         {/* SWAP BUTTON  FROM LEFT TO RIGHT*/}
-                        <div className="flex flex-col gap-3 justify-between">
+                        <div className="flex flex-col gap-3 justify-between ">
                             <Label className="hidden md:block invisible">Swap</Label>
                             <Button
                                 aria-label="reverse"
@@ -100,7 +100,7 @@ const Booking = () => {
                         />
 
                         {/* DATE */}
-                       <SetCalendar date={date} setDate={setDate} />
+                        <SetCalendar date={date} setDate={setDate} />
                     </div>
 
                     <div className="text-center">

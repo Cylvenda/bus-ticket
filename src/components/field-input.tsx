@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select"
 import { Eye, EyeClosed } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type FormInputProps = {
     title?: string,
@@ -85,13 +86,19 @@ type FieldPasswordProps<T extends FieldValues> = {
     id?: string,
     control: Control<T>
     name: FieldPath<T>,
+    forgetPassword?: {
+        text?: string,
+        location?: string
+    }
 }
 
-export const PasswordInput = <T extends FieldValues>({ label, name, placeholder, id, control, }: FieldPasswordProps<T>): React.ReactElement => {
+export const PasswordInput = <T extends FieldValues>({ label, name, placeholder, id, control, forgetPassword }: FieldPasswordProps<T>): React.ReactElement => {
 
     const [show, setShow] = useState<boolean>(false)
 
     const type = show ? "text" : "password"
+
+    const navigate = useNavigate()
 
     return (
         <Controller
@@ -99,8 +106,8 @@ export const PasswordInput = <T extends FieldValues>({ label, name, placeholder,
             control={control}
             render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={name}>
-                        {label}
+                    <FieldLabel className='flex flex-row justify-between' htmlFor={name}>
+                        {label} <span onClick={() => navigate(`${forgetPassword?.location}`)}>{forgetPassword?.text}</span>
                     </FieldLabel>
                     <div className='flex flex-row justify-between items-center gap-1'>
                         <Input

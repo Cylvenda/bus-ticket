@@ -4,8 +4,14 @@ import { LoginFormSchema } from "@/schema/userSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "./ui/button"
+import { companyName } from "@/lib/commonName"
 
-const FormLogin = () => {
+type FormLoginProps = {
+  onForgotPassword: () => void;
+};
+
+
+const FormLogin = ({ onForgotPassword }: FormLoginProps) => {
 
     const form = useForm<z.infer <typeof LoginFormSchema>>({
         resolver: zodResolver(LoginFormSchema),
@@ -23,27 +29,44 @@ const FormLogin = () => {
     <>
         <div >
             <form onSubmit={form.handleSubmit(onSubmitHandler)}>
-                <FormInput
-                    title="Bus Booking Login Form"
-                    description="Login for more premeum services "
-                      className="border-none rounded-none"
-                 >
-                    <FieldInput
-                    control={form.control}
-                    type="text"
-                    name="email"
-                    placeholder="Enter Email Address"
-                    label="Email Address"
-                    />
+          <FormInput
+            title={`${companyName} Login Form`}
+            description="Login for more premium services"
+            className="border-none rounded-md"
+          >
+            <FieldInput
+              control={form.control}
+              type="text"
+              name="email"
+              placeholder="Enter Email Address"
+              label="Email Address"
+            />
 
-                    <PasswordInput 
-                    control={form.control}
-                    label="Password"
-                    name="password"
-                    placeholder="Enter Password"
-                    />
-                      <Button variant="secondary" className="bg-primary hover:bg-[#e02053] cursor-pointer" >Login</Button>
-                </FormInput>
+            <PasswordInput
+              control={form.control}
+              label="Password"
+              name="password"
+              placeholder="Enter Password"
+            />
+
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={onForgotPassword}
+                className="text-sm text-blue-500 hover:underline"
+              >
+                Forgot password?
+              </button>
+            </div>
+
+            <Button
+              variant="secondary"
+              className="bg-primary hover:bg-[#e02053] cursor-pointer"
+            >
+              Login
+            </Button>
+          </FormInput>
+
             </form>
         </div>
     </>

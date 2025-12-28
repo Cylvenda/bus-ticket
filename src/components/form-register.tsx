@@ -4,6 +4,7 @@ import { RegisterFormSchema } from "@/schema/userSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "./ui/button"
+import { companyName } from "@/lib/commonName"
 
 const FormRegister = () => {
 
@@ -25,9 +26,9 @@ const FormRegister = () => {
         <div>
             <form onSubmit={form.handleSubmit(onSubmitHandler)}>
                 <FormInput
-                    title="Bus Booking Register Form"
+                    title={` ${companyName} Register Form`}
                     description="Register and Login for more premeum services "
-                    className="border-none rounded-none"
+                    className="border-none rounded-md "
                 >
                     <div className="w-full flex flex-col md:flex-row gap-3 items-center justify-center">
                         <FieldInput

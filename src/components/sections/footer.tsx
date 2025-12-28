@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import {Separator} from "@/components/ui/separator.tsx";
 import {FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon} from "lucide-react";
+import { companyName } from "@/lib/commonName";
 
 type LinkType = {
     value: string;
@@ -32,7 +33,7 @@ const Footer = () => {
                     <div className="grid gap-15 md:grid-cols-4">
                         {/* Brand */}
                         <div className="space-y-3">
-                            <h1 className="text-xl font-bold">Bus Ticket Booking</h1>
+                            <h1 className="text-xl font-bold">{companyName}</h1>
                             <p className="text-sm ">
                                 Book bus tickets easily, choose seats, and pay securely.
                             </p>
@@ -85,7 +86,7 @@ const Footer = () => {
                     </div>
 
 
-                    <Separator className="mt-5" />
+                    <Separator className="mt-5 bg-black dark:bg-white" />
 
                     {/* Bottom Bar */}
                     <div className="pt-3 flex flex-col items-center justify-between gap-4 text-sm md:flex-row">

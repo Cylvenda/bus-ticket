@@ -1,9 +1,16 @@
 import { create } from "zustand"
 import { devtools, persist } from "zustand/middleware"
-import type { Bus, SelectedSeat, PassengerInfo, Seat, SeatLayout, PassengerRoute } from "@/types/bus"
+import type {
+    Bus,
+    SelectedSeat,
+    PassengerInfo,
+    Seat,
+    SeatLayout,
+    PassengerRoute,
+} from "@/types/bus"
 
 interface BusBookingState {
-    availableBuses: Bus[] | null
+    availableBuses: Bus[]
     seatLayout: SeatLayout[]
 
     // Active bus
@@ -18,25 +25,25 @@ interface BusBookingState {
     passengerData: PassengerInfo[]
     showForms: boolean
 
-    // Passenger route From and To 
-    passengerRoute: PassengerRoute | null  // Changed from PassengerRoute[] | null
-    filteredBuses: Bus[]  // Changed from []
+    // Passenger route
+    passengerRoute: PassengerRoute | null
+    filteredBuses: Bus[]
 
-    // setting passenger route
-    setSelectedRoute: (passengerRoute: PassengerRoute) => void
-
-    // Setters
+    // Actions
     setAvailableBuses: (bus: Bus[]) => void
     setSeatLayout: (layout: SeatLayout[]) => void
+    setActiveBus: (bus: Bus | null) => void
+    setSelectedRoute: (route: PassengerRoute) => void
+
+    openSeats: (bus: Bus) => void
+    closeSeats: () => void
 
     // Seat helpers
     isSeatSelected: (seatNumber: string) => boolean
-    getSeatStatus: (seatNumber: string, defaultStatus: Seat["status"]) => Seat["status"]
-
-    // Actions
-    setActiveBus: (bus: Bus | null) => void
-    openSeats: (bus: Bus) => void
-    closeSeats: () => void
+    getSeatStatus: (
+        seatNumber: string,
+        defaultStatus: Seat["status"]
+    ) => Seat["status"]
 
     toggleSeatSelection: (seatNumber: string, seatPrice: number) => void
     clearSeatSelection: () => void
@@ -60,8 +67,8 @@ export const useBusBookingStore = create<BusBookingState>()(
             (set, get) => ({
                 // Initial state
                 availableBuses: [],
-                passengerRoute: null,  // Changed initialization
                 filteredBuses: [],
+                passengerRoute: null,
                 seatLayout: [],
                 activeBus: null,
                 isSeatsOpen: false,
@@ -73,20 +80,21 @@ export const useBusBookingStore = create<BusBookingState>()(
                 // Setters
                 setAvailableBuses: (bus) => set({ availableBuses: bus }),
                 setSeatLayout: (layout) => set({ seatLayout: layout }),
-
                 setActiveBus: (bus) => set({ activeBus: bus }),
 
                 setSelectedRoute: (route) => {
                     const { availableBuses } = get()
-                    const filtered = availableBuses?.filter(
-                        bus => bus.from === route.selectedRouteFrom &&
+
+                    const filtered = availableBuses.filter(
+                        (bus) =>
+                            bus.from === route.selectedRouteFrom &&
                             bus.to === route.selectedRouteTo &&
                             bus.startDate === route.selecteDate
-                    ) || []  // Provide fallback empty array
+                    )
 
                     set({
-                        passengerRoute: route,  // Now correctly a single object
-                        filteredBuses: filtered
+                        passengerRoute: route,
+                        filteredBuses: filtered,
                     })
                 },
 
@@ -119,7 +127,6 @@ export const useBusBookingStore = create<BusBookingState>()(
                         : "available"
                 },
 
-                // Seat selection (SINGLE)
                 toggleSeatSelection: (seatNumber, seatPrice) =>
                     set((state) => {
                         if (state.selectedSeat?.seatNumber === seatNumber) {
@@ -181,6 +188,8 @@ export const useBusBookingStore = create<BusBookingState>()(
                 resetBooking: () =>
                     set({
                         activeBus: null,
+                        passengerRoute: null,
+                        filteredBuses: [],
                         isSeatsOpen: false,
                         selectedSeat: null,
                         availableSeats: [],
