@@ -34,7 +34,7 @@ const Header = () => {
 
     return (
         <>
-            <header className="p-3 bg-primary flex justify-between items-center">
+            <header className="p-3 bg-primary flex justify-between items-center sticky top-0 z-10">
                 <h1 className="text-xl font-bold cursor-pointer" onClick={() => navigate('/')}>
                     {companyName}
                 </h1>
@@ -91,7 +91,7 @@ const Header = () => {
                     <Card className="relative bg-primary  w-full md:w-[50%] h-full md:h-screen border-none rounded overflow-y-auto">
                         <div className="px-6 flex flex-col gap-5">
                             <div className="bg-secondary p-5 flex flex-row items-center justify-between gap-1 rounded-md">
-                                <span>{companyName}</span>
+                                <span>{companyName} </span>
                                 <Button
                                     onClick={handleClose}
                                     className="bg-primary cursor-pointer"
@@ -102,10 +102,10 @@ const Header = () => {
                             </div>
                             <div>
                                 {activeForm === 'login' && (
-                                    <FormLogin onForgotPassword={() => setActiveForm('resetPassword')} />
+                                    <FormLogin onForgotPassword={() => setActiveForm('resetPassword')} onRegisterClick={() => setActiveForm('register')} />
                                 )}
-                                {activeForm === 'register' && <FormRegister />}
-                                {activeForm === 'resetPassword' && <FormForgetPassword />}
+                                {activeForm === 'register' && <FormRegister onLoginClick={() => setActiveForm('login')} />}
+                                {activeForm === 'resetPassword' && <FormForgetPassword onLoginClick={() => setActiveForm('login')} onRegisterClick={() => setActiveForm('register')} />}
                             </div>
 
                         </div>

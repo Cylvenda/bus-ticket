@@ -19,6 +19,10 @@ export const RegisterFormSchema = z.object({
             /^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
             "Email must contain only letters, numbers, dots or underscores and be a valid email"
         ),
+    username: z
+        .string()
+        .min(1, "Your last name is too short.")
+        .transform((val) => capitalize(val.trim())),
     phone: z
         .string()
         .regex(

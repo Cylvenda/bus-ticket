@@ -2,10 +2,10 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "../app-sidebar"
 import { Separator } from "../ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../ui/breadcrumb"
-import { Link, useLocation } from "react-router-dom"
+import { Link, Outlet, useLocation } from "react-router-dom"
 import { ThemeSwitcher } from "../theme-swicher"
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
 
     const { pathname } = useLocation()
     const segments = pathname.split("/").filter(Boolean)
@@ -56,7 +56,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                 </header>
 
-                <main>{children}</main>
+                <main><Outlet /></main>
             </SidebarInset>
         </SidebarProvider>
     )

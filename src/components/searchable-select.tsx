@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/ui/label"
 
 type routesType = {
+    id?: string,
     value: string,
     label: string
 }
@@ -68,7 +69,7 @@ export function SearchableSelect({
 
                             {routes.map((route) => (
                                 <CommandItem
-                                    key={route.value}
+                                    key={route.id}
                                     value={route.label}
                                     disabled={route.value === disabledValue}
                                     onSelect={() => {

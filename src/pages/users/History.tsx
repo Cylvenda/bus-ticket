@@ -1,11 +1,10 @@
 import PagesWrapper from "@/components/layout/pages-wrapper"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import useMockData from "@/hooks/use-mock-data"
-import { useBusBookingStore } from "@/store/useBusBookingStore"
+import { useBusBookingStore } from "@/store/bus/useBusBookingStore"
 
 const History = () => {
 
-  useMockData()
+
   const { passengerData, selectedSeat, activeBus } = useBusBookingStore()
 
   // Example: create history entries

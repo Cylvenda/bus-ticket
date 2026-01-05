@@ -1,6 +1,6 @@
 import { type Control, Controller, type FieldValues, type FieldPath } from 'react-hook-form'
 import { Card, CardContent } from './ui/card'
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet, } from './ui/field'
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet, FieldTitle, } from './ui/field'
 import { Input } from './ui/input'
 import {
     Select,
@@ -26,8 +26,8 @@ export const FormInput = ({ title, description, children, className }: FormInput
             <CardContent>
                 <FieldGroup>
                     <FieldSet>
-                        <FieldLegend className='text-center'>{title}</FieldLegend>
-                        <FieldDescription className='text-center'>
+                        <FieldTitle className='text-xl font-bold'>{title}</FieldTitle>
+                        <FieldDescription className='-mt-2'>
                             {description}
                         </FieldDescription>
                         {children}
@@ -146,10 +146,11 @@ type FieldSelectProps<T extends FieldValues> = {
     options: optionType[]
     placeHolder: string,
     name: FieldPath<T>,
-    control: Control<T>
+    control: Control<T>,
+    onValueChange?: (value: string) => void
 }
 
-export const FieldSelect = <T extends FieldValues>({ label, name, options, control, placeHolder }: FieldSelectProps<T>): React.ReactElement => {
+export const FieldSelect = <T extends FieldValues>({ label, name, options, control, placeHolder, onValueChange, }: FieldSelectProps<T>): React.ReactElement => {
 
     const defaultValue = options?.find((option: optionType) => option.default)?.value;
 
@@ -163,7 +164,11 @@ export const FieldSelect = <T extends FieldValues>({ label, name, options, contr
                     <Select
                         defaultValue={defaultValue}
                         value={field.value}
-                        onValueChange={field.onChange}>
+                        onValueChange={(value) => {
+                            field.onChange(value)      // update react-hook-form state
+                            onValueChange?.(value)     // call parent callback if provided
+                        }}
+                        >
                         <SelectTrigger className="focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500">
                             <SelectValue placeholder={placeHolder} />
                         </SelectTrigger>

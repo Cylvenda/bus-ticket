@@ -5,7 +5,10 @@ import { FieldInput, FieldSelect, FormInput } from "./field-input"
 import { countryOptions } from "@/lib/countries-helper"
 import { Button } from "./ui/button"
 import { FormTicketUserInfoSchema } from "@/schema/ticketSchema"
-import { useBusBookingStore } from "@/store/useBusBookingStore"
+import { useBus } from "@/hooks/use-bus-booking"
+import { useState } from "react"
+import PassengerDetailsModel from "./passenger-details-model"
+import { useBusBookingStore } from "@/store/bus/busBooking.store"
 
 const routes = [
     { value: "dar-es-salaam", label: "Dar es Salaam" },
@@ -32,41 +35,63 @@ const routes = [
     { value: "rombo", label: "Rombo" },
 ]
 
+
 const SeatSelectForm = () => {
 
-    const { getTotalPrice, } = useBusBookingStore()
+    const { activeSchedule, } = useBus()
+
+    const { selectedSeat } = useBusBookingStore()
+
+    const [selectedIDType, setSelectedIDType] = useState("none")
+    const [isPassengerDetailsOpen, setIsPassengerDetailsOpen] = useState(false)
 
     const form = useForm<z.infer<typeof FormTicketUserInfoSchema>>({
         resolver: zodResolver(FormTicketUserInfoSchema),
         defaultValues: {
-            seatNumber: "",
-            seatPrice: "",
+            seatNumber: selectedSeat!,
             idType: "none",
             idNumber: "",
             ageGroup: "adult",
-            country: "Tanzania",
+            country: "TZ",
             firstName: "",
             lastName: "",
             email: "",
             phone: "",
-            gender: "null",
+            gender: "male",
             startJournal: "",
             endJournal: ""
         }
     })
 
-    const submitFormHandler = (data: z.infer<typeof FormTicketUserInfoSchema>) => {
-        console.log(data)
+    const {
+        formState: { errors },
+    } = form
+
+    console.log("FORM ERRORS:", errors)
+
+    const submitFormHandler = () => {
+
+
+
+        console.log("Button Clicked to Open Modal")
+
+        setIsPassengerDetailsOpen(true)
+    }
+
+    const comfirmPassengerDetailsSubmit = () => {
+
+        setIsPassengerDetailsOpen(false)
+
+
+        const formData = form.getValues()
+        console.log("Passenger Details Confirmed: ", formData)
     }
 
     return (
         <div>
-
             <form onSubmit={form.handleSubmit(submitFormHandler)} className=" flex flex-col w-full gap-3">
 
                 <FormInput
-                    title="Passenger Form details"
-                    description="Please fill in your details to complete the booking."
                     className="border-none md:border"
                 >
 
@@ -122,7 +147,7 @@ const SeatSelectForm = () => {
 
                         <FieldInput
                             control={form.control}
-                            type="phone"
+                            type="tel"
                             label="Phone Number"
                             name="phone"
                             placeholder="Enter Phone Number"
@@ -171,6 +196,7 @@ const SeatSelectForm = () => {
                                 { value: "voterID", label: "Voter ID" },
                                 { value: "none", label: "None", default: true }
                             ]}
+                            onValueChange={(value) => setSelectedIDType(value)}
                         />
                         <FieldSelect
                             name="country"
@@ -188,27 +214,39 @@ const SeatSelectForm = () => {
 
                     </div>
 
-                    <div className="flex flex-col md:flex-row gap-3">
-                        <FieldInput
-                            control={form.control}
-                            type="text"
-                            label="ID Number"
-                            name="idNumber"
-                            placeholder="Enter ID number"
-                            id="idNumber"
-                        />
+                    {selectedIDType !== "none" && ["nida", "passport", "drivingLicense", "TIN", "voterID"].includes(selectedIDType) && (
+                        <div className="flex flex-col md:flex-row gap-3">
+                            <FieldInput
+                                control={form.control}
+                                type="text"
+                                label={`${selectedIDType.toUpperCase()} Number`}
+                                name="idNumber"
+                                placeholder={`Enter your ${selectedIDType.toUpperCase()} Number`}
+                                id="idNumber"
+                            />
+                        </div>
+                    )}
 
-                    </div>
 
                     <div className="flex flex-col items-center justify-center">
                         <div className="flex flex-row items-center justify-between w-full mb-4 mt-2 px-5 py-4 border border-primary rounded-sm">
-                            <span>Total</span>
-                            <span>TZS {Number(getTotalPrice()).toLocaleString()}</span>
+                            <span>Total Seat Price</span>
+                            <span>TZS {Number(activeSchedule?.price).toLocaleString()}</span>
                         </div>
-                        <Button className="w-70 cursor-pointer"> Continue </Button>
+                        <Button
+                            className="w-70 cursor-pointer"
+                            type="submit"
+                        > Continue </Button>
                     </div>
                 </FormInput>
             </form>
+
+            <PassengerDetailsModel
+                isPassengerDetailsOpen={isPassengerDetailsOpen}
+                setIsPassengerDetailsOpen={setIsPassengerDetailsOpen}
+                onConfirmPassengerDetails={comfirmPassengerDetailsSubmit}
+            />
+
         </div>
     )
 }

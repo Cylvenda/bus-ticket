@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { devtools, persist } from "zustand/middleware"
+import type { Route } from "./bus.types"
 import type {
     Bus,
     SelectedSeat,
@@ -12,6 +13,8 @@ import type {
 interface BusBookingState {
     availableBuses: Bus[]
     seatLayout: SeatLayout[]
+
+    availableRoutes: Route[]
 
     // Active bus
     activeBus: Bus | null
@@ -30,6 +33,7 @@ interface BusBookingState {
     filteredBuses: Bus[]
 
     // Actions
+    setavailableRoutes: (route: Route[]) => void
     setAvailableBuses: (bus: Bus[]) => void
     setSeatLayout: (layout: SeatLayout[]) => void
     setActiveBus: (bus: Bus | null) => void
@@ -66,6 +70,7 @@ export const useBusBookingStore = create<BusBookingState>()(
         persist(
             (set, get) => ({
                 // Initial state
+                availableRoutes: [],
                 availableBuses: [],
                 filteredBuses: [],
                 passengerRoute: null,
@@ -81,10 +86,10 @@ export const useBusBookingStore = create<BusBookingState>()(
                 setAvailableBuses: (bus) => set({ availableBuses: bus }),
                 setSeatLayout: (layout) => set({ seatLayout: layout }),
                 setActiveBus: (bus) => set({ activeBus: bus }),
+                setavailableRoutes: (route) => set({ availableRoutes: route }),
 
                 setSelectedRoute: (route) => {
                     const { availableBuses } = get()
-
                     const filtered = availableBuses.filter(
                         (bus) =>
                             bus.from === route.selectedRouteFrom &&

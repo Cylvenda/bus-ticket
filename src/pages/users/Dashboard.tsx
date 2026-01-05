@@ -1,9 +1,9 @@
 import PagesWrapper from "@/components/layout/pages-wrapper"
 import { Card, CardContent } from "@/components/ui/card"
-import { useBusBookingStore } from "@/store/useBusBookingStore"
+import { useBusBookingStore } from "@/store/bus/useBusBookingStore"
 import { ArrowRight } from "lucide-react"
 import type { Bus } from "@/types/bus"
-import useMockData from "@/hooks/use-mock-data"
+
 
 type DashboardCard = {
   title: string
@@ -12,7 +12,6 @@ type DashboardCard = {
 }
 
 const Dashboard = () => {
-  useMockData()
 
   const { availableBuses, filteredBuses } = useBusBookingStore()
   const buses: Bus[] = filteredBuses.length > 0 ? filteredBuses : availableBuses ?? []

@@ -1,4 +1,3 @@
-
 export type Bus = {
     id: number;
     startDate: string;

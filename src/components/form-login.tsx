@@ -8,10 +8,11 @@ import { companyName } from "@/lib/commonName"
 
 type FormLoginProps = {
   onForgotPassword: () => void;
+  onRegisterClick?: () => void;
 };
 
 
-const FormLogin = ({ onForgotPassword }: FormLoginProps) => {
+const FormLogin = ({ onForgotPassword, onRegisterClick }: FormLoginProps) => {
 
     const form = useForm<z.infer <typeof LoginFormSchema>>({
         resolver: zodResolver(LoginFormSchema),
@@ -30,7 +31,7 @@ const FormLogin = ({ onForgotPassword }: FormLoginProps) => {
         <div >
             <form onSubmit={form.handleSubmit(onSubmitHandler)}>
           <FormInput
-            title={`${companyName} Login Form`}
+            title={`${companyName} Login Portal`}
             description="Login for more premium services"
             className="border-none rounded-md"
           >
@@ -49,7 +50,14 @@ const FormLogin = ({ onForgotPassword }: FormLoginProps) => {
               placeholder="Enter Password"
             />
 
-            <div className="flex justify-end">
+            <div className="flex justify-between items-center">
+              <button
+                type="button"
+                onClick={onRegisterClick}
+                className="text-sm text-blue-500 hover:underline"
+              >
+                Don't have an account? Register
+              </button>
               <button
                 type="button"
                 onClick={onForgotPassword}

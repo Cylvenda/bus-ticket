@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { SetCalendar } from "@/components/calender"
 import { ArrowLeftRight } from "lucide-react"
 import { Label } from "@/components/ui/label.tsx";
-import { useBusBookingStore } from "@/store/useBusBookingStore";
-import useMockData from "@/hooks/use-mock-data";
+import { useBus } from "@/hooks/use-bus-booking";
+import { useBusBookingStore } from "@/store/bus/busBooking.store";
+import { Spinner } from "./ui/spinner";
 
 type routesType = {
     value: string,
@@ -15,22 +16,23 @@ type routesType = {
 
 const Booking = () => {
 
-    const { availableBuses, setSelectedRoute } = useBusBookingStore()
+    const { setSelectedSchedule, fetchSchedules, loading } = useBusBookingStore()
 
-    useMockData()
-    
+    const { routes } = useBus()
 
-    const routesFrom: routesType[] = availableBuses?.map((data) => ({
-        value: data.from,
-        label: data.from,
+    const routesFrom: routesType[] = routes?.map((data) => ({
+        id: data.id,
+        value: data.origin,
+        label: data.origin,
     }))
 
-    const routesTo: routesType[] = availableBuses?.map((data) => ({
-        value: data.to,
-        label: data.to,
+    const routesTo: routesType[] = routes?.map((data) => ({
+        id: data.id,
+        value: data.destination,
+        label: data.destination,
     }))
 
-    const [from, setFrom] = useState("")
+    const [from, setFrom] = useState("" )
     const [to, setTo] = useState("")
     const [date, setDate] = useState<string>("")
 
@@ -41,20 +43,20 @@ const Booking = () => {
     }
 
     const handleSearchBus = () => {
-        if (from && to) {
-            setSelectedRoute({
-                selectedRouteFrom: from,
-                selectedRouteTo: to,
-                selecteDate: date
+        if (from && to && date) {
+
+            setSelectedSchedule({
+                origin: from,
+                destination: to,
+                date: date
             })
 
-            // navigation logic
+            fetchSchedules()
         }
     }
 
     return (
         <>
-
             <Card className="rounded-none md:rounded bg-primary max-w-5xl mx-auto w-full ">
                 <CardHeader>
                     <CardTitle className="text-xl text-center">
@@ -108,9 +110,9 @@ const Booking = () => {
                             variant="secondary"
                             className="w-full md:w-70 disabled:cursor-not-allowed"
                             onClick={handleSearchBus}
-                            disabled={!from || !to}
+                            disabled={!from || !to || !date || loading}
                         >
-                            Search For Bus
+                            {loading ? <Spinner className="size-6 text-primary" /> : "Search For Bus"}
                         </Button>
 
                     </div>

@@ -1,18 +1,28 @@
-import { useBusBookingStore } from "@/store/useBusBookingStore"
-import type { Seat as SeatType } from "@/types/bus"
+import { useBus } from "@/hooks/use-bus-booking"
+import type { Seat as SeatType } from "@/store/bus/bus.types"
+import { useBusBookingStore } from "@/store/bus/busBooking.store"
 
 type SeatProps = {
     seat: SeatType
 }
 
 const Seat = ({ seat }: SeatProps) => {
-    const {
-        activeBus,
-        toggleSeatSelection,
-        getSeatStatus,
-    } = useBusBookingStore()
+    const { bookedSeats } = useBus()
+    const { toggleUserSeatSelection, selectedSeat } = useBusBookingStore()
 
-    const status = getSeatStatus(seat.id, seat.status)
+    const bookedSeatNumbers = new Set([
+        ...(bookedSeats?.booked_seats ?? []),
+    ])
+
+    const heldSeatNumbers = new Set([
+        ...(bookedSeats?.held_seats ?? [])
+    ])
+
+    const isBooked = bookedSeatNumbers.has(seat.seat_number)
+
+    const isSelected = heldSeatNumbers.has(seat.seat_number)
+
+    const userchoiceSelected = selectedSeat === seat.seat_number
 
     const base =
         "w-12 h-12 rounded-md text-white text-sm font-semibold flex items-center justify-center"
@@ -21,17 +31,24 @@ const Seat = ({ seat }: SeatProps) => {
         booked: "bg-red-600 cursor-not-allowed",
         available: "bg-green-600 hover:opacity-80 cursor-pointer",
         selected: "bg-yellow-500 cursor-pointer",
+        unavailable: "bg-gray-400 cursor-not-allowed",
     }
 
     return (
         <button
-            disabled={status === "booked"}
-            onClick={() =>
-                toggleSeatSelection(seat.id, activeBus?.price ?? 0)
-            }
-            className={`${base} ${colors[status]}`}
+        key={seat.id}
+            disabled={isBooked}
+            onClick={() => toggleUserSeatSelection(seat.seat_number)}
+            className={`${base} ${isBooked
+                ? colors.booked
+                : isSelected
+                    ? colors.unavailable
+                    : userchoiceSelected
+                        ? colors.selected
+                    : colors.available
+                }`}
         >
-            {seat.id}
+            {seat.seat_number}
         </button>
     )
 }
