@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import type { PassengerInfo } from "@/types/bus"
 import { BusBookingService } from "@/api/services/busBooking.service"
-import type { Route, Schedule, ScheduleSearchPayload, Seat,  Bus, GetBookedSeatsPayload, HoldSeatPayload, HoldSeatResult } from "./bus.types"
+import type { Route, Schedule, ScheduleSearchPayload, Seat, Bus, GetBookedSeatsPayload, HoldSeatPayload, HoldSeatResult } from "./bus.types"
 import { toast } from "react-toastify"
 import { useNotificationStore } from "../notifications/notification.store"
 import { getErrorMessage } from "@/utils/error"
@@ -21,7 +21,6 @@ type BusState = {
 
      // Seat selection 
      selectedSeat: string | null
-     availableSeats: Seat[]
 
 
      // Passenger forms
@@ -50,6 +49,9 @@ type BusState = {
      isSeatSelected: (seatNumber: string) => boolean
      toggleUserSeatSelection: (seat: string) => void
 
+     // reseting
+     reset: () => void
+
 }
 
 export const useBusBookingStore = create<BusState>((set, get) => ({
@@ -61,7 +63,6 @@ export const useBusBookingStore = create<BusState>((set, get) => ({
      activeBus: null,
      isSeatsOpen: false,
      selectedSeat: null,
-     availableSeats: [],
      passengerData: [],
      showForms: false,
      activeSchedule: null,
@@ -90,19 +91,16 @@ export const useBusBookingStore = create<BusState>((set, get) => ({
           const payload = get().selectedSchedule
 
           if (!payload?.origin) {
-               toast.info("Please select an origin.")
                set({ loading: false })
                return
           }
 
           if (!payload.destination) {
-               toast.info("Please select a destination.")
                set({ loading: false })
                return
           }
 
           if (!payload.date) {
-               toast.info("Please select a date.")
                set({ loading: false })
                return
           }
@@ -267,5 +265,13 @@ export const useBusBookingStore = create<BusState>((set, get) => ({
 
 
 
-     // reset: () => set({ buses: [], error: null }),
+     reset: () => set({
+          selectedSchedule: null,
+          schedules: null,
+          activeBus: null,
+          activeSchedule: null,
+          isSeatsOpen: false,
+          passengerData: [],
+          error: null
+     }),
 }))

@@ -7,12 +7,16 @@ import { Button } from "./ui/button"
 import { companyName } from "@/lib/commonName"
 import { authUserService } from "@/api/services/auth.service"
 import { toast } from "react-toastify"
+import { useState } from "react"
+import { Spinner } from "./ui/spinner"
 
 type FormRegisterProps = {
     onLoginClick: () => void;
 };
 
-const FormRegister = ({ onLoginClick }: FormRegisterProps ) => {
+const FormRegister = ({ onLoginClick }: FormRegisterProps) => {
+
+    const [loading, setLoading] = useState(false)
 
     const form = useForm<z.infer<typeof RegisterFormSchema>>({
         resolver: zodResolver(RegisterFormSchema),
@@ -29,21 +33,35 @@ const FormRegister = ({ onLoginClick }: FormRegisterProps ) => {
     const onSubmitHandler = async (
         data: z.infer<typeof RegisterFormSchema>
     ) => {
+
+        setLoading(true)
+
         try {
             const res = await authUserService.userRegister(data)
 
-            console.log(res.status) // 201
-            console.log(res.data)   // User object
-            toast.success("Account created successfully")
+            if (res.status === 201) {
+                toast.success("Account created successfully. Now you can login.")
+                onLoginClick()
+                return
+            }
 
-            // example actions
-            // toast.success("Account created successfully")
-            // navigate("/login")
+        } catch (error: any) {
+            const errors = error?.response?.data
 
-        } catch (error) {
-            console.error(error)
-            toast.error("Registration failed. Please try again.")
+            if (errors) {
+                Object.entries(errors).forEach(([field, messages]) => {
+                    form.setError(field as any, {
+                        type: "server",
+                        message: (messages as string[])[0],
+                    })
+                })
+            } else {
+                toast.error("Registration failed. Please try again.")
+            }
+        }finally {
+            setLoading(false)
         }
+
     }
 
     return (
@@ -119,7 +137,10 @@ const FormRegister = ({ onLoginClick }: FormRegisterProps ) => {
                         </button>
                     </div>
 
-                    <Button variant="secondary" className="bg-primary hover:bg-[#e02053] cursor-pointer" >Register</Button>
+                    <Button  disabled={loading}
+                     className="bg-primary hover:bg-[#e02053] cursor-pointer" >
+                        {loading ? <Spinner  className="size-6 " /> : "Register"}
+                    </Button>
                 </FormInput>
             </form>
         </div>

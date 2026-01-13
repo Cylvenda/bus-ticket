@@ -5,8 +5,7 @@ import { FieldInput, FieldSelect, FormInput } from "./field-input"
 import { countryOptions } from "@/lib/countries-helper"
 import { Button } from "./ui/button"
 import { FormTicketUserInfoSchema } from "@/schema/ticketSchema"
-import { useBus } from "@/hooks/use-bus-booking"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import PassengerDetailsModel from "./passenger-details-model"
 import { useBusBookingStore } from "@/store/bus/busBooking.store"
 
@@ -38,9 +37,7 @@ const routes = [
 
 const SeatSelectForm = () => {
 
-    const { activeSchedule, } = useBus()
-
-    const { selectedSeat } = useBusBookingStore()
+    const { selectedSeat, activeSchedule, activeBus } = useBusBookingStore()
 
     const [selectedIDType, setSelectedIDType] = useState("none")
     const [isPassengerDetailsOpen, setIsPassengerDetailsOpen] = useState(false)
@@ -48,7 +45,9 @@ const SeatSelectForm = () => {
     const form = useForm<z.infer<typeof FormTicketUserInfoSchema>>({
         resolver: zodResolver(FormTicketUserInfoSchema),
         defaultValues: {
-            seatNumber: selectedSeat!,
+            bus_id: undefined,
+            schedule_id: undefined,
+            seatNumber: "",
             idType: "none",
             idNumber: "",
             ageGroup: "adult",
@@ -63,17 +62,27 @@ const SeatSelectForm = () => {
         }
     })
 
-    const {
-        formState: { errors },
-    } = form
+    useEffect(() => {
+        if (!activeBus || !activeSchedule || !selectedSeat) return
 
-    console.log("FORM ERRORS:", errors)
+        form.reset({
+            bus_id: activeBus.id,
+            schedule_id: activeSchedule.id,
+            seatNumber: selectedSeat,
+        })
+    }, [form, activeBus, activeSchedule, selectedSeat])
+
+
+
+    // const {
+    //     formState: { errors },
+    // } = form
+
+    // console.log("FORM ERRORS:", errors)
+    console.log("FORM ERRORS:", form.formState.errors)
+
 
     const submitFormHandler = () => {
-
-
-
-        console.log("Button Clicked to Open Modal")
 
         setIsPassengerDetailsOpen(true)
     }
@@ -82,172 +91,173 @@ const SeatSelectForm = () => {
 
         setIsPassengerDetailsOpen(false)
 
-
-        const formData = form.getValues()
-        console.log("Passenger Details Confirmed: ", formData)
+        // const formData = form.getValues()
+        console.log("FORM VALUES:", form.getValues())
     }
 
     return (
-        <div>
-            <form onSubmit={form.handleSubmit(submitFormHandler)} className=" flex flex-col w-full gap-3">
+        <>
+            <div>
+                <form onSubmit={form.handleSubmit(submitFormHandler)} className=" flex flex-col w-full gap-3">
 
-                <FormInput
-                    className="border-none md:border"
-                >
+                    <FormInput
+                        className="border-none md:border"
+                    >
 
-                    <div className="w-full flex flex-col md:flex-row gap-3 items-center justify-center">
+                        <div className="w-full flex flex-col md:flex-row gap-3 items-center justify-center">
 
-                        <FieldSelect
-                            control={form.control}
-                            name="startJournal"
-                            label="Select Your Starting Point"
-                            options={routes}
-                            placeHolder="Select From"
-                        />
+                            <FieldSelect
+                                control={form.control}
+                                name="startJournal"
+                                label="Select Your Starting Point"
+                                options={routes}
+                                placeHolder="Select From"
+                            />
 
-                        <FieldSelect
-                            control={form.control}
-                            name="endJournal"
-                            label="Select Your Ending Point"
-                            options={routes}
-                            placeHolder="Select To"
-                        />
+                            <FieldSelect
+                                control={form.control}
+                                name="endJournal"
+                                label="Select Your Ending Point"
+                                options={routes}
+                                placeHolder="Select To"
+                            />
 
-                    </div>
+                        </div>
 
-                    <div className="flex flex-col md:flex-row gap-3">
-                        <FieldInput
-                            control={form.control}
-                            type="text"
-                            label="First Name"
-                            name="firstName"
-                            placeholder="Enter First Name"
-                            id="firstName"
-                        />
-
-                        <FieldInput
-                            control={form.control}
-                            type="text"
-                            label="Last Name"
-                            name="lastName"
-                            placeholder="Enter Last Name"
-                            id="lastName"
-                        />
-                    </div>
-
-                    <div className="flex flex-col md:flex-row gap-3">
-                        <FieldInput
-                            control={form.control}
-                            type="email"
-                            label="Email Address"
-                            name="email"
-                            placeholder="Enter your Email Address"
-                            id="email"
-                        />
-
-                        <FieldInput
-                            control={form.control}
-                            type="tel"
-                            label="Phone Number"
-                            name="phone"
-                            placeholder="Enter Phone Number"
-                            id="phone"
-                        />
-                    </div>
-
-                    <div className="flex flex-col md:flex-row gap-3">
-                        <FieldSelect
-                            placeHolder="Select Gender"
-                            control={form.control}
-                            label="Gender"
-                            name="gender"
-                            options={[
-                                { value: "male", label: "Male" },
-                                { value: "female", label: "Female" }
-                            ]}
-                        />
-
-                        <FieldSelect
-                            name="ageGroup"
-                            control={form.control}
-                            label="Age Group"
-                            placeHolder="Select Age Group"
-                            options={[
-                                { value: "adult", label: "Adult", default: true },
-                                { value: "child", label: "Child" },
-                                { value: "infant", label: "Infant" },
-                                { value: "elder", label: "Elder" },
-                            ]}
-                        />
-
-                    </div>
-
-                    <div className="flex flex-col md:flex-row gap-3">
-                        <FieldSelect
-                            control={form.control}
-                            label="ID Type"
-                            placeHolder="Chooce ID Type"
-                            name="idType"
-                            options={[
-                                { value: "nida", label: "NIDA" },
-                                { value: "passport", label: "Passport" },
-                                { value: "drivingLicense", label: "Driving License" },
-                                { value: "TIN", label: "TIN" },
-                                { value: "voterID", label: "Voter ID" },
-                                { value: "none", label: "None", default: true }
-                            ]}
-                            onValueChange={(value) => setSelectedIDType(value)}
-                        />
-                        <FieldSelect
-                            name="country"
-                            control={form.control}
-                            label="Select Nationality"
-                            placeHolder="Nationality"
-                            options={
-                                countryOptions.map((country) => ({
-                                    value: country.value,
-                                    label: country.label,
-                                    default: country.value === "TZ"
-                                }))
-                            }
-                        />
-
-                    </div>
-
-                    {selectedIDType !== "none" && ["nida", "passport", "drivingLicense", "TIN", "voterID"].includes(selectedIDType) && (
                         <div className="flex flex-col md:flex-row gap-3">
                             <FieldInput
                                 control={form.control}
                                 type="text"
-                                label={`${selectedIDType.toUpperCase()} Number`}
-                                name="idNumber"
-                                placeholder={`Enter your ${selectedIDType.toUpperCase()} Number`}
-                                id="idNumber"
+                                label="First Name"
+                                name="firstName"
+                                placeholder="Enter First Name"
+                                id="firstName"
+                            />
+
+                            <FieldInput
+                                control={form.control}
+                                type="text"
+                                label="Last Name"
+                                name="lastName"
+                                placeholder="Enter Last Name"
+                                id="lastName"
                             />
                         </div>
-                    )}
 
+                        <div className="flex flex-col md:flex-row gap-3">
+                            <FieldInput
+                                control={form.control}
+                                type="email"
+                                label="Email Address"
+                                name="email"
+                                placeholder="Enter your Email Address"
+                                id="email"
+                            />
 
-                    <div className="flex flex-col items-center justify-center">
-                        <div className="flex flex-row items-center justify-between w-full mb-4 mt-2 px-5 py-4 border border-primary rounded-sm">
-                            <span>Total Seat Price</span>
-                            <span>TZS {Number(activeSchedule?.price).toLocaleString()}</span>
+                            <FieldInput
+                                control={form.control}
+                                type="tel"
+                                label="Phone Number"
+                                name="phone"
+                                placeholder="Enter Phone Number"
+                                id="phone"
+                            />
                         </div>
-                        <Button
-                            className="w-70 cursor-pointer"
-                            type="submit"
-                        > Continue </Button>
-                    </div>
-                </FormInput>
-            </form>
+
+                        <div className="flex flex-col md:flex-row gap-3">
+                            <FieldSelect
+                                placeHolder="Select Gender"
+                                control={form.control}
+                                label="Gender"
+                                name="gender"
+                                options={[
+                                    { value: "male", label: "Male" },
+                                    { value: "female", label: "Female" }
+                                ]}
+                            />
+
+                            <FieldSelect
+                                name="ageGroup"
+                                control={form.control}
+                                label="Age Group"
+                                placeHolder="Select Age Group"
+                                options={[
+                                    { value: "adult", label: "Adult", default: true },
+                                    { value: "child", label: "Child" },
+                                    { value: "infant", label: "Infant" },
+                                    { value: "elder", label: "Elder" },
+                                ]}
+                            />
+
+                        </div>
+
+                        <div className="flex flex-col md:flex-row gap-3">
+                            <FieldSelect
+                                control={form.control}
+                                label="ID Type"
+                                placeHolder="Chooce ID Type"
+                                name="idType"
+                                options={[
+                                    { value: "nida", label: "NIDA" },
+                                    { value: "passport", label: "Passport" },
+                                    { value: "drivingLicense", label: "Driving License" },
+                                    { value: "TIN", label: "TIN" },
+                                    { value: "voterID", label: "Voter ID" },
+                                    { value: "none", label: "None", default: true }
+                                ]}
+                                onValueChange={(value) => setSelectedIDType(value)}
+                            />
+                            <FieldSelect
+                                name="country"
+                                control={form.control}
+                                label="Select Nationality"
+                                placeHolder="Nationality"
+                                options={
+                                    countryOptions.map((country) => ({
+                                        value: country.value,
+                                        label: country.label,
+                                        default: country.value === "TZ"
+                                    }))
+                                }
+                            />
+
+                        </div>
+
+                        {selectedIDType !== "none" && ["nida", "passport", "drivingLicense", "TIN", "voterID"].includes(selectedIDType) && (
+                            <div className="flex flex-col md:flex-row gap-3">
+                                <FieldInput
+                                    control={form.control}
+                                    type="text"
+                                    label={`${selectedIDType.toUpperCase()} Number`}
+                                    name="idNumber"
+                                    placeholder={`Enter your ${selectedIDType.toUpperCase()} Number`}
+                                    id="idNumber"
+                                />
+                            </div>
+                        )}
+
+
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="flex flex-row items-center justify-between w-full mb-4 mt-2 px-5 py-4 border border-primary rounded-sm">
+                                <span>Total Seat Price</span>
+                                <span>TZS {Number(activeSchedule?.price).toLocaleString()}</span>
+                            </div>
+                            <Button
+                                className="w-70 cursor-pointer"
+                                type="submit"
+                            > Continue </Button>
+                        </div>
+                    </FormInput>
+                </form>
+            </div>
 
             <PassengerDetailsModel
                 isPassengerDetailsOpen={isPassengerDetailsOpen}
                 setIsPassengerDetailsOpen={setIsPassengerDetailsOpen}
                 onConfirmPassengerDetails={comfirmPassengerDetailsSubmit}
+                passengerData={form.getValues()}
             />
-
-        </div>
+        </>
     )
 }
 

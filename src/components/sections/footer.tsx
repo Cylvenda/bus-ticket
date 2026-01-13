@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import {Separator} from "@/components/ui/separator.tsx";
-import {FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon} from "lucide-react";
+import { Separator } from "@/components/ui/separator.tsx";
+import { FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon } from "lucide-react";
 import { companyName } from "@/lib/commonName";
 
 type LinkType = {
@@ -94,7 +94,7 @@ const Footer = () => {
                             © {new Date().getFullYear()} Bus Ticket Booking. All rights reserved.
                         </p>
                         <div className="flex gap-4">
-                            <Link to="https://www.nit.ac.tz/" title="NIT">National Institute of Transport (NIT)</Link>
+                            <Link to="#" title="Cylvenda">Develop by Cylvenda</Link>
                         </div>
                     </div>
                 </CardContent>

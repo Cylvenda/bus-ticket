@@ -34,7 +34,7 @@ export type PassengerInfo = {
     startJournal: string;
     endJournal: string;
     idType: "passport" | "drivingLicense" | "nida" | "voterID" | "TIN" | "none";
-    idNumber: string;
+    idNumber: number;
     firstName: string;
     lastName: string;
     email: string;

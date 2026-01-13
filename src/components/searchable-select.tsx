@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label"
 type routesType = {
     id?: string,
     value: string,
-    label: string
+    label: string,
 }
 
 type selectableProps = {
@@ -67,9 +67,9 @@ export function SearchableSelect({
                         <CommandList>
                             <CommandEmpty>No city found.</CommandEmpty>
 
-                            {routes.map((route) => (
+                            {routes.map((route, index) => (
                                 <CommandItem
-                                    key={route.id}
+                                    key={index}
                                     value={route.label}
                                     disabled={route.value === disabledValue}
                                     onSelect={() => {
@@ -78,6 +78,7 @@ export function SearchableSelect({
                                     }}
                                 >
                                     <Check
+                                        key={index}
                                         className={cn(
                                             "mr-2 h-4 w-4",
                                             value === route.value

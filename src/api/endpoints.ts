@@ -1,4 +1,7 @@
 export const API_ENDPOINTS = {
+     // root api endpoint
+     API_ROOT: "http://127.0.0.1:8000/api/",
+
      // Bus & Booking Endpoints
      ROUTES: "routes/active/",
      SCHEDULES: "schedules/search/",
@@ -14,7 +17,7 @@ export const API_ENDPOINTS = {
      USER_LOGOUT: "auth/logout/",
 
      // Emails activations
-     USER_ACCOUNT_ACTIVATION_EMAIL: "auth/users/activation/",
+     USER_ACCOUNT_ACTIVATION: "auth/users/activation/",
      USER_RESEND_ACTIVATION_EMAIL: "auth/users/resend_activation/",
 
      CURRENT_USER_PROFILE: "auth/users/me/"

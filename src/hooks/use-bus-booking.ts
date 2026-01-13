@@ -10,7 +10,6 @@ export const useBus = () => {
           selectedSchedule,
           activeBus,
           activeSchedule,
-          availableSeats,
           selectedSeat,
           bookedSeats,
           fetchRoutes,
@@ -35,7 +34,6 @@ export const useBus = () => {
           selectedSchedule,
           activeBus,
           activeSchedule,
-          availableSeats,
           bookedSeats,
           selectedSeat,
      }

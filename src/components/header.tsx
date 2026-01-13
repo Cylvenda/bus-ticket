@@ -34,7 +34,7 @@ const Header = () => {
 
     return (
         <>
-            <header className="p-3 bg-primary flex justify-between items-center sticky top-0 z-10">
+            <header className="p-3 bg-primary flex justify-between items-center sticky top-0 z-50">
                 <h1 className="text-xl font-bold cursor-pointer" onClick={() => navigate('/')}>
                     {companyName}
                 </h1>
@@ -88,9 +88,9 @@ const Header = () => {
 
             {activeForm && (
                 <div className="fixed inset-0 bg-black/50 z-10 flex items-center justify-center md:items-start md:justify-end">
-                    <Card className="relative bg-primary  w-full md:w-[50%] h-full md:h-screen border-none rounded overflow-y-auto">
-                        <div className="px-6 flex flex-col gap-5">
-                            <div className="bg-secondary p-5 flex flex-row items-center justify-between gap-1 rounded-md">
+                    <Card className="relative bg-primary  w-full md:w-[50%] h-full md:h-screen border-none rounded overflow-y-auto top-9">
+                        <div className="px-6 flex flex-col gap-3">
+                            <div className="bg-secondary p-3 flex flex-row items-center justify-between gap-1 rounded-md">
                                 <span>{companyName} </span>
                                 <Button
                                     onClick={handleClose}

@@ -5,6 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "./ui/button"
 import { companyName } from "@/lib/commonName"
+import { authUserService } from "@/api/services/auth.service"
+import { toast } from "react-toastify"
+import { useState } from "react"
+import { Spinner } from "./ui/spinner"
+import { useAuthUserStore } from "@/store/auth/userAuth.store"
+import { useNavigate } from "react-router-dom"
 
 type FormLoginProps = {
   onForgotPassword: () => void;
@@ -14,22 +20,43 @@ type FormLoginProps = {
 
 const FormLogin = ({ onForgotPassword, onRegisterClick }: FormLoginProps) => {
 
-    const form = useForm<z.infer <typeof LoginFormSchema>>({
-        resolver: zodResolver(LoginFormSchema),
-        defaultValues: {
-            email: "",
-            password: ""
-        }
-    })
+  const [loading, setLoading] = useState(false)
+  const { fetchUser } = useAuthUserStore()
+  const navigate = useNavigate()
 
-    const onSubmitHandler = (data: z.infer<typeof LoginFormSchema>) => {
-        console.log(data)
+  const form = useForm<z.infer<typeof LoginFormSchema>>({
+    resolver: zodResolver(LoginFormSchema),
+    defaultValues: {
+      email: "",
+      password: ""
     }
+  })
+
+  const onSubmitHandler = async (data: z.infer<typeof LoginFormSchema>) => {
+    setLoading(true)
+
+    try {
+      const res = await authUserService.userLogin(data)
+
+      if (res.status === 200 && res.data) {
+        fetchUser() //fetching profile of the user
+        navigate('/dashboard')
+        return
+      }
+
+    } catch (error: any) {
+      const msg = error?.response?.data?.detail || "Login failed. Please check credentials."
+      toast.error(msg)
+
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
-        <div >
-            <form onSubmit={form.handleSubmit(onSubmitHandler)}>
+      <div >
+        <form onSubmit={form.handleSubmit(onSubmitHandler)}>
           <FormInput
             title={`${companyName} Login Portal`}
             description="Login for more premium services"
@@ -68,15 +95,15 @@ const FormLogin = ({ onForgotPassword, onRegisterClick }: FormLoginProps) => {
             </div>
 
             <Button
-              variant="secondary"
+              disabled={loading}
               className="bg-primary hover:bg-[#e02053] cursor-pointer"
             >
-              Login
+              {loading ? <Spinner /> : "Login"}
             </Button>
           </FormInput>
 
-            </form>
-        </div>
+        </form>
+      </div>
     </>
   )
 }

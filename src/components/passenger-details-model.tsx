@@ -1,95 +1,134 @@
 import {
-     AlertDialog,
-     AlertDialogAction,
-     AlertDialogCancel,
-     AlertDialogContent,
-     AlertDialogDescription,
-     AlertDialogFooter,
-     AlertDialogHeader,
-     AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+     Sheet,
+     SheetClose,
+     SheetContent,
+     SheetDescription,
+     SheetHeader,
+     SheetTitle,
+} from "@/components/ui/sheet"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Button } from "./ui/button"
+import type { PassengerInfo } from "@/types/user"
+import { useBusBookingStore } from "@/store/bus/busBooking.store"
 
 type PassengerDetailsModelProps = {
      isPassengerDetailsOpen: boolean
      setIsPassengerDetailsOpen: (open: boolean) => void
      onConfirmPassengerDetails: () => void
+     passengerData?: PassengerInfo
 }
 
 const PassengerDetailsModel = ({
      isPassengerDetailsOpen,
      setIsPassengerDetailsOpen,
      onConfirmPassengerDetails,
+     passengerData,
 }: PassengerDetailsModelProps) => {
+
+
+     const { activeSchedule, activeBus } = useBusBookingStore()
      return (
-          <AlertDialog
+          <Sheet
                open={isPassengerDetailsOpen}
                onOpenChange={setIsPassengerDetailsOpen}
           >
-               <AlertDialogContent className="w-260">
-                    <AlertDialogHeader>
-                         <AlertDialogTitle className="text-xl">
-                              Confirm Passenger Details
-                         </AlertDialogTitle>
-                         <AlertDialogDescription>
-                              Please review all details carefully before proceeding to payment.
-                         </AlertDialogDescription>
-                    </AlertDialogHeader>
+               <SheetContent className="w-full sm:max-w-6xl overflow-y-auto h-screen">
+                    <SheetHeader className="flex flex-col items-center justify-center -mb-6">
+                         <SheetTitle className="text-2xl">
+                              Review Your Booking
+                         </SheetTitle>
+                         <SheetDescription>
+                              Please confirm the details below before proceeding to payment.
+                         </SheetDescription>
+                    </SheetHeader>
 
-                    {/* Cards Section */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 w-full">
-                         {/* Schedule Details */}
-                         <Card>
+                    {/* Cards */}
+                    <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 p-3">
+                         {/* Schedule */}
+                         <Card className="rounded-sm border border-primary border-dashed">
                               <CardHeader>
-                                   <CardTitle className="text-base">Schedule Details</CardTitle>
+                                   <CardTitle className="text-base">
+                                        Schedule Details
+                                   </CardTitle>
                               </CardHeader>
                               <CardContent className="space-y-2 text-sm">
-                                   <Detail label="From" value="Dodoma" />
-                                   <Detail label="To" value="Dar es Salaam" />
-                                   <Detail label="Departure" value="12:00 PM" />
-                                   <Detail label="Arrival" value="2:30 PM" />
-                                   <Separator />
-                                   <Detail label="Date" value="12 Jan 2026" />
+                                   <Detail label="From" value={passengerData?.startJournal ?? "-"} />
+                                   <Detail label="To" value={passengerData?.endJournal ?? "-"} />
+                                   <Detail label="Departure" value={activeSchedule?.departure_time ?? "-"} />
+                                   <Detail label="Arrival" value={activeSchedule?.arrival_time ?? "-"} />
+                                   <Separator className=" border border-primary border-dashed " />
+                                   <Detail label="Date" value={activeSchedule?.travel_date ?? "-"} />
                               </CardContent>
                          </Card>
 
-                         {/* Bus Details */}
-                         <Card>
+                         {/* Bus */}
+                         <Card className="rounded-sm border border-primary border-dashed">
                               <CardHeader>
-                                   <CardTitle className="text-base">Bus Details</CardTitle>
+                                   <CardTitle className="text-base">
+                                        Bus Details
+                                   </CardTitle>
                               </CardHeader>
                               <CardContent className="space-y-2 text-sm">
-                                   <Detail label="Bus Name" value="Kilimanjaro Express" />
-                                   <Detail label="Bus Number" value="T 456 ABC" />
-                                   <Detail label="Seat Number" value="A12" />
-                                   <Detail label="Bus Type" value="Luxury / AC" />
+                                   <Detail label="Bus Name" value={activeBus?.company_name ?? "-"} />
+                                   <Detail label="Bus Plate No" value={activeBus?.bus_plate ?? "-"} />
+                                   <Detail label="Seat" value={passengerData?.seatNumber ?? "-"} />
+                                   <Detail label="Type" value={activeBus?.bus_type ?? "-"} />
                               </CardContent>
                          </Card>
 
-                         {/* Passenger Details */}
-                         <Card>
+                         {/* Passenger */}
+                         <Card className="rounded-sm border border-primary border-dashed">
                               <CardHeader>
-                                   <CardTitle className="text-base">Passenger Details</CardTitle>
+                                   <CardTitle className="text-base">
+                                        Passenger Details
+                                   </CardTitle>
                               </CardHeader>
                               <CardContent className="space-y-2 text-sm">
-                                   <Detail label="Full Name" value="John Doe" />
-                                   <Detail label="Phone" value="+255 712 345 678" />
-                                   <Detail label="Gender" value="Male" />
-                                   <Detail label="Nationality" value="Tanzanian" />
+                                   <Detail label="Name" value={`${passengerData?.firstName}  ${passengerData?.lastName} `} />
+                                   <Detail label="Phone" value={passengerData?.phone ?? "-"} />
+                                   <Detail label="Gender" value={passengerData?.gender ?? "-"} />
+                                   <Detail label="Nationality" value={passengerData?.country === "TZ" ? "Tanzania" : passengerData?.country ?? "-"} />
                               </CardContent>
                          </Card>
                     </div>
 
+                    {/* Price Summary */}
+                    <div className="p-3 -mt-5">
+                         <Card className="rounded-md border border-primary border-dashed shadow-sm">
+                              {/* Price Section */}
+                              <CardContent className="flex justify-between items-center py-4 px-5">
+                                   <span className="text-sm text-muted-foreground">Total Price</span>
+                                   <span className="text-lg font-bold text-primary">
+                                        {"TZS " + Number(activeSchedule?.price).toLocaleString()}
+                                   </span>
+                              </CardContent>
+
+                              <Separator className="border-primary border-dashed mx-5" />
+
+                              {/* Actions */}
+                              <CardFooter className="flex flex-col md:flex-row justify-between gap-3 px-5 py-4">
+                                   <SheetClose className="w-full md:w-1/2">
+                                        <Button variant="outline" className="w-full">
+                                             Edit Details
+                                        </Button>
+                                   </SheetClose>
+                                   <Button
+                                        onClick={onConfirmPassengerDetails}
+                                        className="w-full md:w-1/2 bg-primary text-primary-foreground hover:opacity-90 cursor-pointer"
+                                   >
+                                        Continue With Payment
+                                   </Button>
+                              </CardFooter>
+                         </Card>
+
+                    </div>
+
                     {/* Footer */}
-                    <AlertDialogFooter className="mt-6">
-                         <AlertDialogCancel>Review</AlertDialogCancel>
-                         <AlertDialogAction onClick={onConfirmPassengerDetails}>
-                              Continue to Payment
-                         </AlertDialogAction>
-                    </AlertDialogFooter>
-               </AlertDialogContent>
-          </AlertDialog>
+
+               </SheetContent>
+          </Sheet>
+
      )
 }
 

@@ -11,10 +11,6 @@ const BussesAvailable = () => {
 
     const { setActiveBus, setActiveSchedule, openSeats, isSeatsOpen, fetchBookedSeats, schedules, selectedSchedule, activeBus, } = useBusBookingStore()
 
-   // console.log(activeSchedule)
-   // console.log("SCHEDULES AVAILABLE: ", schedules)
-   // console.log(activeBus)
-
     const isScheduleSelected = selectedSchedule?.origin && selectedSchedule?.destination && selectedSchedule?.date
 
     return (
@@ -140,7 +136,7 @@ const BussesAvailable = () => {
                                                                 <p className="font-medium">TZS {Number(schedule.price).toLocaleString()}</p>
 
                                                                 <Button
-                                                                    className="rounded px-6"
+                                                                    className="rounded px-6 cursor-pointer"
                                                                     onClick={() => { setActiveBus(bus); setActiveSchedule(schedule); openSeats(bus); fetchBookedSeats() }}
                                                                 >
                                                                     Book Ticket

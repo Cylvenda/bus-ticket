@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_ENDPOINTS } from "./endpoints";
 
 const api = axios.create({
-     baseURL: "http://127.0.0.1:8000/api/",
+     baseURL: API_ENDPOINTS.API_ROOT,
      headers: { "Content-Type": "application/json" },
      withCredentials: true,
 });
@@ -13,7 +14,7 @@ api.interceptors.response.use(
           if (error.response?.status === 401) {
                try {
                     // Try refresh
-                    await api.post("auth/refresh/");
+                    await api.post(API_ENDPOINTS.USER_TOKEN_REFRESH);
 
                     // Retry original request
                     return api(error.config);

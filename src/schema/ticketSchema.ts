@@ -3,6 +3,8 @@ import * as z from "zod"
 
 export const FormTicketUserInfoSchema = z.object({
     seatNumber: z.string(),
+    schedule_id: z.number(),
+    bus_id: z.number(),
     idType: z.enum(["passport", "drivingLicense", "nida", "voterID", "TIN", "none"]),
     idNumber: z.string().optional(),
     firstName: z.string().min(1, "First Name is required"),

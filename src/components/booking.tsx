@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { useBus } from "@/hooks/use-bus-booking";
 import { useBusBookingStore } from "@/store/bus/busBooking.store";
 import { Spinner } from "./ui/spinner";
+import { useNavigate } from "react-router-dom";
 
 type routesType = {
     value: string,
@@ -16,25 +17,30 @@ type routesType = {
 
 const Booking = () => {
 
-    const { setSelectedSchedule, fetchSchedules, loading } = useBusBookingStore()
+    const navigate = useNavigate()
+
+    const { setSelectedSchedule, selectedSchedule, fetchSchedules, loading, reset } = useBusBookingStore()
 
     const { routes } = useBus()
 
-    const routesFrom: routesType[] = routes?.map((data) => ({
-        id: data.id,
-        value: data.origin,
-        label: data.origin,
+    const routesFrom: routesType[] = Array.from(
+        new Set(routes?.map(r => r.origin))
+    ).map(city => ({
+        value: city,
+        label: city,
     }))
 
-    const routesTo: routesType[] = routes?.map((data) => ({
-        id: data.id,
-        value: data.destination,
-        label: data.destination,
+    const routesTo: routesType[] = Array.from(
+        new Set(routes?.map(r => r.destination))
+    ).map(city => ({
+        value: city,
+        label: city,
     }))
 
-    const [from, setFrom] = useState("" )
-    const [to, setTo] = useState("")
-    const [date, setDate] = useState<string>("")
+
+    const [from, setFrom] = useState(selectedSchedule?.origin ?? "")
+    const [to, setTo] = useState(selectedSchedule?.destination ?? "")
+    const [date, setDate] = useState(selectedSchedule?.date ?? "")
 
 
     const handleSwap = () => {
@@ -42,17 +48,20 @@ const Booking = () => {
         setTo(from)
     }
 
-    const handleSearchBus = () => {
-        if (from && to && date) {
+    const handleSearchBus = async () => {
+        if (!from || !to || !date) return
 
-            setSelectedSchedule({
-                origin: from,
-                destination: to,
-                date: date
-            })
+        reset()
 
-            fetchSchedules()
-        }
+        setSelectedSchedule({
+            origin: from,
+            destination: to,
+            date: date
+        })
+
+        await fetchSchedules()
+
+        navigate('/schedule')
     }
 
     return (
@@ -77,7 +86,7 @@ const Booking = () => {
                         />
 
                         {/* SWAP BUTTON  FROM LEFT TO RIGHT*/}
-                        <div className="flex flex-col gap-3 justify-between ">
+                        <div className="flex items-end md:items-center flex-col gap-3 justify-between ">
                             <Label className="hidden md:block invisible">Swap</Label>
                             <Button
                                 aria-label="reverse"
@@ -108,7 +117,7 @@ const Booking = () => {
                     <div className="text-center">
                         <Button
                             variant="secondary"
-                            className="w-full md:w-70 disabled:cursor-not-allowed"
+                            className="w-full md:w-70 cursor-pointer disabled:cursor-not-allowed"
                             onClick={handleSearchBus}
                             disabled={!from || !to || !date || loading}
                         >

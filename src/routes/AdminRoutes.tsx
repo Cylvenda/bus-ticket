@@ -1,9 +1,9 @@
-import Dashboard from "@/pages/users/Dashboard"
-import History from "@/pages/users/History"
-import Inbox from "@/pages/users/Inbox"
-import Profile from "@/pages/users/Profile"
+import Dashboard from "@/pages/Dashboard"
+import History from "@/pages/History"
+import Inbox from "@/pages/Inbox"
+import Profile from "@/pages/Profile"
 import Schedule from "@/pages/users/Schedule"
-import Settings from "@/pages/users/Settings"
+import Settings from "@/pages/Settings"
 import { Route, Routes } from "react-router-dom"
 
 const AdminRoutes = () => {

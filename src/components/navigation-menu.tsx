@@ -20,7 +20,7 @@ import { Button } from "./ui/button";
 const components = [
     {
         title: "Search Trips",
-        href: "/trips/search",
+        href: "/search",
         description: "Find buses by route, date, and seat availability.",
     },
     {

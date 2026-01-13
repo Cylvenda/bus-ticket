@@ -3,6 +3,7 @@ import type { Seat as SeatType } from "@/store/bus/bus.types"
 import { useBusBookingStore } from "@/store/bus/busBooking.store"
 
 type SeatProps = {
+    id?: string | number
     seat: SeatType
 }
 
@@ -36,7 +37,7 @@ const Seat = ({ seat }: SeatProps) => {
 
     return (
         <button
-        key={seat.id}
+            key={seat.id}
             disabled={isBooked}
             onClick={() => toggleUserSeatSelection(seat.seat_number)}
             className={`${base} ${isBooked
