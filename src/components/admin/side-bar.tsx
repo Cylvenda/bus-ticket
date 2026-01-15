@@ -7,10 +7,10 @@ import {
      Home,
      LogOutIcon,
      RockingChair,
-     Route,
      Search,
      Settings,
      UserSquare2Icon,
+     Route,
 } from "lucide-react"
 import {
      Sidebar,
@@ -55,13 +55,12 @@ const items: SidebarItem[] = [
      { title: "Profile", url: "/profile", icon: UserSquare2Icon },
      { title: "Settings", url: "/settings", icon: Settings },
 ]
-
 // Placeholder avatar (can be replaced with user image)
 const placeholderAvatar =
      "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhITExAWFRUXGBcXFRYVFxgaGhgYGBUWGh0YGRUdHSggGBolGxcVITEhJSktLi4uFyAzODMsNygtLisBCgoKDg0OGhAQGislICYrLysvLy0tLS0tLy0tKy4rNS0tLS0tMi8tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAPEA0QMBIgACEQEDEQH/..."
 
 // Main sidebar component
-export function AppSidebar() {
+export function AdminAppSidebar() {
      const { user } = useAuthUserStore() // get current user
 
      return (

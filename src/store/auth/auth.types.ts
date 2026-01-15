@@ -2,11 +2,11 @@ export type User = {
      id: string | number,
      firstName: string
      lastName: string
-     username: string | null
+     username: string 
      email: string 
-     phone?: string | null
+     phone: string 
      isActive: boolean
-     isAdmin?: boolean
+     isAdmin: boolean
      isStaff: boolean
 }
 
@@ -15,10 +15,10 @@ export type UserMeResponse = {
      first_name: string
      last_name: string
      email: string
-     phone?: string | null
-     username?: string | null
+     phone: string 
+     username: string 
      is_active: boolean
-     is_admin?: boolean
+     is_admin: boolean
      is_staff: boolean
 }
 

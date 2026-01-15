@@ -79,7 +79,7 @@ const SeatSelectForm = () => {
     // } = form
 
     // console.log("FORM ERRORS:", errors)
-    console.log("FORM ERRORS:", form.formState.errors)
+    // console.log("FORM ERRORS:", form.formState.errors)
 
 
     const submitFormHandler = () => {

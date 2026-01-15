@@ -8,7 +8,7 @@ type AuthState = {
      isAuthenticated: boolean
      isLoggedIn: boolean
 
-     fetchUser: () => Promise<void>
+     fetchUser: () => Promise<User | null>
 }
 
 export const useAuthUserStore = create<AuthState>((set,) => ({
@@ -17,21 +17,19 @@ export const useAuthUserStore = create<AuthState>((set,) => ({
      isAuthenticated: false,
      isLoggedIn: false,
 
-     fetchUser: async () => {
+     fetchUser: async (): Promise<User | null> => {
           try {
-
                const res = await userServices.getUserMe()
-
-               const userData = {
+               const userData: User = {
                     id: res.data.id,
                     firstName: res.data.first_name,
                     lastName: res.data.last_name,
-                    email: "brayanmlawa0917@gmail.com",
-                    phone: res.data.phone ?? null,
+                    email: res.data.email,
+                    phone: res.data.phone,
                     username: res.data.username,
-                    isActive: false,
+                    isActive: res.data.is_active,
+                    isAdmin: res.data.is_admin,
                     isStaff: res.data.is_staff,
-                    isAdmin: res.data.is_admin ?? null
                }
 
                set({
@@ -39,13 +37,17 @@ export const useAuthUserStore = create<AuthState>((set,) => ({
                     isAuthenticated: true,
                     isLoggedIn: true,
                })
-          } catch (error) {
-               console.error("Failed to fetch user:", error)
+
+               return userData
+          } catch {
                set({
                     user: null,
                     isAuthenticated: false,
                     isLoggedIn: false,
                })
+               return null
           }
-     },
+     }
+
+
 }))

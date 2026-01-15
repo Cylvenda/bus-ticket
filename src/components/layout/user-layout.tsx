@@ -5,7 +5,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Link, Outlet, useLocation } from "react-router-dom"
 import { ThemeSwitcher } from "../theme-swicher"
 
-export default function Layout() {
+export default function UserLayout() {
 
     const { pathname } = useLocation()
     const segments = pathname.split("/").filter(Boolean)
