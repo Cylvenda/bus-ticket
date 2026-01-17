@@ -1,4 +1,3 @@
-import React from "react"
 import {
      Bus,
      Calendar,
@@ -11,6 +10,9 @@ import {
      Settings,
      UserSquare2Icon,
      Route,
+     UsersIcon,
+     BookDownIcon,
+     type LucideIcon,
 } from "lucide-react"
 import {
      Sidebar,
@@ -24,7 +26,7 @@ import {
      SidebarMenuButton,
      SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { companyName } from "@/lib/commonName"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import {
@@ -38,39 +40,45 @@ import { useAuthUserStore } from "@/store/auth/userAuth.store"
 type SidebarItem = {
      title: string
      url: string
-     icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+     icon: LucideIcon
 }
 
-// Sidebar menu items
-const items: SidebarItem[] = [
-     { title: "Home", url: "/dashboard", icon: Home },
-     { title: "Users", url: "/Users", icon: Search },
-     { title: "Bus Companies", url: "/bus-companies", icon: CompassIcon },
-     { title: "Buses", url: "/buses", icon: Bus },
-     { title: "Route Stop", url: "/route-stop", icon: Search },
-     { title: "Schedule", url: "/schedule", icon: Calendar },
-     { title: "Routes", url: "/Routes", icon: Route },
-     { title: "Seat Layout", url: "/Seat-layout", icon: RockingChair },
-     { title: "History", url: "/history", icon: Search },
-     { title: "Profile", url: "/profile", icon: UserSquare2Icon },
-     { title: "Settings", url: "/settings", icon: Settings },
-]
+
 // Placeholder avatar (can be replaced with user image)
 const placeholderAvatar =
      "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhITExAWFRUXGBcXFRYVFxgaGhgYGBUWGh0YGRUdHSggGBolGxcVITEhJSktLi4uFyAzODMsNygtLisBCgoKDg0OGhAQGislICYrLysvLy0tLS0tLy0tKy4rNS0tLS0tMi8tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAPEA0QMBIgACEQEDEQH/..."
 
-// Main sidebar component
+
+
 export function AdminAppSidebar() {
-     const { user } = useAuthUserStore() // get current user
+
+     const { user } = useAuthUserStore();
+
+     const location = useLocation()
+     const active = location.pathname
+
+     const items: SidebarItem[] = [
+          { title: "Home", url: "/admin/dashboard", icon: Home },
+          { title: "Users", url: "/admin/Users", icon: UsersIcon },
+          { title: "Bookings", url: "/admin/bookings", icon: BookDownIcon },
+          { title: "Bus Companies", url: "/admin/bus-companies", icon: CompassIcon },
+          { title: "Buses", url: "/admin/buses", icon: Bus },
+          { title: "Route Stop", url: "/admin/route-stop", icon: Search },
+          { title: "Schedule", url: "/admin/schedule", icon: Calendar },
+          { title: "Routes", url: "/admin/Routes", icon: Route },
+          { title: "Seat Layout", url: "/admin/Seat-layout", icon: RockingChair },
+          { title: "Profile", url: "/admin/profile", icon: UserSquare2Icon },
+          { title: "Settings", url: "/admin/settings", icon: Settings },
+     ]
 
      return (
-          <Sidebar>
+          <Sidebar className="bg-primary border-r border-secondary ">
                {/* Sidebar Header */}
-               <SidebarHeader>
+               <SidebarHeader className="bg-primary border-b border-accent">
                     <SidebarMenu>
                          <SidebarMenuItem>
                               <SidebarMenuButton size="lg" asChild>
-                                   <Link to="/dashboard" className="flex items-center gap-2">
+                                   <Link to="/admin/dashboard" className="flex items-center gap-2">
                                         <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square w-8 items-center justify-center rounded-lg">
                                              <GalleryVerticalEnd className="w-4 h-4" />
                                         </div>
@@ -82,7 +90,7 @@ export function AdminAppSidebar() {
                </SidebarHeader>
 
                {/* Sidebar Content */}
-               <SidebarContent>
+               <SidebarContent className="bg-primary">
                     <SidebarGroup>
                          <SidebarGroupLabel>Application</SidebarGroupLabel>
                          <SidebarGroupContent>
@@ -92,7 +100,7 @@ export function AdminAppSidebar() {
                                              <SidebarMenuButton asChild>
                                                   <Link
                                                        to={item.url}
-                                                       className="flex items-center gap-2 text-primary hover:text-primary/80"
+                                                       className={`flex items-center gap-2 hover:text-accent ${active === item.url ? `bg-primary-foreground text-white dark:text-black ` : ``}`}
                                                   >
                                                        <item.icon className="w-5 h-5" />
                                                        <span>{item.title}</span>
@@ -106,7 +114,7 @@ export function AdminAppSidebar() {
                </SidebarContent>
 
                {/* Sidebar Footer */}
-               <SidebarFooter>
+               <SidebarFooter className="bg-primary border-t border-accent">
                     <SidebarMenu>
                          <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -125,7 +133,7 @@ export function AdminAppSidebar() {
                                              <span className="font-medium truncate">
                                                   {user?.firstName || "User"} {user?.lastName || ""}
                                              </span>
-                                             <span className="text-xs text-muted-foreground truncate">
+                                             <span className="text-xs text-muted truncate hover:text-primary">
                                                   {user?.email || "user@example.com"}
                                              </span>
                                         </div>

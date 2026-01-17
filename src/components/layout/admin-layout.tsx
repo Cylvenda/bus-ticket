@@ -16,9 +16,9 @@ export default function AdminLayout() {
                <AdminAppSidebar />
 
                <SidebarInset>
-                    <header className="flex justify-between h-16 shrink-0 items-center gap-2 border-b ">
+                    <header className="flex justify-between h-16 shrink-0 items-center gap-2 border-b bg-primary">
                          <div className="flex items-center gap-2 px-3">
-                              <SidebarTrigger className="text-primary" />
+                              <SidebarTrigger className="bg-secondary flex items-center" />
                               <Separator orientation="vertical" className="mr-2 h-4" />
 
                               <BreadcrumbList>
@@ -35,14 +35,14 @@ export default function AdminLayout() {
                                                             </BreadcrumbPage>
                                                        ) : (
                                                             <BreadcrumbLink asChild>
-                                                                 <Link to={href} className="capitalize">
+                                                                 <Link to={href} className="capitalize text-black dark:text-white">
                                                                       {segment.replace(/-/g, " ")}
                                                                  </Link>
                                                             </BreadcrumbLink>
                                                        )}
                                                   </BreadcrumbItem>
 
-                                                  {!isLast && <BreadcrumbSeparator />}
+                                                  {!isLast && <BreadcrumbSeparator className="text-black dark:text-white" />}
                                              </React.Fragment>
                                         );
                                    })}

@@ -1,8 +1,8 @@
-import PagesWrapper from "@/components/pages-wrapper"
+import PagesWrapper from "@/components/layout/pages-wrapper"
 import { Card, CardContent } from "@/components/ui/card"
 import { useBusBookingStore } from "@/store/bus/busBooking.store"
-import { DataTable } from "@/components/table-data"
-import { RoutesColumns } from "@/components/columns/route-column"
+import { DataTable } from "@/components/table/table-data"
+import { RoutesColumns } from "@/components/table/route-column"
 
 type DashboardCard = {
   title: string

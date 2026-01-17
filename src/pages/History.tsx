@@ -1,4 +1,4 @@
-import PagesWrapper from "@/components/pages-wrapper"
+import PagesWrapper from "@/components/layout/pages-wrapper"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useBusBookingStore } from "@/store/bus/useBusBookingStore"
 

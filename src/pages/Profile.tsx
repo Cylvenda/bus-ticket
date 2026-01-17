@@ -5,7 +5,7 @@ import * as z from "zod"
 import { companyName } from "@/lib/commonName"
 import { FieldInput, FormInput } from "@/components/field-input"
 import { Button } from "@/components/ui/button"
-import PagesWrapper from "@/components/pages-wrapper"
+import PagesWrapper from "@/components/layout/pages-wrapper"
 import { useAuthUserStore } from "@/store/auth/userAuth.store"
 import { useEffect } from "react"
 

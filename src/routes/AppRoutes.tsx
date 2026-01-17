@@ -20,6 +20,7 @@ import Profile from "@/pages/Profile"
 import Settings from "@/pages/Settings"
 import Dashboard from "@/pages/Dashboard"
 import AdminDashboard from "@/pages/admin/AdminDashboard"
+import Bookings from "@/pages/admin/Bookings"
 
 const AppRoutes = () => {
   return (
@@ -37,6 +38,7 @@ const AppRoutes = () => {
         <Route element={<RoleRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="bookings" element={<Bookings />} />
             <Route path="bus-companies" element={<BusCompanies />} />
             <Route path="buses" element={<Buses />} />
             <Route path="schedule-management" element={<ScheduleManagement />} />

@@ -1,7 +1,7 @@
 
 const PagesWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="p-5">
+    <div className="py-3 px-3 bg-accent">
         {children}
     </div>
   )
