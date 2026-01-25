@@ -94,7 +94,7 @@ const Footer = () => {
                             © {new Date().getFullYear()} Bus Ticket Booking. All rights reserved.
                         </p>
                         <div className="flex gap-4">
-                            <Link to="#" title="Cylvenda">Develop by Cylvenda</Link>
+                            <Link to="#" title="Cylvenda">Develop by Group Number 02.</Link>
                         </div>
                     </div>
                 </CardContent>

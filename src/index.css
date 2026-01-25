@@ -176,6 +176,14 @@
   }
 }
 
+/* Printing style background */
+@media print {
+  body {
+    background: white;
+  }
+}
+
+
 /* Tailwind CSS custom animation classes */
 .animate-drive {
   animation: drive 3s ease-in-out infinite;

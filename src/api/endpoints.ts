@@ -15,11 +15,21 @@ export const API_ENDPOINTS = {
      USER_TOKEN_LOGIN: "auth/jwt/create/",
      USER_TOKEN_REFRESH: "auth/jwt/refresh/",
      USER_TOKEN_VERIFY: "auth/jwt/verify/",
-     USER_LOGOUT: "auth/logout/",
+     USER_LOGOUT: "auth/jwt/logout/", 
 
      // Emails activations
      USER_ACCOUNT_ACTIVATION: "auth/users/activation/",
      USER_RESEND_ACTIVATION_EMAIL: "auth/users/resend_activation/",
 
-     CURRENT_USER_PROFILE: "auth/users/me/"
+     //current users
+     CURRENT_USER_PROFILE: "auth/users/me/",
+
+     //admin-data
+     USERS: "auth/users/",
+     BUSES: "bus/",
+     BUS_COMPANIES: "bus-companies/",
+     SCHEDULE: "schedule/",
+     ROUTES_GET: "route/",
+     SCHEDULE_TEMPLATE: "schedule-template/",
+
 }

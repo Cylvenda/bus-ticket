@@ -1,18 +1,16 @@
 import { create } from "zustand"
 import type { PassengerInfo } from "@/types/bus"
 import { BusBookingService } from "@/api/services/busBooking.service"
-import type { Route, Schedule, ScheduleSearchPayload, Seat, Bus, GetBookedSeatsPayload, HoldSeatPayload, HoldSeatResult, Booking } from "./bus.types"
+import type { Route, Schedule, ScheduleSearchPayload, Seat, Bus, GetBookedSeatsPayload, HoldSeatPayload, HoldSeatResult } from "./bus.types"
 import { toast } from "react-toastify"
 import { useNotificationStore } from "../notifications/notification.store"
 import { getErrorMessage } from "@/utils/error"
-import type { ApiResponse } from "@/api/types"
 
 type BusState = {
      routes: Route[]
      schedules: Schedule[] | null
      selectedSchedule: ScheduleSearchPayload | null
      bookedSeats: HoldSeatResult | null
-     bookings: Booking[]
 
      loading: boolean
      error: string | null
@@ -48,7 +46,7 @@ type BusState = {
      closeSeats: () => void
      setActiveSchedule: (schedule: Schedule | null) => void
 
-     fetchBookings: () => Promise<void>
+     
      // Seat helpers
      isSeatSelected: (seatNumber: string) => boolean
      toggleUserSeatSelection: (seat: string) => void
@@ -267,25 +265,6 @@ export const useBusBookingStore = create<BusState>((set, get) => ({
           })),
 
      clearPassengerData: () => set({ passengerData: [] }),
-
-     fetchBookings: async () => {
-          const { bookings, loading } = get()
-
-          if (bookings.length > 0 || loading) return
-
-          set({ loading: true, error: null })
-          try {
-               const result = await BusBookingService.getAllBookings()
-               set({ bookings : result.data, loading: false })
-          } catch (err: unknown) {
-               set({
-                    error: getErrorMessage(err),
-                    loading: false,
-               })
-          }
-     },
-
-
 
      reset: () => set({
           selectedSchedule: null,

@@ -8,19 +8,21 @@ import VerifyAccount from '@/pages/VerifyingAccount'
 import AdminLayout from '@/components/layout/admin-layout'
 import { RoleRoute } from './RoleRoute'
 import Unauthorized from '@/pages/Unauthorized'
-import BusCompanies from "@/pages/admin/BusCompanies"
-import Buses from "@/pages/admin/Buses"
-import ScheduleManagement from "@/pages/admin/ScheduleManagement"
-import RouteStop from "@/pages/admin/RouteStop"
-import RoutesManagement from "@/pages/admin/RoutesManagement"
-import SeatLayout from "@/pages/admin/SeatLayout"
-import Users from "@/pages/admin/Users"
-import Inbox from "@/pages/Inbox"
-import Profile from "@/pages/Profile"
+import BusCompanies from "@/pages/admin/BusCompanies/BusCompanies"
+import Buses from "@/pages/admin/Buses/Buses"
+import ScheduleManagement from "@/pages/admin/Schedule/ScheduleManagement"
+import RoutesManagement from "@/pages/admin/Routes/RoutesManagement"
+import SeatLayout from "@/pages/admin/SeatLayout/SeatLayout"
+import Users from "@/pages/admin/Users/Users"
+import Inbox from "@/pages/users/Inbox"
+import Profile from "@/pages/users/Profile"
 import Settings from "@/pages/Settings"
-import Dashboard from "@/pages/Dashboard"
+import Dashboard from "@/pages/users/Dashboard"
 import AdminDashboard from "@/pages/admin/AdminDashboard"
-import Bookings from "@/pages/admin/Bookings"
+import Bookings from "@/pages/admin/Bookings/Bookings"
+import Payments from "@/pages/Payments"
+import PaymentProcessGuard from "./payment-processes"
+import History from "@/pages/users/History"
 
 const AppRoutes = () => {
   return (
@@ -32,6 +34,12 @@ const AppRoutes = () => {
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route path="/account-activation/:uid/:token" element={<VerifyAccount />} />
 
+
+      <Route element={<PaymentProcessGuard />} >
+        <Route path="payments-process" element={<Payments />} />
+      </Route>
+
+
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         {/* Admin routes */}
@@ -41,11 +49,12 @@ const AppRoutes = () => {
             <Route path="bookings" element={<Bookings />} />
             <Route path="bus-companies" element={<BusCompanies />} />
             <Route path="buses" element={<Buses />} />
-            <Route path="schedule-management" element={<ScheduleManagement />} />
+            <Route path="schedule" element={<ScheduleManagement />} />
             <Route path="routes" element={<RoutesManagement />} />
-            <Route path="route-stop" element={<RouteStop />} />
             <Route path="seat-layout" element={<SeatLayout />} />
             <Route path="users" element={<Users />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="settings" element={<Settings/>} />
           </Route>
         </Route>
 
@@ -55,7 +64,7 @@ const AppRoutes = () => {
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/history" element={<History/>} />
         </Route>
       </Route>
     </Routes>

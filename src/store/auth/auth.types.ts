@@ -1,3 +1,5 @@
+import type { PassengerInfo } from "@/types/user"
+
 export type User = {
      id: string | number,
      firstName: string
@@ -25,4 +27,11 @@ export type UserMeResponse = {
 export type AccountActivation = {
      uid: string
      token: string
+}
+
+export interface BookingResponse {
+     booking_id: number
+     passenger: PassengerInfo
+     total_amount: number
+     payment_status: "PENDING" | "PAID" | "FAILED"
 }

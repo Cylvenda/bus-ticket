@@ -18,9 +18,9 @@ export type Seat = {
 export type Bus = {
      id?: number;
      company_name?: string;
-     bus_plate?: string;
+     plate_number?: string;
      bus_type?: string;
-     company?: string;
+     is_active?: string;
      total_seats?: string;
      amenities?: string;
      startPoint?: string;
@@ -60,28 +60,4 @@ export type HoldSeatPayload = {
 export type HoldSeatResult = {
      held_seats?: string[];
      booked_seats?: string[];
-}
-
-export interface Passenger {
-     id: number;
-     first_name: string;
-     last_name: string;
-     email: string;
-     phone: string;
-     age: number;
-     gender: "M" | "F";
-     nationality: string;
-     boarding_point: string;
-     dropping_point: string;
-}
-export interface Booking {
-     id: number;
-     schedule: Schedule;
-     bus_assignment: Bus;
-     seat_number: string;
-     price_paid: string;    
-     status: "HELD" | "CONFIRMED" | "CANCELLED";
-     is_paid: boolean;
-     booked_at: string;      
-     passenger: Passenger;
 }

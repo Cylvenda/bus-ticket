@@ -1,4 +1,4 @@
-import type { Route, Schedule, ScheduleSearchPayload, GetBookedSeatsPayload, HoldSeatResult, Booking, } from "@/store/bus/bus.types"
+import type { Route, Schedule, ScheduleSearchPayload, GetBookedSeatsPayload, HoldSeatResult } from "@/store/bus/bus.types"
 import api from "../axios"
 import { API_ENDPOINTS } from "../endpoints"
 import type { ApiResponse } from "../types"
@@ -42,12 +42,6 @@ export const BusBookingService = {
      },
      
      // get all bookings 
-     async getAllBookings() {
-          const response = await api.get<ApiResponse<Booking>>(API_ENDPOINTS.GET_BOOKINGS)
-          return {
-               status: response.status,
-               data: response.data
-          }
-     },
+
 }
 

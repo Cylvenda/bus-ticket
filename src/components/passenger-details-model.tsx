@@ -42,7 +42,7 @@ const PassengerDetailsModel = ({
                               Please confirm the details below before proceeding to payment.
                          </SheetDescription>
                     </SheetHeader>
-
+                    comfirmPassengerDetailsSubmit
                     {/* Cards */}
                     <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 p-3">
                          {/* Schedule */}
@@ -71,7 +71,7 @@ const PassengerDetailsModel = ({
                               </CardHeader>
                               <CardContent className="space-y-2 text-sm">
                                    <Detail label="Bus Name" value={activeBus?.company_name ?? "-"} />
-                                   <Detail label="Bus Plate No" value={activeBus?.bus_plate ?? "-"} />
+                                   <Detail label="Bus Plate No" value={activeBus?.plate_number ?? "-"} />
                                    <Detail label="Seat" value={passengerData?.seatNumber ?? "-"} />
                                    <Detail label="Type" value={activeBus?.bus_type ?? "-"} />
                               </CardContent>

@@ -18,8 +18,30 @@ export type PassengerInfo = {
     lastName: string;
     email: string;
     phone: string;
-    gender: "male" | "female";
+    phonePaymentNumber?: string;
+    gender: "M" | "F";
     ageGroup: "adult" | "child" | "infant" | "elder";
     country: string;
 }
 
+export type PassengerFinalInfo = {
+    schedule_id: number,
+    bus_assignment_id: number,
+    seat_number: string;
+    passenger: PassengerData
+}
+
+export type PassengerData = {
+    boarding_point: string;
+    dropping_point: string;
+    id_type: "passport" | "drivingLicense" | "nida" | "voterID" | "TIN" | "none";
+    id_number?: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    phone_payment_number?: string;
+    gender: "M" | "F";
+    age_group: "adult" | "child" | "infant" | "elder";
+    nationality: string;
+}

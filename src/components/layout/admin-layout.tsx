@@ -16,7 +16,7 @@ export default function AdminLayout() {
                <AdminAppSidebar />
 
                <SidebarInset>
-                    <header className="flex justify-between h-16 shrink-0 items-center gap-2 border-b bg-primary">
+                    <header className="flex justify-between h-16 shrink-0 items-center gap-2 border-b ">
                          <div className="flex items-center gap-2 px-3">
                               <SidebarTrigger className="bg-secondary flex items-center" />
                               <Separator orientation="vertical" className="mr-2 h-4" />

@@ -8,6 +8,9 @@ import { FormTicketUserInfoSchema } from "@/schema/ticketSchema"
 import { useEffect, useState } from "react"
 import PassengerDetailsModel from "./passenger-details-model"
 import { useBusBookingStore } from "@/store/bus/busBooking.store"
+import Payments from "@/pages/Payments"
+import { usePassengerStore } from "@/store/passenger/passenger.store"
+import { useNavigate } from "react-router-dom"
 
 const routes = [
     { value: "dar-es-salaam", label: "Dar es Salaam" },
@@ -39,6 +42,11 @@ const SeatSelectForm = () => {
 
     const { selectedSeat, activeSchedule, activeBus } = useBusBookingStore()
 
+    const navigate = useNavigate()
+
+    const setPassenger = usePassengerStore((state) => state.setPassenger)
+
+
     const [selectedIDType, setSelectedIDType] = useState("none")
     const [isPassengerDetailsOpen, setIsPassengerDetailsOpen] = useState(false)
 
@@ -56,7 +64,7 @@ const SeatSelectForm = () => {
             lastName: "",
             email: "",
             phone: "",
-            gender: "male",
+            gender: "M",
             startJournal: "",
             endJournal: ""
         }
@@ -91,8 +99,14 @@ const SeatSelectForm = () => {
 
         setIsPassengerDetailsOpen(false)
 
-        // const formData = form.getValues()
-        console.log("FORM VALUES:", form.getValues())
+        const formData = form.getValues()
+
+        setPassenger(formData)
+
+        navigate("/payments-process")
+
+        // 
+        // console.log("FORM VALUES:", form.getValues())
     }
 
     return (
@@ -171,8 +185,8 @@ const SeatSelectForm = () => {
                                 label="Gender"
                                 name="gender"
                                 options={[
-                                    { value: "male", label: "Male" },
-                                    { value: "female", label: "Female" }
+                                    { value: "M", label: "Male" },
+                                    { value: "F", label: "Female" }
                                 ]}
                             />
 

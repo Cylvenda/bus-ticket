@@ -11,7 +11,7 @@ type AuthState = {
      fetchUser: () => Promise<User | null>
 }
 
-export const useAuthUserStore = create<AuthState>((set,) => ({
+export const useAuthUserStore = create<AuthState>((set) => ({
      loading: false,
      user: null,
      isAuthenticated: false,
@@ -47,7 +47,6 @@ export const useAuthUserStore = create<AuthState>((set,) => ({
                })
                return null
           }
-     }
-
+     },
 
 }))

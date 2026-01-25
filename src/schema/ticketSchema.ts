@@ -11,7 +11,7 @@ export const FormTicketUserInfoSchema = z.object({
     lastName: z.string().min(1, "Last Name is required"),
     email: z.string().email("Invalid email address"),
     phone: z.string().min(1, "Phone number is required"),
-    gender: z.enum(["male", "female"]),
+    gender: z.enum(["M", "F"]),
     ageGroup: z.enum(["adult", "child", "infant", "elder"]),
     country: z.string().min(1, "Country is required"),
     startJournal: z.string().min(1, "You have to select the beggining of your journal"),
