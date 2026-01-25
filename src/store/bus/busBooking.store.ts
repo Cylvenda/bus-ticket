@@ -1,10 +1,11 @@
 import { create } from "zustand"
 import type { PassengerInfo } from "@/types/bus"
 import { BusBookingService } from "@/api/services/busBooking.service"
-import type { Route, Schedule, ScheduleSearchPayload, Seat, Bus, GetBookedSeatsPayload, HoldSeatPayload, HoldSeatResult } from "./bus.types"
+import type { Schedule, ScheduleSearchPayload, Seat, Bus, GetBookedSeatsPayload, HoldSeatPayload, HoldSeatResult } from "./bus.types"
 import { toast } from "react-toastify"
 import { useNotificationStore } from "../notifications/notification.store"
 import { getErrorMessage } from "@/utils/error"
+import type { Route } from "../admin/admin.types"
 
 type BusState = {
      routes: Route[]
