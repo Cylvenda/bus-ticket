@@ -108,8 +108,8 @@ const PassengerDetailsModel = ({
 
                               {/* Actions */}
                               <CardFooter className="flex flex-col md:flex-row justify-between gap-3 px-5 py-4">
-                                   <SheetClose className="w-full md:w-1/2">
-                                        <Button variant="outline" className="w-full">
+                                   <SheetClose asChild>
+                                        <Button variant="outline" className="w-full md:w-1/2">
                                              Edit Details
                                         </Button>
                                    </SheetClose>

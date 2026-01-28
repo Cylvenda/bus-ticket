@@ -78,7 +78,7 @@ const SeatSelectForm = () => {
     useEffect(() => {
         if (activeSchedule?.route_id) {
             const routeId = activeSchedule.route_id;
-            console.log('Route ID:', routeId);
+         //   console.log('Route ID:', routeId);
 
             if (!isNaN(routeId)) {
                 fetchRouteStops(routeId);
