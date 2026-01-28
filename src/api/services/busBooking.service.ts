@@ -1,4 +1,4 @@
-import type { Route, Schedule, ScheduleSearchPayload, GetBookedSeatsPayload, HoldSeatResult } from "@/store/bus/bus.types"
+import type { Route, Schedule, ScheduleSearchPayload, GetBookedSeatsPayload, HoldSeatResult, RouteStop } from "@/store/bus/bus.types"
 import api from "../axios"
 import { API_ENDPOINTS } from "../endpoints"
 import type { ApiResponse } from "../types"
@@ -40,7 +40,16 @@ export const BusBookingService = {
                data: response.data
           }
      },
-     
+
+     // fetching route stops for a specific route
+     async getRouteStops(routeId: number): Promise<ApiResponse<RouteStop[]>> {
+          const response = await api.get<RouteStop[]>(`${API_ENDPOINTS.ROUTE_STOPS}${routeId}/stops/`)
+          return {
+               status: response.status,
+               data: response.data
+          }
+     },
+
      // get all bookings 
 
 }

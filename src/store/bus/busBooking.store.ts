@@ -1,17 +1,17 @@
 import { create } from "zustand"
 import type { PassengerInfo } from "@/types/bus"
 import { BusBookingService } from "@/api/services/busBooking.service"
-import type { Schedule, ScheduleSearchPayload, Seat, Bus, GetBookedSeatsPayload, HoldSeatPayload, HoldSeatResult } from "./bus.types"
+import type { Route, Schedule, ScheduleSearchPayload, Seat, Bus, GetBookedSeatsPayload, HoldSeatPayload, HoldSeatResult, RouteStop } from "./bus.types"
 import { toast } from "react-toastify"
 import { useNotificationStore } from "../notifications/notification.store"
 import { getErrorMessage } from "@/utils/error"
-import type { Route } from "../admin/admin.types"
 
 type BusState = {
      routes: Route[]
      schedules: Schedule[] | null
      selectedSchedule: ScheduleSearchPayload | null
      bookedSeats: HoldSeatResult | null
+     routeStops: RouteStop[]
 
      loading: boolean
      error: string | null
@@ -32,6 +32,7 @@ type BusState = {
 
      fetchRoutes: () => Promise<void>
      fetchSchedules: () => Promise<void>
+     fetchRouteStops: (routeId: number) => Promise<void>
      setSelectedSchedule: (scheduleSelected: ScheduleSearchPayload) => void
      setShowForms: (show: boolean) => void
      addPassengerData: (data: PassengerInfo) => void
@@ -47,7 +48,7 @@ type BusState = {
      closeSeats: () => void
      setActiveSchedule: (schedule: Schedule | null) => void
 
-     
+
      // Seat helpers
      isSeatSelected: (seatNumber: string) => boolean
      toggleUserSeatSelection: (seat: string) => void
@@ -58,9 +59,10 @@ type BusState = {
 }
 
 export const useBusBookingStore = create<BusState>((set, get) => ({
-     routes: [] ,
+     routes: [],
      schedules: null,
      selectedSchedule: null,
+     routeStops: [],
      loading: false,
      error: null,
      activeBus: null,
@@ -112,6 +114,19 @@ export const useBusBookingStore = create<BusState>((set, get) => ({
           try {
                const result = await BusBookingService.getSchedules(payload)
                set({ schedules: result.data, loading: false })
+          } catch (err: unknown) {
+               set({
+                    error: getErrorMessage(err),
+                    loading: false,
+               })
+          }
+     },
+
+     fetchRouteStops: async (routeId: number) => {
+          set({ loading: true, error: null })
+          try {
+               const result = await BusBookingService.getRouteStops(routeId)
+               set({ routeStops: result.data, loading: false })
           } catch (err: unknown) {
                set({
                     error: getErrorMessage(err),
@@ -274,6 +289,7 @@ export const useBusBookingStore = create<BusState>((set, get) => ({
           activeSchedule: null,
           isSeatsOpen: false,
           passengerData: [],
+          routeStops: [],
           error: null
      }),
 }))

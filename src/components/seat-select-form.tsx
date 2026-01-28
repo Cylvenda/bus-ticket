@@ -8,47 +8,41 @@ import { FormTicketUserInfoSchema } from "@/schema/ticketSchema"
 import { useEffect, useState } from "react"
 import PassengerDetailsModel from "./passenger-details-model"
 import { useBusBookingStore } from "@/store/bus/busBooking.store"
-import Payments from "@/pages/Payments"
 import { usePassengerStore } from "@/store/passenger/passenger.store"
 import { useNavigate } from "react-router-dom"
-
-const routes = [
-    { value: "dar-es-salaam", label: "Dar es Salaam" },
-    { value: "dodoma", label: "Dodoma" },
-    { value: "arusha", label: "Arusha" },
-    { value: "moshi", label: "Moshi" },
-    { value: "mwanza", label: "Mwanza" },
-    { value: "tanga", label: "Tanga" },
-    { value: "morogoro", label: "Morogoro" },
-    { value: "iringa", label: "Iringa" },
-    { value: "mbeya", label: "Mbeya" },
-    { value: "songea", label: "Songea" },
-    { value: "singida", label: "Singida" },
-    { value: "tabora", label: "Tabora" },
-    { value: "kigoma", label: "Kigoma" },
-    { value: "shinyanga", label: "Shinyanga" },
-    { value: "kahama", label: "Kahama" },
-    { value: "bukoba", label: "Bukoba" },
-    { value: "musoma", label: "Musoma" },
-    { value: "babati", label: "Babati" },
-    { value: "njombe", label: "Njombe" },
-    { value: "lindi", label: "Lindi" },
-    { value: "mtwara", label: "Mtwara" },
-    { value: "rombo", label: "Rombo" },
-]
+import type { RouteStop } from "@/store/bus/bus.types"
 
 
 const SeatSelectForm = () => {
 
-    const { selectedSeat, activeSchedule, activeBus } = useBusBookingStore()
+    const { selectedSeat, activeSchedule, activeBus, routeStops, fetchRouteStops } = useBusBookingStore()
 
     const navigate = useNavigate()
 
     const setPassenger = usePassengerStore((state) => state.setPassenger)
 
-
     const [selectedIDType, setSelectedIDType] = useState("none")
     const [isPassengerDetailsOpen, setIsPassengerDetailsOpen] = useState(false)
+
+    // Convert route stops to options format for the select dropdown with order numbers
+    const routeOptions = routeStops.map((stop: RouteStop) => ({
+        value: stop.stop_name.toLowerCase().replace(/\s+/g, '-'),
+        label: `${stop.stop_order}. ${stop.stop_name}`,
+        stopOrder: stop.stop_order,
+        stopName: stop.stop_name
+    }))
+
+    // Sort route options by stop order to ensure proper sequence
+    routeOptions.sort((a, b) => a.stopOrder - b.stopOrder)
+
+    // Create separate options for start and end stops
+    const startStopOptions = [...routeOptions] // Ascending order (1, 2, 3...)
+    const endStopOptions = [...routeOptions].reverse() // Descending order (last, second-to-last, first)
+
+    // Get route direction info
+    const routeDirection = routeStops.length > 0
+        ? `${routeStops[0].stop_name} → ${routeStops[routeStops.length - 1].stop_name}`
+        : ""
 
     const form = useForm<z.infer<typeof FormTicketUserInfoSchema>>({
         resolver: zodResolver(FormTicketUserInfoSchema),
@@ -80,6 +74,19 @@ const SeatSelectForm = () => {
         })
     }, [form, activeBus, activeSchedule, selectedSeat])
 
+    // Fetch route stops when we have an active schedule
+    useEffect(() => {
+        if (activeSchedule?.route_id) {
+            const routeId = activeSchedule.route_id;
+            console.log('Route ID:', routeId);
+
+            if (!isNaN(routeId)) {
+                fetchRouteStops(routeId);
+            } else {
+                console.error('Invalid route ID:', routeId);
+            }
+        }
+    }, [activeSchedule, fetchRouteStops])
 
 
     // const {
@@ -101,7 +108,17 @@ const SeatSelectForm = () => {
 
         const formData = form.getValues()
 
-        setPassenger(formData)
+        // Find the actual stop names from the correct options arrays based on the selected values
+        const startStop = startStopOptions.find(option => option.value === formData.startJournal)
+        const endStop = endStopOptions.find(option => option.value === formData.endJournal)
+
+        const cleanedFormData = {
+            ...formData,
+            startJournal: startStop?.stopName || formData.startJournal,
+            endJournal: endStop?.stopName || formData.endJournal
+        }
+
+        setPassenger(cleanedFormData)
 
         navigate("/payments-process")
 
@@ -124,7 +141,7 @@ const SeatSelectForm = () => {
                                 control={form.control}
                                 name="startJournal"
                                 label="Select Your Starting Point"
-                                options={routes}
+                                options={startStopOptions}
                                 placeHolder="Select From"
                             />
 
@@ -132,7 +149,7 @@ const SeatSelectForm = () => {
                                 control={form.control}
                                 name="endJournal"
                                 label="Select Your Ending Point"
-                                options={routes}
+                                options={endStopOptions}
                                 placeHolder="Select To"
                             />
 

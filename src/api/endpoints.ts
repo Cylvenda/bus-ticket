@@ -17,7 +17,7 @@ export const API_ENDPOINTS = {
      USER_TOKEN_LOGIN: "auth/jwt/create/",
      USER_TOKEN_REFRESH: "auth/jwt/refresh/",
      USER_TOKEN_VERIFY: "auth/jwt/verify/",
-     USER_LOGOUT: "auth/jwt/logout/", 
+     USER_LOGOUT: "auth/jwt/logout/",
 
      // Emails activations
      USER_ACCOUNT_ACTIVATION: "auth/users/activation/",
@@ -33,5 +33,6 @@ export const API_ENDPOINTS = {
      SCHEDULE: "schedule/",
      ROUTES_GET: "route/",
      SCHEDULE_TEMPLATE: "schedule-template/",
+     ROUTE_STOPS: "route/",
 
 }

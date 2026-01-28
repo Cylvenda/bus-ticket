@@ -3,7 +3,16 @@ export type Route = {
      origin: string,
      destination: string,
      distance_km: number,
-     estimated_duration_minutes: number
+     estimated_duration_minutes: number,
+     stops?: RouteStop[]
+}
+
+export type RouteStop = {
+     id: number,
+     stop_name: string,
+     stop_order: number,
+     arrival_offset_min?: number,
+     departure_offset_min?: number
 }
 
 export type SeatLayout = {
@@ -30,6 +39,7 @@ export type Bus = {
 export type Schedule = {
      id?: number;
      route?: string;
+     route_id?: number;
      route_origin?: string;
      route_destination?: string;
      travel_date?: string;
