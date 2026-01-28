@@ -22,6 +22,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import { useMyBookings } from "@/hooks/use-my-bookings"
 
 interface Passenger {
   id: number
@@ -79,42 +80,13 @@ interface BookingResponse {
 }
 
 const History = () => {
-  const [bookings, setBookings] = useState<Booking[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+
+  const { MyBookings, loading, error } = useMyBookings()
+
   const [expandedBooking, setExpandedBooking] = useState<number | null>(null)
   const [filterStatus, setFilterStatus] = useState<string>("ALL")
 
-  useEffect(() => {
-    fetchBookingHistory()
-  }, [filterStatus])
 
-  const fetchBookingHistory = async () => {
-    try {
-      setLoading(true)
-      // Replace with your actual API endpoint
-      const url = filterStatus === "ALL"
-        ? '/api/my-bookings/'
-        : `/api/my-bookings/?status=${filterStatus}`
-
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Adjust based on your auth
-        }
-      })
-
-      if (!response.ok) throw new Error('Failed to fetch bookings')
-
-      const data: BookingResponse = await response.json()
-      setBookings(data.results)
-      setError(null)
-    } catch (err) {
-      setError('Failed to load booking history')
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const getStatusColor = (status: string) => {
     const colors = {
@@ -164,10 +136,6 @@ const History = () => {
     setExpandedBooking(expandedBooking === bookingId ? null : bookingId)
   }
 
-  const filteredBookings = filterStatus === "ALL"
-    ? bookings
-    : bookings.filter(b => b.status === filterStatus)
-
   if (loading) {
     return (
       <PagesWrapper>
@@ -196,7 +164,7 @@ const History = () => {
           <div>
             <h1 className="text-3xl font-bold">Booking History</h1>
             <p className="text-muted-foreground mt-1">
-              Review your past bookings and tickets ({bookings.length} total)
+              Review your past bookings and tickets ({MyBookings?.length} total)
             </p>
           </div>
 
@@ -217,7 +185,7 @@ const History = () => {
 
         {/* Bookings List */}
         <div className="space-y-4">
-          {filteredBookings.length === 0 ? (
+          {MyBookings?.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
                 <Ticket className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
@@ -225,7 +193,7 @@ const History = () => {
               </CardContent>
             </Card>
           ) : (
-            filteredBookings.map((booking) => (
+              MyBookings?.map((booking) => (
               <Collapsible
                 key={booking.id}
                 open={expandedBooking === booking.id}
@@ -294,7 +262,7 @@ const History = () => {
                         <div>
                           <p className="text-sm text-muted-foreground">Travel Date</p>
                           <p className="font-medium">
-                            {formatDate(booking.schedule.travel_date)}
+                            {formatDate(booking.schedule.travel_date as string)}
                           </p>
                         </div>
                       </div>
@@ -316,7 +284,7 @@ const History = () => {
                         <div>
                           <p className="text-sm text-muted-foreground">Price Paid</p>
                           <p className="font-semibold text-lg">
-                            TZS {parseFloat(booking.price_paid).toLocaleString()}
+                            TZS {parseFloat(booking.price_paid ).toLocaleString()}
                           </p>
                         </div>
                       </div>
@@ -326,9 +294,9 @@ const History = () => {
                     <div className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
                       <Clock className="h-4 w-4 text-muted-foreground" />
                       <div className="flex items-center gap-2 text-sm">
-                        <span>Departure: <strong>{formatTime(booking.schedule.departure_time)}</strong></span>
+                        <span>Departure: <strong>{formatTime(booking.schedule.departure_time as string)}</strong></span>
                         <span>→</span>
-                        <span>Arrival: <strong>{formatTime(booking.schedule.arrival_time)}</strong></span>
+                        <span>Arrival: <strong>{formatTime(booking.schedule.arrival_time as string)}</strong></span>
                       </div>
                     </div>
 

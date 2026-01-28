@@ -10,6 +10,8 @@ export const API_ENDPOINTS = {
      HOLD_SEAT: "hold-seat/",
      GET_BOOKINGS: "get-bookings/",
 
+     GET_MY_BOOKING: "my-bookings/",
+
      // User Authentication Endpoints
      USER_REGISTRATION: "auth/users/",
      USER_TOKEN_LOGIN: "auth/jwt/create/",

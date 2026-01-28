@@ -10,7 +10,6 @@ import { useBookings } from "@/hooks/use-admin/useBooking"
 import { Eye, XCircle } from "lucide-react"
 import { bookingColumns } from "./booking-columns"
 import { DataTable } from "@/components/table/table-data"
-import { BookingMobileCard } from "./booking-mobile"
 
 const PAGE_SIZE = 5
 

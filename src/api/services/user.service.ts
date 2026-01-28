@@ -27,5 +27,18 @@ export const userServices = {
                status: response.status,
                data: response.data
           }
+     },
+
+     async getAllMyBookings({ page, pageSize }: { page: number; pageSize: number }) {
+          const response = await api.get(API_ENDPOINTS.GET_MY_BOOKING, {
+               params: {
+                    page,
+                    page_size: pageSize,
+               }
+          })
+          return {
+               status: response.status,
+               data: response.data
+          }
      }
 }

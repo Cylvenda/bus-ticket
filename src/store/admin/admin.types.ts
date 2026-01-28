@@ -30,6 +30,7 @@ export type Passenger = {
      last_name: string;
      email: string;
      phone: string;
+     age_group?: string;
      age: number | string;
      gender: Gender;
      nationality: string;
