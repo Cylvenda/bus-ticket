@@ -8,6 +8,8 @@ import { useState } from "react"
 import { useUsers } from "@/hooks/use-admin/useUsers"
 import type { UserMeResponse } from "@/store/auth/auth.types"
 import { UsersActions } from './actions';
+import { ViewUserDialog } from "@/components/dialog/user"
+import { AdminStore } from "@/store/admin/admin.store"
 
 const Users = () => {
 
@@ -24,7 +26,9 @@ const Users = () => {
   ]
 
   const [selected, setSelected] = useState<UserMeResponse | null>(null)
-  const [mode, setMode] = useState<"view" | "edit" | null>(null)
+  const [openView, setOpenView] = useState(false)
+
+  const toggleUserActive = AdminStore(state => state.toggleUserActive)
 
 
   return (
@@ -40,17 +44,25 @@ const Users = () => {
               users={users}
               onView={() => {
                 setSelected(users)
-                setMode("view")
+                setOpenView(true)
               }}
-              onEdit={() => {
-                setSelected(users)
-                setMode("edit")
+              onToggleActive={() => {
+                void toggleUserActive(users.id, !users.is_active)
               }}
             />
           )}
         />
         <TablePagination page={page} totalPages={totalPages} onPageChange={setPage} />
       </Card>
+
+      <ViewUserDialog
+        open={openView}
+        user={selected}
+        onClose={() => {
+          setOpenView(false)
+          setSelected(null)
+        }}
+      />
 
     </PagesWrapper>
   )

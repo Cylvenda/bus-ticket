@@ -1,4 +1,4 @@
-import type { Bus, Schedule } from "../bus/bus.types";
+import type { Bus, Schedule, Route, RouteStop } from "../bus/bus.types";
 
 export type ListResponse<T> = {
      count: string
@@ -42,12 +42,15 @@ export type BookingStatus = "CONFIRMED" | "PENDING" | "CANCELLED";
 
 export type Gender = "M" | "F";
 
+// Re-export Route and RouteStop from bus.types for consistency
+export type { Route, RouteStop } from "../bus/bus.types";
+
 export type Booking = {
      id: number;
      schedule: Schedule;
      bus_assignment: BusAssignment;
      seat_number: string;
-     price_paid: number ;
+     price_paid: number;
      status: BookingStatus;
      is_paid: boolean;
      booked_at: string;
@@ -73,16 +76,32 @@ export type Route = {
 };
 
 export type ScheduleGet = {
-     travel_date: string
-     departure_time: string
-     arrival_time: string
-     price: string
+     id: number;
+     travel_date: string;
+     departure_time: string;
+     arrival_time: string;
+     price: string;
+     template: ScheduleTemplate;
+     template_id?: number;
+}
+
+
+export type SeatLayoutApi = {
+     id: number
+     name: string
+     layout: {
+          rows: (string | null)[][]
+     }
+     total_seats: number
+     is_active: boolean
 }
 
 
 export type BusCompany = {
-     id: string
+     id: number
      name: string
      contact_email: string
+     contact_phone?: string | null
+     address?: string | null
      license_number: string
 }

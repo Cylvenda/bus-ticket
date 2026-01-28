@@ -5,19 +5,23 @@ import {
      DropdownMenuItem,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { MoreVertical, Eye, Edit, Trash } from "lucide-react"
-import type { ScheduleGet } from "@/store/admin/admin.types"
+import { MoreVertical, Eye, Edit, Trash, MapPin, Settings } from "lucide-react"
+import type { Route } from "@/store/admin/admin.types"
 
 export const Actions = ({
-     schedule,
+     route,
      onView,
      onEdit,
      onDelete,
+     onViewStops,
+     onManageStops,
 }: {
-     schedule: ScheduleGet
+     route: Route
      onView: () => void
      onEdit: () => void
      onDelete: () => void
+     onViewStops: () => void
+     onManageStops: () => void
 }) => {
      return (
           <DropdownMenu>
@@ -37,6 +41,18 @@ export const Actions = ({
                          <Edit className="w-4 h-4 mr-2" />
                          Edit
                     </DropdownMenuItem>
+
+                    <DropdownMenuItem onClick={onManageStops}>
+                         <Settings className="w-4 h-4 mr-2" />
+                         Manage Stops
+                    </DropdownMenuItem>
+
+                    {route.stops && route.stops.length > 0 && (
+                         <DropdownMenuItem onClick={onViewStops}>
+                              <MapPin className="w-4 h-4 mr-2" />
+                              View {route.stops.length} Stop{route.stops.length !== 1 ? 's' : ''}
+                         </DropdownMenuItem>
+                    )}
 
                     <DropdownMenuItem
                          className="text-red-500"

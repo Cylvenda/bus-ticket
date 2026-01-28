@@ -30,6 +30,7 @@ export const API_ENDPOINTS = {
      USERS: "auth/users/",
      BUSES: "bus/",
      BUS_COMPANIES: "bus-companies/",
+     SEAT_LAYOUTS: "seat-layout/",
      SCHEDULE: "schedule/",
      ROUTES_GET: "route/",
      SCHEDULE_TEMPLATE: "schedule-template/",

@@ -8,7 +8,17 @@ import { Button } from "@/components/ui/button"
 import { MoreVertical, Eye, Edit, Trash } from "lucide-react"
 import type { Bus } from "@/store/bus/bus.types"
 
-export const BusesActions = ({ buses }: { buses: Bus }) => {
+export const Actions = ({
+     bus,
+     onView,
+     onEdit,
+     onDelete,
+}: {
+     bus: Bus
+     onView: () => void
+     onEdit: () => void
+     onDelete: () => void
+}) => {
      return (
           <DropdownMenu>
                <DropdownMenuTrigger asChild>
@@ -18,19 +28,19 @@ export const BusesActions = ({ buses }: { buses: Bus }) => {
                </DropdownMenuTrigger>
 
                <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => view(buses)}>
+                    <DropdownMenuItem onClick={onView}>
                          <Eye className="w-4 h-4 mr-2" />
                          View
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem onClick={() => edit(buses)}>
+                    <DropdownMenuItem onClick={onEdit}>
                          <Edit className="w-4 h-4 mr-2" />
                          Edit
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
                          className="text-red-500"
-                         onClick={() => remove(buses.id)}
+                         onClick={onDelete}
                     >
                          <Trash className="w-4 h-4 mr-2" />
                          Delete

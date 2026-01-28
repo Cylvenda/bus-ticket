@@ -1,72 +1,64 @@
 import { type ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "../../../components/ui/checkbox"
-import { ArrowUpDown } from "lucide-react"
-import { Button } from "../../../components/ui/button"
+import { Actions } from "./actions"
 import type { Bus } from "@/store/bus/bus.types"
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+interface BusesColumnsProps {
+     onView: (bus: Bus) => void
+     onEdit: (bus: Bus) => void
+     onDelete: (bus: Bus) => void
+}
 
-
-export const BusesColumns: ColumnDef<Bus>[] = [
-
-     {
-          id: "select",
-          header: ({ table }) => (
-               <Checkbox
-                    checked={
-                         table.getIsAllPageRowsSelected() ||
-                         (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-               />
-          ),
-          cell: ({ row }) => (
-               <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-               />
-          ),
-          enableSorting: false,
-          enableHiding: false,
-     },
-     {
-          accessorKey: "id",
-          header: "id",
-          cell: ({ row }) => (
-               <div className="capitalize">{row.getValue("id")}</div>
-          ),
-     },
+export const BusesColumns = ({ onView, onEdit, onDelete }: BusesColumnsProps): ColumnDef<Bus>[] => [
      {
           accessorKey: "plate_number",
-          header: ({ column }) => {
-               return (
-                    <Button
-                         variant="ghost"
-                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                         Plate Number
-                         <ArrowUpDown />
-                    </Button>
-               )
-          },
-          cell: ({ row }) => <div className="lowercase">{row.getValue("plate_number")}</div>,
+          header: "Plate Number",
+          cell: ({ row }) => (
+               <div className="font-medium">{row.getValue("plate_number")}</div>
+          ),
      },
      {
           accessorKey: "bus_type",
-          header: ({ column }) => {
+          header: "Bus Type",
+          cell: ({ row }) => (
+               <div className="font-medium">{row.getValue("bus_type")}</div>
+          ),
+     },
+     {
+          accessorKey: "company_name",
+          header: "Company",
+          cell: ({ row }) => (
+               <div className="font-medium">{row.getValue("company_name")}</div>
+          ),
+     },
+     {
+          accessorKey: "total_seats",
+          header: "Total Seats",
+          cell: ({ row }) => (
+               <div className="text-sm">{row.getValue("total_seats")}</div>
+          ),
+     },
+     {
+          accessorKey: "is_active",
+          header: "Status",
+          cell: ({ row }) => (
+               <div className={`text-sm font-medium ${row.getValue("is_active") ? "text-green-600" : "text-red-600"}`}>
+                    {row.getValue("is_active") ? "Active" : "Inactive"}
+               </div>
+          ),
+     },
+     {
+          id: "actions",
+          header: "Actions",
+          cell: ({ row }) => {
+               const bus = row.original
                return (
-                    <Button
-                         variant="ghost"
-                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                         Bus Type
-                         <ArrowUpDown />
-                    </Button>
+                    <Actions
+                         bus={bus}
+                         onView={() => onView(bus)}
+                         onEdit={() => onEdit(bus)}
+                         onDelete={() => onDelete(bus)}
+                    />
                )
           },
-          cell: ({ row }) => <div className="lowercase">{row.getValue("bus_type")}</div>,
      },
 ]

@@ -1,98 +1,67 @@
 import { type ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "../../../components/ui/checkbox"
-import { ArrowUpDown } from "lucide-react"
-import { Button } from "../../../components/ui/button"
+import { Actions } from "./actions"
 import type { ScheduleGet } from "@/store/admin/admin.types"
 
-export const ScheduleColumns: ColumnDef<ScheduleGet>[] = [
+interface ScheduleColumnsProps {
+     onView: (schedule: ScheduleGet) => void
+     onEdit: (schedule: ScheduleGet) => void
+     onDelete: (schedule: ScheduleGet) => void
+}
 
-     {
-          id: "select",
-          header: ({ table }) => (
-               <Checkbox
-                    checked={
-                         table.getIsAllPageRowsSelected() ||
-                         (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-               />
-          ),
-          cell: ({ row }) => (
-               <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-               />
-          ),
-          enableSorting: false,
-          enableHiding: false,
-     },
-     {
-          accessorKey: "id",
-          header: "id",
-          cell: ({ row }) => (
-               <div className="capitalize">{row.getValue("id")}</div>
-          ),
-     },
+export const ScheduleColumns = ({ onView, onEdit, onDelete }: ScheduleColumnsProps): ColumnDef<ScheduleGet>[] => [
      {
           accessorKey: "travel_date",
-          header: ({ column }) => {
-               return (
-                    <Button
-                         variant="ghost"
-                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                         Travel Date
-                         <ArrowUpDown />
-                    </Button>
-               )
-          },
-          cell: ({ row }) => <div className="lowercase">{row.getValue("travel_date")}</div>,
-     },
-     {
-          accessorKey: "arrival_time",
-          header: ({ column }) => {
-               return (
-                    <Button
-                         variant="ghost"
-                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                         Arrival Time
-                         <ArrowUpDown />
-                    </Button>
-               )
-          },
-          cell: ({ row }) => <div className="lowercase">{row.getValue("arrival_time")}</div>,
+          header: "Travel Date",
+          cell: ({ row }) => (
+               <div className="font-medium">{row.getValue("travel_date")}</div>
+          ),
      },
      {
           accessorKey: "departure_time",
-          header: ({ column }) => {
-               return (
-                    <Button
-                         variant="ghost"
-                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                         Depature Time
-                         <ArrowUpDown />
-                    </Button>
-               )
-          },
-          cell: ({ row }) => <div className="lowercase">{row.getValue("departure_time")}</div>,
+          header: "Departure Time",
+          cell: ({ row }) => (
+               <div className="font-medium">{row.getValue("departure_time")}</div>
+          ),
+     },
+     {
+          accessorKey: "arrival_time",
+          header: "Arrival Time",
+          cell: ({ row }) => (
+               <div className="font-medium">{row.getValue("arrival_time")}</div>
+          ),
      },
      {
           accessorKey: "price",
-          header: ({ column }) => {
+          header: "Price",
+          cell: ({ row }) => (
+               <div className="font-medium">${row.getValue("price")}</div>
+          ),
+     },
+     {
+          accessorKey: "template",
+          header: "Route",
+          cell: ({ row }) => {
+               const template = row.original.template
                return (
-                    <Button
-                         variant="ghost"
-                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                         Price
-                         <ArrowUpDown />
-                    </Button>
+                    <div className="font-medium">
+                         Route ID: {template?.route}
+                    </div>
                )
           },
-          cell: ({ row }) => <div className="lowercase">{row.getValue("price")}</div>,
+     },
+     {
+          id: "actions",
+          header: "Actions",
+          cell: ({ row }) => {
+               const schedule = row.original
+               return (
+                    <Actions
+                         schedule={schedule}
+                         onView={() => onView(schedule)}
+                         onEdit={() => onEdit(schedule)}
+                         onDelete={() => onDelete(schedule)}
+                    />
+               )
+          },
      },
 ]

@@ -63,7 +63,16 @@ export const BusCompnyColumns: ColumnDef<BusCompany>[] = [
                     </Button>
                )
           },
-          cell: ({ row }) => <div className="lowercase">{row.getValue("contact_email")}</div>,
+          cell: ({ row }) => (
+               <div className="lowercase max-w-[220px] truncate">{row.getValue("contact_email")}</div>
+          ),
+     },
+     {
+          accessorKey: "contact_phone",
+          header: "Phone",
+          cell: ({ row }) => (
+               <div className="max-w-[160px] truncate">{(row.getValue("contact_phone") as string) ?? "-"}</div>
+          ),
      },
      {
           accessorKey: "license_number",
@@ -78,6 +87,8 @@ export const BusCompnyColumns: ColumnDef<BusCompany>[] = [
                     </Button>
                )
           },
-          cell: ({ row }) => <div className="lowercase">{row.getValue("licence_number")}</div>,
+          cell: ({ row }) => (
+               <div className="max-w-[160px] break-all">{row.getValue("license_number")}</div>
+          ),
      }
 ]
