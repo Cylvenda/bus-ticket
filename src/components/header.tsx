@@ -51,10 +51,10 @@ const Header = () => {
                                     <span className="ml-5">Quick Actions</span>
                                     <X onClick={() => setPhoneMenu(false)} />
                                 </li>
-                                <li className="m-2 hover:opacity-80" onClick={() => openForm('register')}>
+                                <li className="m-2 hover:opacity-80 cursor-pointer" onClick={() => openForm('register')}>
                                     Register
                                 </li>
-                                <li className="m-2 hover:opacity-80" onClick={() => openForm('login')}>
+                                <li className="m-2 hover:opacity-80 cursor-pointer" onClick={() => openForm('login')}>
                                     Login
                                 </li>
                             </ul>

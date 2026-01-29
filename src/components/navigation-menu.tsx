@@ -82,7 +82,7 @@ export function NavigationMenuHome() {
                                 <NavigationMenuLink asChild>
                                     <Link
                                         to="/"
-                                        className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none hover:bg-muted focus:shadow-md md:p-6"
+                                        className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none hover:bg-muted focus:shadow-md md:p-6 cursor-pointer"
                                     >
                                         <img src={assets.busEmpty} alt="" width={400} height={100} />
                                         <div className="mb-2 text-sm font-medium sm:mt-4">
@@ -152,7 +152,7 @@ export function NavigationMenuHome() {
                     </NavigationMenuContent>
 
                 </NavigationMenuItem>
-                
+
                 <NavigationMenuItem >
                     <Button className="cursor-pointer text-black dark:text-white " onClick={() => navigate("/schedule")} >
                         Schedule
@@ -178,7 +178,7 @@ function ListItem({
             <NavigationMenuLink asChild>
                 <Link
                     to={href}
-                    className="block rounded-md p-3 transition-colors hover:bg-muted focus:bg-muted"
+                    className="block rounded-md p-3 transition-colors hover:bg-muted focus:bg-muted cursor-pointer"
                 >
                     <div className="text-sm font-medium leading-none">
                         {title}
