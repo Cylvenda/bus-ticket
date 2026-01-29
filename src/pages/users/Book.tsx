@@ -26,11 +26,11 @@ const Book = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { routes, loading: routesLoading, error: routesError } = useUserRoutes()
-  const { 
-    selectedSchedule, 
-    setSelectedSchedule, 
-    schedules, 
-    loading: schedulesLoading, 
+  const {
+    selectedSchedule,
+    setSelectedSchedule,
+    schedules,
+    loading: schedulesLoading,
     fetchSchedules,
     activeBus,
     setActiveBus,
@@ -57,10 +57,15 @@ const Book = () => {
     }
 
     setIsSearching(true)
+
+    // Convert date from YYYY-MM-DD to DD-MM-YYYY format for API
+    const [year, month, day] = searchData.date.split('-')
+    const formattedDate = `${day}-${month}-${year}`
+
     setSelectedSchedule({
       origin: searchData.origin,
       destination: searchData.destination,
-      date: searchData.date,
+      date: formattedDate,
     })
 
     try {
@@ -187,8 +192,8 @@ const Book = () => {
                 />
               </div>
               <div className="flex items-end">
-                <Button 
-                  onClick={handleSearch} 
+                <Button
+                  onClick={handleSearch}
                   disabled={isSearching}
                   className="w-full gap-2"
                 >

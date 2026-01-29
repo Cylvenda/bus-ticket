@@ -61,7 +61,7 @@ type SidebarItem = {
 
 // Enhanced sidebar menu items with better organization
 const mainItems: SidebarItem[] = [
-    { title: "Dashboard", url: "/dashboard", icon: Home, badge: "New" },
+    { title: "Dashboard", url: "/dashboard", icon: Home},
     { title: "Book Ticket", url: "/book", icon: Ticket },
     { title: "My Trips", url: "/schedule", icon: Calendar },
     { title: "Routes", url: "/routes", icon: MapPin },
@@ -69,7 +69,7 @@ const mainItems: SidebarItem[] = [
 
 const accountItems: SidebarItem[] = [
     { title: "Booking History", url: "/history", icon: Clock },
-    { title: "Inbox", url: "/inbox", icon: Inbox, badge: "3" },
+    { title: "Inbox", url: "/inbox", icon: Inbox },
     { title: "Profile", url: "/profile", icon: UserSquare2Icon },
     { title: "Payment Methods", url: "/payment", icon: CreditCard },
 ]
@@ -113,7 +113,7 @@ export function AppSidebar() {
     return (
         <Sidebar variant="inset">
             {/* Enhanced Sidebar Header */}
-            <SidebarHeader className="bg-gradient-to-r from-blue-600 to-purple-600">
+            <SidebarHeader className="bg-primary">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild className="hover:bg-white/10">
@@ -134,8 +134,11 @@ export function AppSidebar() {
             {/* Enhanced Sidebar Content */}
             <SidebarContent className="bg-background">
                 {/* Main Navigation */}
-                <SidebarGroup>
-                    <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground">Main</SidebarGroupLabel>
+                <SidebarGroup className="pb-4">
+                    <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2 mb-3 pb-2 border-b border-border">
+                        <Home className="w-3 h-3" />
+                        Main
+                    </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {mainItems.map((item) => (
@@ -146,17 +149,19 @@ export function AppSidebar() {
                                             className="flex items-center gap-3 group"
                                         >
                                             <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${isActive(item.url)
-                                                    ? 'bg-primary text-primary-foreground'
-                                                    : 'bg-muted group-hover:bg-muted/80'
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-muted group-hover:bg-muted/80'
                                                 }`}>
                                                 <item.icon className="w-4 h-4" />
                                             </div>
-                                            <span className="font-medium">{item.title}</span>
-                                            {item.badge && (
-                                                <Badge variant="secondary" className="ml-auto text-xs">
-                                                    {item.badge}
-                                                </Badge>
-                                            )}
+                                            <div className="flex flex-col">
+                                                <span className="font-medium">{item.title}</span>
+                                                {item.badge && (
+                                                    <Badge variant="secondary" className="w-fit text-xs">
+                                                        {item.badge}
+                                                    </Badge>
+                                                )}
+                                            </div>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -166,8 +171,11 @@ export function AppSidebar() {
                 </SidebarGroup>
 
                 {/* Account Management */}
-                <SidebarGroup>
-                    <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground">Account</SidebarGroupLabel>
+                <SidebarGroup className="pb-4 mt-2">
+                    <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2 mb-3 pb-2 border-b border-border">
+                        <UserSquare2Icon className="w-3 h-3" />
+                        Account
+                    </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {accountItems.map((item) => (
@@ -178,17 +186,19 @@ export function AppSidebar() {
                                             className="flex items-center gap-3 group"
                                         >
                                             <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${isActive(item.url)
-                                                    ? 'bg-primary text-primary-foreground'
-                                                    : 'bg-muted group-hover:bg-muted/80'
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-muted group-hover:bg-muted/80'
                                                 }`}>
                                                 <item.icon className="w-4 h-4" />
                                             </div>
-                                            <span className="font-medium">{item.title}</span>
-                                            {item.badge && (
-                                                <Badge variant="destructive" className="ml-auto text-xs animate-pulse">
-                                                    {item.badge}
-                                                </Badge>
-                                            )}
+                                            <div className="flex flex-col">
+                                                <span className="font-medium">{item.title}</span>
+                                                {item.badge && (
+                                                    <Badge variant="destructive" className="w-fit text-xs animate-pulse">
+                                                        {item.badge}
+                                                    </Badge>
+                                                )}
+                                            </div>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -198,8 +208,11 @@ export function AppSidebar() {
                 </SidebarGroup>
 
                 {/* Support */}
-                <SidebarGroup>
-                    <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground">Support</SidebarGroupLabel>
+                <SidebarGroup className="pb-4 mt-2">
+                    <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2 mb-3 pb-2 border-b border-border">
+                        <HelpCircle className="w-3 h-3" />
+                        Support
+                    </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {supportItems.map((item) => (
@@ -210,12 +223,14 @@ export function AppSidebar() {
                                             className="flex items-center gap-3 group"
                                         >
                                             <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${isActive(item.url)
-                                                    ? 'bg-primary text-primary-foreground'
-                                                    : 'bg-muted group-hover:bg-muted/80'
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-muted group-hover:bg-muted/80'
                                                 }`}>
                                                 <item.icon className="w-4 h-4" />
                                             </div>
-                                            <span className="font-medium">{item.title}</span>
+                                            <div className="flex flex-col">
+                                                <span className="font-medium">{item.title}</span>
+                                            </div>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -233,17 +248,20 @@ export function AppSidebar() {
                             <SidebarMenuButton className="w-full justify-start data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50">
                                 <Avatar className="h-8 w-8 rounded-lg border-2 border-background shadow-sm">
                                     <AvatarImage src={user?.avatar} alt={user?.firstName || "User"} />
-                                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
+                                    <AvatarFallback className="bg-primary text-white font-semibold">
                                         {getUserInitials()}
                                     </AvatarFallback>
                                 </Avatar>
-                                <div className="flex flex-col text-left leading-tight">
-                                    <span className="font-medium truncate">
+                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                    <span className="truncate font-semibold">
                                         {user?.firstName || "User"} {user?.lastName || ""}
                                     </span>
-                                    <span className="text-xs text-muted-foreground truncate">
+                                    <span className="truncate text-xs text-muted-foreground">
                                         {user?.email || "user@example.com"}
                                     </span>
+                                    <Badge variant="secondary" className="w-fit mt-1 text-xs">
+                                        User
+                                    </Badge>
                                 </div>
                                 <ChevronRight className="ml-auto h-4 w-4" />
                             </SidebarMenuButton>
@@ -258,12 +276,8 @@ export function AppSidebar() {
                                 <Settings className="w-4 h-4 mr-2" />
                                 Account Settings
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="cursor-pointer">
-                                <Bell className="w-4 h-4 mr-2" />
-                                Notifications
-                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600">
+                            <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600" onClick={handleLogout}>
                                 <LogOutIcon className="w-4 h-4 mr-2" />
                                 Logout
                             </DropdownMenuItem>
