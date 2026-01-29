@@ -315,7 +315,7 @@ const AdminDashboard = () => {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <StatsCard
             title="Total Revenue"
-            value="$0"
+            value="TZS 0"
             change={0}
             changeType="increase"
             icon={TrendingUp}

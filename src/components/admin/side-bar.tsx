@@ -72,7 +72,7 @@ const dashboardItems: SidebarItem[] = [
 
 const managementItems: SidebarItem[] = [
      { title: "Users", url: "/admin/Users", icon: UsersIcon, description: "User Management" },
-     { title: "Bookings", url: "/admin/bookings", icon: BookDownIcon, description: "Booking Management", badge: "New" },
+     { title: "Bookings", url: "/admin/bookings", icon: BookDownIcon, description: "Booking Management" },
      { title: "Companies", url: "/admin/bus-companies", icon: Building, description: "Bus Companies" },
      { title: "Buses", url: "/admin/buses", icon: Bus, description: "Bus Fleet" },
 ]
@@ -123,7 +123,7 @@ export function AdminAppSidebar() {
      return (
           <Sidebar variant="inset">
                {/* Enhanced Admin Sidebar Header */}
-               <SidebarHeader className="bg-gradient-to-r from-purple-600 to-pink-600">
+               <SidebarHeader className="bg-primary">
                     <SidebarMenu>
                          <SidebarMenuItem>
                               <SidebarMenuButton size="lg" asChild className="hover:bg-white/10">
@@ -144,8 +144,8 @@ export function AdminAppSidebar() {
                {/* Enhanced Admin Sidebar Content */}
                <SidebarContent className="bg-background">
                     {/* Dashboard Section */}
-                    <SidebarGroup>
-                         <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                    <SidebarGroup className="pb-4">
+                         <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2 mb-3 pb-2 border-b border-border">
                               <Activity className="w-3 h-3" />
                               Dashboard
                          </SidebarGroupLabel>
@@ -156,8 +156,8 @@ export function AdminAppSidebar() {
                                              <SidebarMenuButton asChild isActive={isActive(item.url)}>
                                                   <Link to={item.url} className="flex items-center gap-3 group">
                                                        <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${isActive(item.url)
-                                                                 ? 'bg-primary text-primary-foreground'
-                                                                 : 'bg-muted group-hover:bg-muted/80'
+                                                            ? 'bg-primary text-primary-foreground'
+                                                            : 'bg-muted group-hover:bg-muted/80'
                                                             }`}>
                                                             <item.icon className="w-4 h-4" />
                                                        </div>
@@ -176,8 +176,8 @@ export function AdminAppSidebar() {
                     </SidebarGroup>
 
                     {/* Management Section */}
-                    <SidebarGroup>
-                         <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                    <SidebarGroup className="pb-4 mt-2">
+                         <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2 mb-3 pb-2 border-b border-border">
                               <UsersIcon className="w-3 h-3" />
                               Management
                          </SidebarGroupLabel>
@@ -188,22 +188,17 @@ export function AdminAppSidebar() {
                                              <SidebarMenuButton asChild isActive={isActive(item.url)}>
                                                   <Link to={item.url} className="flex items-center gap-3 group">
                                                        <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${isActive(item.url)
-                                                                 ? 'bg-primary text-primary-foreground'
-                                                                 : 'bg-muted group-hover:bg-muted/80'
+                                                            ? 'bg-primary text-primary-foreground'
+                                                            : 'bg-muted group-hover:bg-muted/80'
                                                             }`}>
                                                             <item.icon className="w-4 h-4" />
                                                        </div>
-                                                       <div className="flex flex-col flex-1">
+                                                       <div className="flex flex-col flex-1 py-5">
                                                             <span className="font-medium">{item.title}</span>
                                                             {item.description && (
                                                                  <span className="text-xs text-muted-foreground">{item.description}</span>
                                                             )}
                                                        </div>
-                                                       {item.badge && (
-                                                            <Badge variant="destructive" className="ml-auto text-xs animate-pulse">
-                                                                 {item.badge}
-                                                            </Badge>
-                                                       )}
                                                   </Link>
                                              </SidebarMenuButton>
                                         </SidebarMenuItem>
@@ -213,8 +208,8 @@ export function AdminAppSidebar() {
                     </SidebarGroup>
 
                     {/* Operations Section */}
-                    <SidebarGroup>
-                         <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                    <SidebarGroup className="pb-4 mt-2">
+                         <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2 mb-3 pb-2 border-b border-border">
                               <Calendar className="w-3 h-3" />
                               Operations
                          </SidebarGroupLabel>
@@ -225,8 +220,8 @@ export function AdminAppSidebar() {
                                              <SidebarMenuButton asChild isActive={isActive(item.url)}>
                                                   <Link to={item.url} className="flex items-center gap-3 group">
                                                        <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${isActive(item.url)
-                                                                 ? 'bg-primary text-primary-foreground'
-                                                                 : 'bg-muted group-hover:bg-muted/80'
+                                                            ? 'bg-primary text-primary-foreground'
+                                                            : 'bg-muted group-hover:bg-muted/80'
                                                             }`}>
                                                             <item.icon className="w-4 h-4" />
                                                        </div>
@@ -245,8 +240,8 @@ export function AdminAppSidebar() {
                     </SidebarGroup>
 
                     {/* System Section */}
-                    <SidebarGroup>
-                         <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                    <SidebarGroup className="pb-4 mt-2">
+                         <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground flex items-center gap-2 mb-3 pb-2 border-b border-border">
                               <Settings className="w-3 h-3" />
                               System
                          </SidebarGroupLabel>
@@ -257,8 +252,8 @@ export function AdminAppSidebar() {
                                              <SidebarMenuButton asChild isActive={isActive(item.url)}>
                                                   <Link to={item.url} className="flex items-center gap-3 group">
                                                        <div className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${isActive(item.url)
-                                                                 ? 'bg-primary text-primary-foreground'
-                                                                 : 'bg-muted group-hover:bg-muted/80'
+                                                            ? 'bg-primary text-primary-foreground'
+                                                            : 'bg-muted group-hover:bg-muted/80'
                                                             }`}>
                                                             <item.icon className="w-4 h-4" />
                                                        </div>
@@ -286,7 +281,7 @@ export function AdminAppSidebar() {
                                         <SidebarMenuButton className="w-full justify-start data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50">
                                              <Avatar className="h-8 w-8 rounded-lg border-2 border-background shadow-sm">
                                                   <AvatarImage src={user?.avatar} alt={user?.firstName || "Admin"} />
-                                                  <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-600 text-white font-semibold">
+                                                  <AvatarFallback className="bg-primary text-white font-semibold">
                                                        {getUserInitials()}
                                                   </AvatarFallback>
                                              </Avatar>
@@ -315,10 +310,6 @@ export function AdminAppSidebar() {
                                         <DropdownMenuItem className="cursor-pointer">
                                              <Settings className="mr-2 h-4 w-4" />
                                              System Settings
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem className="cursor-pointer">
-                                             <Bell className="mr-2 h-4 w-4" />
-                                             Notifications
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600" onClick={handleLogout}>

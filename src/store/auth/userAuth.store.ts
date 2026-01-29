@@ -24,7 +24,7 @@ type AuthState = {
      fetchUserBookings: (page?: number, pageSize?: number) => Promise<void>
 }
 
-export const useAuthUserStore = create<AuthState>((set, get) => ({
+export const useAuthUserStore = create<AuthState>((set) => ({
      loading: false,
      error: "",
      user: null,
@@ -49,30 +49,30 @@ export const useAuthUserStore = create<AuthState>((set, get) => ({
                     isStaff: res.data.is_staff,
                }
 
-               set({
+               set((state) => ({
+                    ...state,
                     user: userData,
                     isAuthenticated: true,
                     isLoggedIn: true,
-               })
+               }))
 
                return userData
           } catch {
-               set({
+               set((state) => ({
+                    ...state,
                     user: null,
                     isAuthenticated: false,
                     isLoggedIn: false,
-               })
+               }))
                return null
           }
      },
 
      fetchUserBookings: async (page = 1, pageSize = 20) => {
-          if (get().loading) return
-
           set(state => ({ ...state, loading: true, error: "" }))
 
           try {
-               const res = await userServices.getAllMyBookings({page, pageSize})
+               const res = await userServices.getAllMyBookings({ page, pageSize })
 
                set(state => ({
                     ...state,

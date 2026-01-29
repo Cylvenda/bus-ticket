@@ -13,7 +13,7 @@ const ProtectedRoute = () => {
                setInitialized(true)
           }
           init()
-     }, [fetchUser])
+     }, [])
 
      if (loading || !initialized) {
           return (

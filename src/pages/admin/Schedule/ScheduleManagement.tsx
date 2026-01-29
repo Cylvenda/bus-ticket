@@ -141,12 +141,12 @@ const ScheduleManagement = () => {
 
         {/* Table */}
         <Card>
-          <DataTable 
+          <DataTable
             columns={ScheduleColumns({
               onView: openView,
               onEdit: openEdit,
               onDelete: openDelete,
-            })} 
+            })}
             data={schedule ?? []}
           />
           {totalPages > 1 && (
@@ -183,7 +183,7 @@ const ScheduleManagement = () => {
                 </div>
                 <div>
                   <Label>Price</Label>
-                  <p className="font-medium">${selected.price}</p>
+                  <p className="font-medium">TZS {selected.price}</p>
                 </div>
                 <div>
                   <Label>Route</Label>
@@ -215,8 +215,8 @@ const ScheduleManagement = () => {
                 {formMode === "create" ? "Add New Schedule" : "Edit Schedule"}
               </DialogTitle>
               <DialogDescription>
-                {formMode === "create" 
-                  ? "Create a new schedule" 
+                {formMode === "create"
+                  ? "Create a new schedule"
                   : "Update schedule information"
                 }
               </DialogDescription>
@@ -269,7 +269,7 @@ const ScheduleManagement = () => {
                   <SelectContent>
                     {scheduleTemplates?.map((template) => (
                       <SelectItem key={template.id} value={template.id.toString()}>
-                        Route {template.route} - {template.departure_time} to {template.arrival_time} (${template.base_price})
+                        Route {template.route} - {template.departure_time} to {template.arrival_time} (TZS {template.base_price})
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -293,7 +293,7 @@ const ScheduleManagement = () => {
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Schedule</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete the schedule for {selected?.travel_date}? 
+                Are you sure you want to delete the schedule for {selected?.travel_date}?
                 This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>

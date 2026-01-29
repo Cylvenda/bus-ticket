@@ -34,7 +34,7 @@ export const ScheduleColumns = ({ onView, onEdit, onDelete }: ScheduleColumnsPro
           accessorKey: "price",
           header: "Price",
           cell: ({ row }) => (
-               <div className="font-medium">${row.getValue("price")}</div>
+               <div className="font-medium">TZS {row.getValue("price")}</div>
           ),
      },
      {

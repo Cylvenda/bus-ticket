@@ -1,83 +1,83 @@
-import { useAuthUserStore } from "@/store/auth/userAuth.store"
-import { useEffect, useRef, useCallback } from "react"
+import { useState, useEffect } from "react"
+import { userServices } from "@/api/services/user.service"
+import { API_ENDPOINTS } from "@/api/endpoints"
 
-// Global state to prevent multiple fetches across component instances
-const globalFetchState = {
-     isFetching: false,
-     lastFetch: 0,
-     currentPage: 1,
-     currentPageSize: 10
+interface Booking {
+  id: number
+  status: string
+  price_paid: number
+  seat_number: string
+  is_paid: boolean
+  booked_at: string
+  schedule: {
+    route?: string
+    route_origin?: string
+    route_destination?: string
+    travel_date?: string
+    departure_time?: string
+    arrival_time?: string
+  }
+  bus_assignment?: {
+    bus?: {
+      company_name?: string
+      plate_number?: string
+    }
+    available_seats?: number
+  }
+  passenger?: {
+    first_name?: string
+    last_name?: string
+    email?: string
+    phone?: string
+  }
+}
+
+interface PaginationMeta {
+  count: number
+  next: string | null
+  previous: string | null
 }
 
 export const useMyBookings = (page = 1, pageSize = 10) => {
-     const MyBookings = useAuthUserStore(state => state.MyBookings)
-     const MyBookingsPagination = useAuthUserStore(state => state.MyBookingsPagination)
-     const loading = useAuthUserStore(state => state.loading)
-     const error = useAuthUserStore(state => state.error)
-     const fetchUserBookings = useAuthUserStore(state => state.fetchUserBookings)
+  const [bookings, setBookings] = useState<Booking[] | null>(null)
+  const [pagination, setPagination] = useState<PaginationMeta | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string>("")
 
-     const hasFetched = useRef(false)
-     const lastPageRef = useRef(page)
-     const lastPageSizeRef = useRef(pageSize)
-     const fetchFunctionRef = useRef(fetchUserBookings)
+  useEffect(() => {
+    const fetchBookings = async () => {
+      if (loading) return // Prevent multiple simultaneous requests
+      
+      setLoading(true)
+      setError("")
+      
+      try {
+        const response = await userServices.getAllMyBookings({ page, pageSize })
+        setBookings(response.data.results)
+        setPagination({
+          count: Number(response.data.count),
+          next: response.data.next,
+          previous: response.data.previous,
+        })
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch bookings")
+        setBookings(null)
+        setPagination(null)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-     // Update the fetch function ref if it changes
-     if (fetchFunctionRef.current !== fetchUserBookings) {
-          fetchFunctionRef.current = fetchUserBookings
-     }
+    fetchBookings()
+  }, [page, pageSize])
 
-     const fetchBookings = useCallback(() => {
-          const now = Date.now()
+  const totalPages = pagination ? Math.ceil(pagination.count / pageSize) : 0
 
-          // Prevent multiple simultaneous fetches across all instances
-          if (globalFetchState.isFetching) {
-               console.log('useMyBookings: Another instance is fetching, skipping')
-               return
-          }
-
-          // Only fetch if it's the first time or if page/pageSize changed
-          if (
-               !hasFetched.current ||
-               lastPageRef.current !== page ||
-               lastPageSizeRef.current !== pageSize
-          ) {
-               // Additional check: don't fetch if we just fetched the same data
-               if (
-                    globalFetchState.currentPage === page &&
-                    globalFetchState.currentPageSize === pageSize &&
-                    (now - globalFetchState.lastFetch) < 1000 // 1 second cooldown
-               ) {
-                    console.log('useMyBookings: Recently fetched same data, skipping')
-                    return
-               }
-
-               console.log('useMyBookings: Fetching bookings for page:', page, 'pageSize:', pageSize)
-               globalFetchState.isFetching = true
-               globalFetchState.currentPage = page
-               globalFetchState.currentPageSize = pageSize
-
-               fetchFunctionRef.current?.(page, pageSize)
-
-               // Reset fetch state after a delay
-               setTimeout(() => {
-                    globalFetchState.isFetching = false
-                    globalFetchState.lastFetch = Date.now()
-               }, 500)
-
-               hasFetched.current = true
-               lastPageRef.current = page
-               lastPageSizeRef.current = pageSize
-          } else {
-               console.log('useMyBookings: Skipping fetch - already fetched for page:', page, 'pageSize:', pageSize)
-          }
-     }, [page, pageSize]) // Remove fetchUserBookings from dependencies
-
-     useEffect(() => {
-          fetchBookings()
-     }, [fetchBookings])
-
-     // Calculate total pages based on backend pagination
-     const totalPages = Math.ceil((MyBookingsPagination?.count ?? 0) / pageSize)
-
-     return { MyBookings, MyBookingsPagination, loading, error, totalPages }
+  return {
+    MyBookings: bookings,
+    MyBookingsPagination: pagination,
+    loading,
+    error,
+    totalPages
+  }
 }

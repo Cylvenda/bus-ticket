@@ -22,7 +22,13 @@ import AdminDashboard from "@/pages/admin/AdminDashboard"
 import Bookings from "@/pages/admin/Bookings/Bookings"
 import Payments from "@/pages/Payments"
 import PaymentProcessGuard from "./payment-processes"
+import Book from "@/pages/users/Book"
+import UserRoutes from "@/pages/users/Routes"
+import PaymentMethods from "@/pages/users/PaymentMethods"
+import HelpCenter from "@/pages/users/HelpCenter"
+import Analytics from "@/pages/admin/Analytics"
 import History from "@/pages/users/History"
+
 
 const AppRoutes = () => {
   return (
@@ -46,6 +52,7 @@ const AppRoutes = () => {
         <Route element={<RoleRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="analytics" element={<Analytics />} />
             <Route path="bookings" element={<Bookings />} />
             <Route path="bus-companies" element={<BusCompanies />} />
             <Route path="buses" element={<Buses />} />
@@ -54,17 +61,22 @@ const AppRoutes = () => {
             <Route path="seat-layout" element={<SeatLayout />} />
             <Route path="users" element={<Users />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="settings" element={<Settings/>} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
 
         {/* User routes */}
         <Route element={<UserLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/book" element={<Book />} />
+          <Route path="/routes" element={<UserRoutes />} />
+          <Route path="/schedule" element={<Schedule />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/history" element={<History/>} />
+          <Route path="/history" element={<History />} />
+          <Route path="/payment" element={<PaymentMethods />} />
+          <Route path="/help" element={<HelpCenter />} />
         </Route>
       </Route>
     </Routes>
