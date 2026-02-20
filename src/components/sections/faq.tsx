@@ -1,234 +1,241 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import React, { useState } from "react"
+import {
+  Bus,
+  ChevronDown,
+  ChevronUp,
+  CreditCard,
+  HelpCircle,
+  Mail,
+  MessageCircle,
+  Phone,
+  Search,
+  Users,
+} from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 
 interface FAQItemProps {
-     question: string;
-     answer: string;
-     isOpen: boolean;
-     onClick: () => void;
+  question: string
+  answer: string
+  isOpen: boolean
+  onClick: () => void
+  icon: React.ReactNode
 }
-
-const FAQItem: React.FC<FAQItemProps> = ({ question, answer, isOpen, onClick }) => (
-     <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
-          <button
-               onClick={onClick}
-               className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
-          >
-               <span className="font-semibold text-gray-800 pr-4">{question}</span>
-               {isOpen ? (
-                    <ChevronUp className="text-pink-600 flex-shrink-0" size={24} />
-               ) : (
-                    <ChevronDown className="text-pink-600 flex-shrink-0" size={24} />
-               )}
-          </button>
-          {isOpen && (
-               <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                    <p className="text-gray-700 leading-relaxed">{answer}</p>
-               </div>
-          )}
-     </div>
-);
 
 interface FAQCategory {
-     category: string;
-     icon: string;
-     questions: Array<{ question: string; answer: string }>;
+  category: string
+  icon: React.ReactNode
+  label: string
+  questions: Array<{ question: string; answer: string }>
 }
 
+const FAQItem: React.FC<FAQItemProps> = ({ question, answer, isOpen, onClick, icon }) => (
+  <Card className="overflow-hidden border-border/70 bg-card shadow-sm">
+    <button
+      onClick={onClick}
+      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-accent"
+    >
+      <div className="flex items-center gap-3">
+        <div className="text-primary">{icon}</div>
+        <span className="font-medium text-foreground">{question}</span>
+      </div>
+      <div className="rounded-md bg-muted p-1 text-muted-foreground">
+        {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+      </div>
+    </button>
+
+    {isOpen && (
+      <div className="border-t border-border bg-background px-5 py-4">
+        <p className="text-sm leading-relaxed text-muted-foreground">{answer}</p>
+      </div>
+    )}
+  </Card>
+)
+
 const Faq: React.FC = () => {
-     const [openIndex, setOpenIndex] = useState<string | null>(null);
-     const [activeCategory, setActiveCategory] = useState<string>('booking');
+  const [openIndex, setOpenIndex] = useState<string | null>(null)
+  const [activeCategory, setActiveCategory] = useState<string>("booking")
+  const [searchQuery, setSearchQuery] = useState("")
 
-     const faqData: FAQCategory[] = [
-          {
-               category: 'booking',
-               icon: '🎫',
-               questions: [
-                    {
-                         question: 'How do I book a bus ticket online?',
-                         answer: 'Go to our homepage, pick your departure and arrival cities, choose a travel date, then click "Search For Bus". Pick a bus, select a seat, and pay.'
-                    },
-                    {
-                         question: 'Can I book tickets for someone else?',
-                         answer: 'Yes, you can. Enter the passenger\'s name, age, and contact info. Make sure it matches their ID.'
-                    },
-                    {
-                         question: 'How far in advance can I book?',
-                         answer: 'You can book tickets up to 90 days before travel. Book early during busy times to get the best seats.'
-                    },
-                    {
-                         question: 'What payment methods do you accept?',
-                         answer: 'We accept credit/debit cards (Visa, Mastercard), mobile money (M-Pesa, Tigo Pesa, Airtel Money), and bank transfers. Payments are safe and secure.'
-                    }
-               ]
-          },
-          {
-               category: 'cancellation',
-               icon: '❌',
-               questions: [
-                    {
-                         question: 'What is your cancellation policy?',
-                         answer: 'You can cancel up to 2 hours before departure. Over 24 hours = 90% refund, 24-6 hours = 75%, 6-2 hours = 50%, within 2 hours = no refund.'
-                    },
-                    {
-                         question: 'How do I cancel my ticket?',
-                         answer: 'Log in, go to "My Bookings", select the ticket, and click "Cancel Booking". You will get a confirmation email.'
-                    },
-                    {
-                         question: 'How long does it take to get a refund?',
-                         answer: 'Refunds usually take 5-7 business days. The exact time depends on your bank or payment method.'
-                    },
-                    {
-                         question: 'Can I reschedule my ticket instead of cancelling?',
-                         answer: 'Yes, up to 6 hours before departure. A 10% fee applies. New date depends on seat availability.'
-                    }
-               ]
-          },
-          {
-               category: 'travel',
-               icon: '🚌',
-               questions: [
-                    {
-                         question: 'What should I bring for boarding?',
-                         answer: 'Bring a valid ID (National ID, Passport, or Driver\'s License) and your ticket. Arrive at least 30 minutes early.'
-                    },
-                    {
-                         question: 'What is the luggage allowance?',
-                         answer: 'Each passenger can bring one check-in bag (up to 20kg) and one carry-on (up to 5kg). Extra or heavy bags may cost more. No flammables, weapons, or illegal items.'
-                    },
-                    {
-                         question: 'Are there amenities on board?',
-                         answer: 'Buses have comfy seats, AC, and toilets. Long-distance buses may have WiFi, charging ports, and entertainment. Some routes have snacks or drinks.'
-                    },
-                    {
-                         question: 'What if my bus is delayed or cancelled?',
-                         answer: 'We will notify you by SMS and email. You can reschedule for free or get a refund. We try to avoid delays.'
-                    }
-               ]
-          },
-          {
-               category: 'account',
-               icon: '👤',
-               questions: [
-                    {
-                         question: 'Do I need an account to book tickets?',
-                         answer: 'You can book as a guest, but having an account is easier. You can track bookings, save routes, and get special offers.'
-                    },
-                    {
-                         question: 'How do I reset my password?',
-                         answer: 'Click "Forgot Password" on login. Enter your email. Follow the link sent to your email to create a new password.'
-                    },
-                    {
-                         question: 'Can I update my profile information?',
-                         answer: 'Yes. Log in and go to "Profile Settings". Update your name, phone, email, etc. Some changes may need email verification.'
-                    },
-                    {
-                         question: 'How do I delete my account?',
-                         answer: 'Contact customer support. Deleting your account is permanent and removes all your booking history.'
-                    }
-               ]
-          }
-     ];
+  const faqData: FAQCategory[] = [
+    {
+      category: "booking",
+      icon: <CreditCard size={20} />,
+      label: "Booking",
+      questions: [
+        {
+          question: "How do I book a bus ticket online?",
+          answer:
+            'Select route and date, click "Search For Bus", choose a seat, then pay. Confirmation is sent immediately.',
+        },
+        {
+          question: "Can I book for someone else?",
+          answer:
+            "Yes. Enter the passenger's actual details during checkout. Names should match the ID used for boarding.",
+        },
+        {
+          question: "How early can I reserve?",
+          answer:
+            "Tickets are typically available up to 90 days in advance, subject to route and schedule availability.",
+        },
+      ],
+    },
+    {
+      category: "travel",
+      icon: <Bus size={20} />,
+      label: "Travel",
+      questions: [
+        {
+          question: "What do I need for boarding?",
+          answer:
+            "Bring a valid ID and your booking confirmation, and arrive at least 30 minutes before departure.",
+        },
+        {
+          question: "What luggage is allowed?",
+          answer:
+            "Standard trips allow one main bag and one hand-carry. Oversized or extra luggage may incur charges.",
+        },
+        {
+          question: "What if the bus is delayed?",
+          answer:
+            "You receive update notifications. If needed, support assists with rebooking or refund options.",
+        },
+      ],
+    },
+    {
+      category: "account",
+      icon: <Users size={20} />,
+      label: "Account",
+      questions: [
+        {
+          question: "Do I need an account to book?",
+          answer:
+            "Guest booking is possible, but accounts make repeat bookings faster and keep your trip history in one place.",
+        },
+        {
+          question: "How do I reset password?",
+          answer:
+            "Use the " +
+            '"Forgot Password" option on login and follow the secure reset link sent to your email.',
+        },
+      ],
+    },
+  ]
 
+  const activeData = faqData.find((cat) => cat.category === activeCategory)
 
-     const activeData = faqData.find(cat => cat.category === activeCategory);
+  const filteredQuestions =
+    activeData?.questions.filter(
+      (item) =>
+        item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.answer.toLowerCase().includes(searchQuery.toLowerCase()),
+    ) ?? []
 
-     const handleToggle = (index: string) => {
-          setOpenIndex(openIndex === index ? null : index);
-     };
+  return (
+    <section className="bg-background py-20 sm:py-24">
+      <div className="container mx-auto px-4">
+        <div className="mx-auto max-w-4xl text-center">
+          <Badge className="mb-4 bg-primary/15 text-primary hover:bg-primary/20">
+            Help Center
+          </Badge>
+          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            Straight answers to common travel questions
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg">
+            Search quickly or browse by category to find what you need.
+          </p>
+        </div>
 
-     return (
-          <div className="min-h-screen bg-gray-50 border-t border-accent">
-               {/* Hero Section */}
-               <section className="bg-primary  py-20">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-4xl mx-auto text-center">
-                              <HelpCircle className="mx-auto mb-6" size={64} />
-                              <h1 className="text-3xl font-bold mb-6">Frequently Asked Questions</h1>
-                              <p className="text-lg opacity-90">
-                                   Find answers to common questions about booking, cancellations, and travel
-                              </p>
-                         </div>
-                    </div>
-               </section>
-
-               {/* Search Bar */}
-               <section className="py-8 bg-white shadow-sm">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-2xl mx-auto">
-                              <input
-                                   type="text"
-                                   placeholder="Search for answers..."
-                                   className="w-full px-6 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
-                              />
-                         </div>
-                    </div>
-               </section>
-
-               {/* Category Tabs */}
-               <section className="py-8">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-4xl mx-auto">
-                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                                   {faqData.map((cat) => (
-                                        <button
-                                             key={cat.category}
-                                             onClick={() => {
-                                                  setActiveCategory(cat.category);
-                                                  setOpenIndex(null);
-                                             }}
-                                             className={`p-4 rounded-lg font-semibold transition-all ${activeCategory === cat.category
-                                                       ? 'bg-primary  shadow-lg'
-                                                       : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md'
-                                                  }`}
-                                        >
-                                             <span className="text-2xl mb-2 block">{cat.icon}</span>
-                                             {cat.category.charAt(0).toUpperCase() + cat.category.slice(1)}
-                                        </button>
-                                   ))}
-                              </div>
-                         </div>
-                    </div>
-               </section>
-
-               {/* FAQ Items */}
-               <section className="pb-16">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-4xl mx-auto">
-                              {activeData?.questions.map((item, index) => (
-                                   <FAQItem
-                                        key={index}
-                                        question={item.question}
-                                        answer={item.answer}
-                                        isOpen={openIndex === `${activeCategory}-${index}`}
-                                        onClick={() => handleToggle(`${activeCategory}-${index}`)}
-                                   />
-                              ))}
-                         </div>
-                    </div>
-               </section>
-
-               {/* Still Need Help Section */}
-               <section className="py-16 bg-primary border-b-2 border-accent ">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-3xl mx-auto text-center">
-                              <h2 className="text-3xl font-bold mb-4">Still Need Help?</h2>
-                              <p className="text-xl mb-8 opacity-90">
-                                   Can't find the answer you're looking for? Our customer support team is here to assist you.
-                              </p>
-                              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                   <button className="bg-white text-pink-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                                        Contact Support
-                                   </button>
-                                   <button className="border-2 border-white  px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-pink-600 transition-colors">
-                                        Live Chat
-                                   </button>
-                              </div>
-                         </div>
-                    </div>
-               </section>
+        <div className="mx-auto mt-10 max-w-3xl">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+            <Input
+              type="text"
+              placeholder="Search questions..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-11 border-border bg-card pl-10"
+            />
           </div>
-     );
-};
+        </div>
 
-export default Faq;
+        <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-3 md:grid-cols-4">
+          {faqData.map((cat) => {
+            const active = activeCategory === cat.category
+            return (
+              <button
+                key={cat.category}
+                onClick={() => {
+                  setActiveCategory(cat.category)
+                  setOpenIndex(null)
+                  setSearchQuery("")
+                }}
+                className={`rounded-xl border px-3 py-3 text-sm transition-colors ${
+                  active
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-foreground hover:bg-accent"
+                }`}
+              >
+                <div className="mb-1 flex items-center justify-center">{cat.icon}</div>
+                <div className="font-medium">{cat.label}</div>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="mx-auto mt-8 max-w-5xl space-y-3">
+          {filteredQuestions.length > 0 ? (
+            filteredQuestions.map((item, idx) => (
+              <FAQItem
+                key={item.question}
+                question={item.question}
+                answer={item.answer}
+                isOpen={openIndex === `${activeCategory}-${idx}`}
+                onClick={() =>
+                  setOpenIndex(openIndex === `${activeCategory}-${idx}` ? null : `${activeCategory}-${idx}`)
+                }
+                icon={activeData?.icon ?? <HelpCircle size={20} />}
+              />
+            ))
+          ) : (
+            <Card className="border-border/70 bg-card">
+              <CardContent className="py-10 text-center">
+                <Search className="mx-auto mb-3 text-muted-foreground" size={30} />
+                <p className="font-medium text-foreground">No results found</p>
+                <p className="mt-1 text-sm text-muted-foreground">Try another keyword or switch category.</p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        <Card className="mx-auto mt-12 max-w-5xl border-border/70 bg-muted/30">
+          <CardContent className="grid gap-4 p-6 md:grid-cols-3 md:p-8">
+            <div className="rounded-lg border border-border bg-card p-4 text-center">
+              <Phone className="mx-auto mb-2 text-primary" size={18} />
+              <p className="text-sm font-medium text-foreground">Phone</p>
+              <p className="text-sm text-muted-foreground">+255 780 598 902</p>
+            </div>
+            <div className="rounded-lg border border-border bg-card p-4 text-center">
+              <MessageCircle className="mx-auto mb-2 text-primary" size={18} />
+              <p className="text-sm font-medium text-foreground">Live Chat</p>
+              <p className="text-sm text-muted-foreground">Available daily</p>
+            </div>
+            <div className="rounded-lg border border-border bg-card p-4 text-center">
+              <Mail className="mx-auto mb-2 text-primary" size={18} />
+              <p className="text-sm font-medium text-foreground">Email</p>
+              <p className="text-sm text-muted-foreground">support@busticketbookingtz.co.tz</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="mt-6 text-center">
+          <Button className="bg-primary text-primary-foreground hover:bg-primary/90">Contact Support</Button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export default Faq

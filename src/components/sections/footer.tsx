@@ -1,106 +1,103 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "react-router-dom";
-import { Separator } from "@/components/ui/separator.tsx";
-import { FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon } from "lucide-react";
-import { companyName } from "@/lib/commonName";
+import { Link } from "react-router-dom"
+import { FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon } from "lucide-react"
+
+import { Card, CardContent } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator.tsx"
+import { companyName } from "@/lib/commonName"
 
 type LinkType = {
-    value: string;
-    location: string;
-};
+  value: string
+  location: string
+}
 
 const Footer = () => {
-    const links: LinkType[] = [
-        { value: "Home", location: "/" },
-        { value: "Book Now", location: "/schedule" },
-        { value: "About", location: "#about" },
-        { value: "Contact", location: "#contact" },
-        { value: "Call Center", location: "#call-center" },
-    ];
+  const links: LinkType[] = [
+    { value: "Home", location: "/" },
+    { value: "Book Now", location: "/schedule" },
+    { value: "About", location: "/#about" },
+    { value: "Contact", location: "/#contact" },
+    { value: "Call Center", location: "/#call-center" },
+  ]
 
-    const companyLinks: LinkType[] = [
-        { value: "Privacy Policy", location: "#" },
-        { value: "Terms & Conditions", location: "#" },
-        { value: "FAQs", location: "#" },
-        { value: "More Products", location: "#" },
-    ];
+  const companyLinks: LinkType[] = [
+    { value: "Privacy Policy", location: "#" },
+    { value: "Terms & Conditions", location: "#" },
+    { value: "FAQs", location: "#" },
+    { value: "More Products", location: "#" },
+  ]
 
-    return (
-        <footer>
-            <Card className="rounded-none border-none bg-primary  ">
-                <CardContent className="max-w-7xl mx-auto px-1 md:px-5 py-3 md:py-12">
-                    {/* Top Section */}
-                    <div className="grid gap-15 md:grid-cols-4">
-                        {/* Brand */}
-                        <div className="space-y-3">
-                            <h1 className="text-xl font-bold">{companyName}</h1>
-                            <p className="text-sm ">
-                                Book bus tickets easily, choose seats, and pay securely.
-                            </p>
-                        </div>
+  return (
+    <footer className="border-t border-primary/40 bg-primary text-primary-foreground">
+      <Card className="rounded-none border-0 bg-primary text-primary-foreground">
+        <CardContent className="mx-auto max-w-7xl px-4 py-10 md:px-6 md:py-12">
+          <div className="grid gap-8 md:grid-cols-4">
+            <div className="space-y-3">
+              <h2 className="text-xl font-semibold text-primary-foreground">{companyName}</h2>
+              <p className="max-w-xs text-sm leading-relaxed text-primary-foreground/80">
+                Book bus tickets easily, choose seats, and pay securely with a
+                clear, reliable booking experience.
+              </p>
+            </div>
 
-                        {/* Quick Links */}
-                        <div>
-                            <h2 className="mb-4 text-lg font-semibold">Quick Links</h2>
-                            <ul className="space-y-2 text-sm">
-                                {links.map((link) => (
-                                    <li key={link.value}>
-                                        <Link
-                                            to={link.location}
-                                            className="hover:underline"
-                                        >
-                                            {link.value}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+            <div>
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary-foreground">
+                Quick Links
+              </h3>
+              <ul className="space-y-2 text-sm">
+                {links.map((link) => (
+                  <li key={link.value}>
+                    <Link to={link.location} className="text-primary-foreground/80 hover:text-primary-foreground">
+                      {link.value}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                        {/* Company */}
-                        <div>
-                            <h2 className="mb-4 text-lg font-semibold">Company</h2>
-                            <ul className="space-y-2 text-sm">
-                                {companyLinks.map((company) => (
-                                    <li key={company.value}>
-                                        <Link
-                                            to={company.location}
-                                            className=" hover:underline"
-                                        >
-                                            {company.value}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+            <div>
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary-foreground">
+                Company
+              </h3>
+              <ul className="space-y-2 text-sm">
+                {companyLinks.map((company) => (
+                  <li key={company.value}>
+                    <Link to={company.location} className="text-primary-foreground/80 hover:text-primary-foreground">
+                      {company.value}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                        {/*social Medias*/}
-                        <div >
-                            <h2 className="mb-4 text-lg font-semibold">Social</h2>
-                            <div className="flex flex-row justify-start gap-3">
-                                <LinkedinIcon />
-                                <YoutubeIcon />
-                                <InstagramIcon />
-                                <FacebookIcon />
-                            </div>
-                        </div>
-                    </div>
+            <div>
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary-foreground">
+                Social
+              </h3>
+              <div className="flex items-center gap-2">
+                {[LinkedinIcon, YoutubeIcon, InstagramIcon, FacebookIcon].map((Icon, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="rounded-md border border-primary-foreground/35 bg-primary-foreground/10 p-2 text-primary-foreground transition-colors hover:bg-primary-foreground/20"
+                    aria-label="Social link"
+                  >
+                    <Icon size={18} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
 
+          <Separator className="my-6 bg-primary-foreground/20" />
 
-                    <Separator className="mt-5 bg-black dark:bg-white" />
+          <div className="flex flex-col items-center justify-between gap-3 text-sm text-primary-foreground/80 md:flex-row">
+            <p>© {new Date().getFullYear()} {companyName}. All rights reserved.</p>
+            <p>Developed by Group Number 02.</p>
+          </div>
+        </CardContent>
+      </Card>
+    </footer>
+  )
+}
 
-                    {/* Bottom Bar */}
-                    <div className="pt-3 flex flex-col items-center justify-between gap-4 text-sm md:flex-row">
-                        <p >
-                            © {new Date().getFullYear()} Bus Ticket Booking. All rights reserved.
-                        </p>
-                        <div className="flex gap-4">
-                            <Link to="#" title="Cylvenda">Develop by Group Number 02.</Link>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-        </footer>
-    );
-};
-
-export default Footer;
+export default Footer

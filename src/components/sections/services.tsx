@@ -1,268 +1,135 @@
-import React from 'react';
+import React from "react"
 import {
-     Bus,
-     Wifi,
-     Coffee,
-     Monitor,
-     Zap,
-     Shield,
-     Headphones,
-     Clock,
-     CreditCard,
-     Package,
-     Users
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+  Bus,
+  CheckCircle2,
+  Clock,
+  Headphones,
+  Luggage,
+  Smartphone,
+  Wifi,
+  Zap,
+} from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
 
-interface ServiceCardProps {
-     icon: React.ReactNode;
-     title: string;
-     description: string;
-     features?: string[];
-}
-
-const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description, features }) => (
-     <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all hover:-translate-y-2 duration-300">
-          <div className="text-primary mb-4">{icon}</div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">{title}</h3>
-          <p className="text-gray-600 mb-4">{description}</p>
-          {features && (
-               <ul className="space-y-2">
-                    {features.map((feature, index) => (
-                         <li key={index} className="text-sm text-gray-600 flex items-start">
-                              <span className="text-primary mr-2">✓</span>
-                              <span>{feature}</span>
-                         </li>
-                    ))}
-               </ul>
-          )}
-     </div>
-);
-
+const services = [
+  {
+    icon: Bus,
+    title: "Intercity Trips",
+    description:
+      "Daily departures on high-demand routes with consistent seat availability.",
+    points: ["Express and regular routes", "Comfort seating", "Live seat view"],
+  },
+  {
+    icon: Clock,
+    title: "On-Time Operations",
+    description:
+      "Tighter dispatch workflows and delay alerts keep your day predictable.",
+    points: ["ETA updates", "Departure reminders", "Fewer missed rides"],
+  },
+  {
+    icon: Smartphone,
+    title: "Fast Booking",
+    description:
+      "Search, reserve, and confirm in minutes with mobile-friendly checkout.",
+    points: ["Simple flow", "Instant confirmation", "Secure payment"],
+  },
+  {
+    icon: Luggage,
+    title: "Parcel Support",
+    description:
+      "Trusted transport options for small cargo and personal parcels.",
+    points: ["Tracked handoff", "Route-wide drop points", "Clear pricing"],
+  },
+  {
+    icon: Headphones,
+    title: "24/7 Assistance",
+    description:
+      "Support team available whenever you need booking or travel help.",
+    points: ["Chat and call support", "Issue follow-up", "Trip guidance"],
+  },
+  {
+    icon: Wifi,
+    title: "Onboard Comfort",
+    description:
+      "Thoughtful amenities for long journeys and daily commuters alike.",
+    points: ["Wi-Fi enabled buses", "Charging ports", "Clean interiors"],
+  },
+]
 
 const Services: React.FC = () => {
+  return (
+    <section className="bg-muted/30 py-20 sm:py-24">
+      <div className="container mx-auto px-4">
+        <div className="mx-auto max-w-4xl text-center">
+          <Badge className="mb-4 bg-primary/15 text-primary hover:bg-primary/20">
+            Services
+          </Badge>
+          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            Practical features, not visual noise
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg">
+            Every service is designed to reduce friction and make bus travel more
+            predictable for passengers and teams.
+          </p>
+        </div>
 
-     const navigate = useNavigate()
-     return (
-          <div className="min-h-screen bg-gray-50">
-               {/* Hero Section */}
-               <section className="bg-primary border-t-2 border-accent  py-20">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-4xl mx-auto text-center">
-                              <h1 className="text-3xl font-bold mb-6">Our Services</h1>
-                              <p className="text-lg opacity-90">
-                                   Comprehensive bus transportation solutions designed for your comfort and convenience
-                              </p>
-                         </div>
-                    </div>
-               </section>
+        <div className="mx-auto mt-12 grid max-w-6xl gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => {
+            const Icon = service.icon
+            return (
+              <Card
+                key={service.title}
+                className="h-full border-border/70 bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40"
+              >
+                <CardContent className="p-6">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+                    <Icon size={20} />
+                  </div>
 
-               {/* Core Services */}
-               <section className="py-16">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-6xl mx-auto">
-                              <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-                                   What We Offer
-                              </h2>
-                              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                   <ServiceCard
-                                        icon={<Bus size={48} />}
-                                        title="Long Distance Travel"
-                                        description="Comfortable intercity bus services connecting major cities across the country."
-                                        features={[
-                                             'Modern fleet of buses',
-                                             'Multiple daily departures',
-                                             'Direct and express routes',
-                                             'Comfortable seating'
-                                        ]}
-                                   />
-                                   <ServiceCard
-                                        icon={<Clock size={48} />}
-                                        title="On-Time Guarantee"
-                                        description="We value your time with our commitment to punctual departures and arrivals."
-                                        features={[
-                                             '95% on-time performance',
-                                             'Real-time tracking',
-                                             'SMS/Email notifications',
-                                             'Schedule reliability'
-                                        ]}
-                                   />
-                                   <ServiceCard
-                                        icon={<CreditCard size={48} />}
-                                        title="Easy Booking"
-                                        description="Simple and secure online booking system with multiple payment options."
-                                        features={[
-                                             'Online ticket booking',
-                                             'Mobile app available',
-                                             'Multiple payment methods',
-                                             'Instant confirmation'
-                                        ]}
-                                   />
-                                   <ServiceCard
-                                        icon={<Package size={48} />}
-                                        title="Cargo Services"
-                                        description="Safe and reliable parcel delivery service on all our routes."
-                                        features={[
-                                             'Door-to-door delivery',
-                                             'Package tracking',
-                                             'Insurance available',
-                                             'Same-day service'
-                                        ]}
-                                   />
-                                   <ServiceCard
-                                        icon={<Users size={48} />}
-                                        title="Group Bookings"
-                                        description="Special rates and arrangements for group travel and corporate bookings."
-                                        features={[
-                                             'Discounted group rates',
-                                             'Dedicated support',
-                                             'Custom schedules',
-                                             'Corporate accounts'
-                                        ]}
-                                   />
-                                   <ServiceCard
-                                        icon={<Headphones size={48} />}
-                                        title="24/7 Support"
-                                        description="Round-the-clock customer support for all your travel needs."
-                                        features={[
-                                             'Phone support',
-                                             'Live chat',
-                                             'Email assistance',
-                                             'Emergency hotline'
-                                        ]}
-                                   />
-                              </div>
-                         </div>
-                    </div>
-               </section>
+                  <h3 className="text-lg font-semibold text-foreground">{service.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {service.description}
+                  </p>
 
-               {/* Onboard Amenities */}
-               <section className="py-16 bg-white">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-6xl mx-auto">
-                              <h2 className="text-3xl font-bold text-center text-gray-800 mb-4">
-                                   Onboard Amenities
-                              </h2>
-                              <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-                                   Travel in comfort with our modern fleet equipped with premium amenities
-                              </p>
-                              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                   <div className="text-center p-6">
-                                        <div className="inline-block p-4 bg-pink-100 rounded-full mb-4">
-                                             <Wifi className="text-primary" size={32} />
-                                        </div>
-                                        <h3 className="font-semibold text-gray-800 mb-2">Free WiFi</h3>
-                                        <p className="text-gray-600 text-sm">Stay connected throughout your journey</p>
-                                   </div>
-                                   <div className="text-center p-6">
-                                        <div className="inline-block p-4 bg-pink-100 rounded-full mb-4">
-                                             <Zap className="text-primary" size={32} />
-                                        </div>
-                                        <h3 className="font-semibold text-gray-800 mb-2">Charging Ports</h3>
-                                        <p className="text-gray-600 text-sm">USB and power outlets at every seat</p>
-                                   </div>
-                                   <div className="text-center p-6">
-                                        <div className="inline-block p-4 bg-pink-100 rounded-full mb-4">
-                                             <Monitor className="text-primary" size={32} />
-                                        </div>
-                                        <h3 className="font-semibold text-gray-800 mb-2">Entertainment</h3>
-                                        <p className="text-gray-600 text-sm">Movies and music on demand</p>
-                                   </div>
-                                   <div className="text-center p-6">
-                                        <div className="inline-block p-4 bg-pink-100 rounded-full mb-4">
-                                             <Coffee className="text-primary" size={32} />
-                                        </div>
-                                        <h3 className="font-semibold text-gray-800 mb-2">Refreshments</h3>
-                                        <p className="text-gray-600 text-sm">Complimentary snacks and beverages</p>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </section>
+                  <ul className="mt-4 space-y-2">
+                    {service.points.map((point) => (
+                      <li key={point} className="flex items-center gap-2 text-sm text-foreground">
+                        <CheckCircle2 size={16} className="text-primary" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
 
-               {/* Safety Features */}
-               <section className="py-16">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-6xl mx-auto">
-                              <div className="bg-white rounded-lg shadow-lg p-8 md:p-12">
-                                   <div className="flex items-center justify-center mb-6">
-                                        <Shield className="text-primary" size={64} />
-                                   </div>
-                                   <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-                                        Your Safety is Our Priority
-                                   </h2>
-                                   <div className="grid md:grid-cols-2 gap-8 mt-8">
-                                        <div>
-                                             <h3 className="text-xl font-semibold text-gray-800 mb-4">Safety Standards</h3>
-                                             <ul className="space-y-3 text-gray-700">
-                                                  <li className="flex items-start">
-                                                       <span className="text-primary mr-2">✓</span>
-                                                       <span>Regular vehicle maintenance and inspections</span>
-                                                  </li>
-                                                  <li className="flex items-start">
-                                                       <span className="text-primary mr-2">✓</span>
-                                                       <span>Professional, certified drivers</span>
-                                                  </li>
-                                                  <li className="flex items-start">
-                                                       <span className="text-primary mr-2">✓</span>
-                                                       <span>GPS tracking on all vehicles</span>
-                                                  </li>
-                                                  <li className="flex items-start">
-                                                       <span className="text-primary mr-2">✓</span>
-                                                       <span>Emergency equipment on board</span>
-                                                  </li>
-                                             </ul>
-                                        </div>
-                                        <div>
-                                             <h3 className="text-xl font-semibold text-gray-800 mb-4">Security Measures</h3>
-                                             <ul className="space-y-3 text-gray-700">
-                                                  <li className="flex items-start">
-                                                       <span className="text-primary mr-2">✓</span>
-                                                       <span>CCTV surveillance in all buses</span>
-                                                  </li>
-                                                  <li className="flex items-start">
-                                                       <span className="text-primary mr-2">✓</span>
-                                                       <span>Passenger identification verification</span>
-                                                  </li>
-                                                  <li className="flex items-start">
-                                                       <span className="text-primary mr-2">✓</span>
-                                                       <span>Secure luggage handling</span>
-                                                  </li>
-                                                  <li className="flex items-start">
-                                                       <span className="text-primary mr-2">✓</span>
-                                                       <span>24/7 emergency response team</span>
-                                                  </li>
-                                             </ul>
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </section>
+        <Card className="mx-auto mt-12 max-w-6xl overflow-hidden border-border/70 bg-card">
+          <CardContent className="grid gap-6 p-6 md:grid-cols-2 md:p-8">
+            <div>
+              <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15 text-primary">
+                <Zap size={20} />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground">Safety and operations baseline</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                We maintain scheduled inspections, driver checks, and route-level
+                monitoring to keep service quality stable.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {["Routine maintenance", "Certified drivers", "Vehicle tracking", "Emergency response"].map((item) => (
+                <div key={item} className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+  )
+}
 
-               {/* CTA Section */}
-               <section className="py-16 bg-primary ">
-                    <div className="container mx-auto px-4">
-                         <div className="max-w-4xl mx-auto text-center">
-                              <h2 className="text-3xl font-bold mb-6">Ready to Book Your Journey?</h2>
-                              <p className="text-lg mb-8 opacity-90">
-                                   Experience comfortable, safe, and reliable bus travel with us
-                              </p>
-                              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                   <button className="bg-white text-primary px-5 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-lg"
-                                   onClick={() => navigate("/schedule")}>
-                                        Book Now
-                                   </button>
-                                   <button className="border border-white  px-5 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors text-lg"
-                                        onClick={() => navigate("/schedule")}>
-                                        View Routes
-                                   </button>
-                              </div>
-                         </div>
-                    </div>
-               </section>
-          </div>
-     );
-};
-
-export default Services;
+export default Services

@@ -1,107 +1,67 @@
 # Frontend - Bus Ticket Booking System
 
-A modern React-based frontend for the Bus Ticket Booking System, built with Vite, TypeScript, and Tailwind CSS.
+React frontend for user booking, seat selection, payments flow, and admin management screens.
 
-## 🚀 Technologies
+## Tech Stack
 
-- React 19
-- TypeScript
+- React 19 + TypeScript
 - Vite
-- Tailwind CSS
-- Radix UI
+- Tailwind CSS + shadcn/ui
+- Zustand
+- Axios
 - React Router
-- date-fns
 
-## 🛠️ Getting Started
+## Getting Started
 
-1. Navigate to the frontend directory:
+1. Navigate to frontend:
    ```bash
    cd frontend
    ```
-
 2. Install dependencies:
    ```bash
-   npm install
+   pnpm install
    ```
-
-3. Start the development server:
+3. Start dev server:
    ```bash
-   npm run dev
+   pnpm dev
    ```
+4. Open: `http://localhost:5173`
 
-4. Open [http://localhost:5173](http://localhost:5173) in your browser.
+## Environment Variables
 
-## 📦 Available Scripts
+Create `frontend/.env`:
 
-- `npm run dev` - Start the development server
-- `npm run build` - Build for production
-- `npm run lint` - Run ESLint
-- `npm run preview` - Preview the production build
-
-## 🏗️ Project Structure
-
-```
-frontend/
-├── public/           # Static files
-└── src/
-    ├── components/   # Reusable UI components
-    ├── pages/        # Page components
-    ├── lib/         # Utility functions and configurations
-    ├── styles/      # Global styles and Tailwind configuration
-    └── App.tsx      # Main application component
+```env
+VITE_API_BASE_URL=http://127.0.0.1:8000/api/
 ```
 
-## 🔧 Environment Variables
+## Development / Coding
 
-Create a `.env` file in the frontend directory with the following variables:
+- Keep domain calls in `src/api/services/` and avoid direct API calls inside UI components.
+- Keep shared state in Zustand stores under `src/store/` and expose actions through hooks.
+- Use strong TypeScript contracts for API responses and store types; avoid `any`.
+- Build UI with shadcn tokens from `src/index.css` (`primary`, `muted`, `foreground`, `border`) for theme consistency.
+- Keep components focused and reusable (`components/`, `pages/`, `hooks/` separation).
+- Run lint before commits and keep imports/unused variables clean.
 
-```
-VITE_API_BASE_URL=http://localhost:8000
-```
+## Available Scripts
 
-## 🧪 Testing
-
-To run tests:
 ```bash
-npm test
+pnpm dev
+pnpm lint
+pnpm build
+pnpm preview
 ```
 
-## 🔄 Development
+## Project Structure
 
-This project uses Vite with the following plugins:
-- `@vitejs/plugin-react` - For React Fast Refresh
-- `@tailwindcss/vite` - For Tailwind CSS integration
+- `src/components/` reusable UI and feature components
+- `src/pages/` route-level pages
+- `src/routes/` router configuration and guards
+- `src/api/` axios client, endpoints, services
+- `src/store/` Zustand state stores
+- `src/hooks/` custom hooks
 
-## 🧹 Linting and Formatting
+## Notes
 
-This project uses ESLint with TypeScript support. The configuration includes:
-- TypeScript type checking
-- React-specific rules
-- Import sorting
-- Code style consistency
-## 🛠️ ESLint Configuration
-
-This project comes with a pre-configured ESLint setup that includes:
-
-```javascript
-// .eslintrc.js
-module.exports = {
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
-  ],
-  parser: '@typescript-eslint/parser',
-  plugins: ['react', '@typescript-eslint'],
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
-  rules: {
-    // Custom rules can be added here
-  },
-};
-```
-
+- If TypeScript build fails, check `tsconfig.app.json` compatibility with the installed TypeScript version.

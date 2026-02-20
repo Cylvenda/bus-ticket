@@ -278,23 +278,23 @@ export function AdminAppSidebar() {
                          <SidebarMenuItem>
                               <DropdownMenu>
                                    <DropdownMenuTrigger asChild>
-                                        <SidebarMenuButton className="w-full justify-start data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50">
+                                        <SidebarMenuButton
+                                             size="lg"
+                                             className="h-auto min-h-14 w-full justify-start data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50"
+                                        >
                                              <Avatar className="h-8 w-8 rounded-lg border-2 border-background shadow-sm">
                                                   <AvatarImage src={user?.avatar} alt={user?.firstName || "Admin"} />
                                                   <AvatarFallback className="bg-primary text-white font-semibold">
                                                        {getUserInitials()}
                                                   </AvatarFallback>
                                              </Avatar>
-                                             <div className="grid flex-1 text-left text-sm leading-tight">
+                                             <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
                                                   <span className="truncate font-semibold">
                                                        {user?.firstName || "Admin"} {user?.lastName || ""}
                                                   </span>
                                                   <span className="truncate text-xs text-muted-foreground">
                                                        {user?.email || "admin@example.com"}
                                                   </span>
-                                                  <Badge variant="secondary" className="w-fit mt-1 text-xs">
-                                                       Administrator
-                                                  </Badge>
                                              </div>
                                              <ChevronRight className="ml-auto h-4 w-4" />
                                         </SidebarMenuButton>

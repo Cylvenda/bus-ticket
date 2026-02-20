@@ -1,33 +1,26 @@
-import { useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import PagesWrapper from "@/components/layout/pages-wrapper"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAdminData } from "@/hooks/use-admin-data"
 import {
   BarChart3,
-  TrendingUp,
-  TrendingDown,
   Users,
   Ticket,
-  DollarSign,
   Calendar,
-  Download,
-  Filter,
   RefreshCw,
   Activity,
   Bus,
   MapPin,
-  Clock,
-  Star,
   ArrowUpRight,
   ArrowDownRight,
   MoreHorizontal,
+  MonitorSpeakerIcon,
 } from "lucide-react"
 
-interface AnalyticsCard {
+type AnalyticsCard = {
   title: string
   value: string | number
   change?: number
@@ -36,99 +29,188 @@ interface AnalyticsCard {
   description: string
 }
 
-interface ChartData {
+type ChartData = {
   name: string
   value: number
-  change?: number
+}
+
+const DAY_MS = 1000 * 60 * 60 * 24
+
+const periodDaysMap: Record<string, number> = {
+  "24h": 1,
+  "7d": 7,
+  "30d": 30,
+  "90d": 90,
+  "1y": 365,
+}
+
+const trendPercent = (current: number, previous: number) => {
+  if (previous === 0) return current > 0 ? 100 : 0
+  return Math.round(((current - previous) / previous) * 100)
+}
+
+const isInPeriod = (dateValue: string, days: number, offsetDays = 0) => {
+  const diffDays = Math.floor((Date.now() - new Date(dateValue).getTime()) / DAY_MS)
+  return diffDays >= offsetDays && diffDays < offsetDays + days
 }
 
 const Analytics = () => {
-  const { 
-    users, 
-    bookings, 
-    routes, 
-    buses, 
-    schedules, 
+  const {
+    users,
+    bookings,
+    routes,
+    buses,
+    schedules,
     busCompanies,
     loading,
-    error 
+    error,
+    refreshData,
   } = useAdminData()
 
   const [selectedPeriod, setSelectedPeriod] = useState("7d")
   const [refreshing, setRefreshing] = useState(false)
 
-  // Calculate analytics data
-  const totalRevenue = bookings?.reduce((sum, booking) => sum + (booking.price_paid || 0), 0) || 0
-  const activeUsers = users?.filter(user => user.is_active).length || 0
-  const totalBookings = bookings?.length || 0
-  const averageBookingValue = totalBookings > 0 ? totalRevenue / totalBookings : 0
+  const periodDays = periodDaysMap[selectedPeriod]
 
-  // Mock trend data (in real app, this would come from backend)
+  const bookingsData = useMemo(() => bookings ?? [], [bookings])
+  const usersData = users ?? []
+  const routesData = routes ?? []
+  const busesData = buses ?? []
+  const schedulesData = schedules ?? []
+  const companiesData = busCompanies ?? []
+
+  const currentBookings = useMemo(
+    () => bookingsData.filter((b) => isInPeriod(b.booked_at, periodDays, 0)),
+    [bookingsData, periodDays],
+  )
+
+  const previousBookings = useMemo(
+    () => bookingsData.filter((b) => isInPeriod(b.booked_at, periodDays, periodDays)),
+    [bookingsData, periodDays],
+  )
+
+  const totalRevenue = currentBookings.reduce((sum, b) => sum + (Number(b.price_paid) || 0), 0)
+  const previousRevenue = previousBookings.reduce((sum, b) => sum + (Number(b.price_paid) || 0), 0)
+
+  const totalBookings = currentBookings.length
+  const previousTotalBookings = previousBookings.length
+
+  const activeUsers = usersData.filter((user) => user.is_active).length
+  const averageBookingValue = totalBookings > 0 ? totalRevenue / totalBookings : 0
+  const previousAverageBookingValue =
+    previousTotalBookings > 0 ? previousRevenue / previousTotalBookings : 0
+
   const analyticsCards: AnalyticsCard[] = [
     {
-      title: "Total Revenue",
-      value: `TZS ${totalRevenue.toLocaleString()}`,
-      change: 12.5,
-      changeType: "increase",
-      icon: <DollarSign className="h-6 w-6" />,
-      description: "Total revenue from all bookings"
+      title: "Revenue",
+      value: `TZS ${Math.round(totalRevenue).toLocaleString()}`,
+      change: Math.abs(trendPercent(totalRevenue, previousRevenue)),
+      changeType: trendPercent(totalRevenue, previousRevenue) >= 0 ? "increase" : "decrease",
+      icon: <MonitorSpeakerIcon className="h-6 w-6" />,
+      description: `Compared to previous ${selectedPeriod}`,
     },
     {
-      title: "Total Bookings",
+      title: "Bookings",
       value: totalBookings,
-      change: 8.2,
-      changeType: "increase",
+      change: Math.abs(trendPercent(totalBookings, previousTotalBookings)),
+      changeType:
+        trendPercent(totalBookings, previousTotalBookings) >= 0 ? "increase" : "decrease",
       icon: <Ticket className="h-6 w-6" />,
-      description: "Total number of bookings"
+      description: `Total bookings in ${selectedPeriod}`,
     },
     {
       title: "Active Users",
       value: activeUsers,
-      change: 15.3,
-      changeType: "increase",
       icon: <Users className="h-6 w-6" />,
-      description: "Active registered users"
+      description: "Current active users",
     },
     {
-      title: "Average Booking Value",
+      title: "Avg Booking Value",
       value: `TZS ${Math.round(averageBookingValue).toLocaleString()}`,
-      change: -2.1,
-      changeType: "decrease",
+      change: Math.abs(trendPercent(averageBookingValue, previousAverageBookingValue)),
+      changeType:
+        trendPercent(averageBookingValue, previousAverageBookingValue) >= 0
+          ? "increase"
+          : "decrease",
       icon: <BarChart3 className="h-6 w-6" />,
-      description: "Average value per booking"
+      description: "Average price per booking",
+    },
+  ]
+
+  const chartRangeDays = Math.min(periodDays, 14)
+  const bookingTrends: ChartData[] = Array.from({ length: chartRangeDays }).map((_, index) => {
+    const daysOffset = chartRangeDays - index - 1
+    const dayDate = new Date(Date.now() - daysOffset * DAY_MS)
+
+    const value = currentBookings.filter((booking) => {
+      const bookingDate = new Date(booking.booked_at)
+      return bookingDate.toDateString() === dayDate.toDateString()
+    }).length
+
+    return {
+      name: dayDate.toLocaleDateString("en-US", { weekday: "short" }),
+      value,
     }
-  ]
+  })
 
-  // Mock chart data
-  const bookingTrends: ChartData[] = [
-    { name: "Mon", value: 45, change: 5 },
-    { name: "Tue", value: 52, change: 8 },
-    { name: "Wed", value: 38, change: -3 },
-    { name: "Thu", value: 65, change: 12 },
-    { name: "Fri", value: 78, change: 15 },
-    { name: "Sat", value: 92, change: 18 },
-    { name: "Sun", value: 58, change: -8 }
-  ]
+  const routePerformance = Object.values(
+    currentBookings.reduce<Record<string, { name: string; bookings: number; revenue: number }>>(
+      (acc, booking) => {
+        const routeName = `${booking.schedule.route_origin || "Unknown"} → ${
+          booking.schedule.route_destination || "Unknown"
+        }`
+        if (!acc[routeName]) {
+          acc[routeName] = { name: routeName, bookings: 0, revenue: 0 }
+        }
 
-  const routePerformance = routes?.slice(0, 5).map(route => ({
-    name: `${route.origin} → ${route.destination}`,
-    bookings: Math.floor(Math.random() * 100) + 20,
-    revenue: Math.floor(Math.random() * 1000000) + 100000,
-    rating: (Math.random() * 2 + 3).toFixed(1)
-  })) || []
+        acc[routeName].bookings += 1
+        acc[routeName].revenue += Number(booking.price_paid) || 0
 
-  const topBusCompanies = busCompanies?.slice(0, 5).map(company => ({
-    name: company.name,
-    totalBookings: Math.floor(Math.random() * 500) + 100,
-    revenue: Math.floor(Math.random() * 5000000) + 500000,
-    buses: Math.floor(Math.random() * 20) + 5
-  })) || []
+        return acc
+      },
+      {},
+    ),
+  )
+    .sort((a, b) => b.bookings - a.bookings)
+    .slice(0, 5)
+
+  const topBusCompanies = Object.values(
+    currentBookings.reduce<
+      Record<string, { name: string; totalBookings: number; revenue: number; buses: Set<string> }>
+    >((acc, booking) => {
+      const companyName = booking.bus_assignment?.bus?.company_name || "Unknown Company"
+      const plate = booking.bus_assignment?.bus?.plate_number || "UNKNOWN"
+
+      if (!acc[companyName]) {
+        acc[companyName] = {
+          name: companyName,
+          totalBookings: 0,
+          revenue: 0,
+          buses: new Set<string>(),
+        }
+      }
+
+      acc[companyName].totalBookings += 1
+      acc[companyName].revenue += Number(booking.price_paid) || 0
+      acc[companyName].buses.add(plate)
+
+      return acc
+    }, {}),
+  )
+    .map((company) => ({
+      ...company,
+      buses: company.buses.size,
+    }))
+    .sort((a, b) => b.totalBookings - a.totalBookings)
+    .slice(0, 5)
 
   const handleRefresh = async () => {
     setRefreshing(true)
-    // Simulate refresh delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setRefreshing(false)
+    try {
+      await refreshData()
+    } finally {
+      setRefreshing(false)
+    }
   }
 
   if (loading) {
@@ -169,88 +251,75 @@ const Analytics = () => {
   return (
     <PagesWrapper>
       <div className="space-y-6">
-        {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Analytics Dashboard</h1>
             <p className="text-muted-foreground mt-1">
-              Comprehensive insights and performance metrics
+              Metrics are generated from live database records.
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Filter
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleRefresh}
-              disabled={refreshing}
-              className="gap-2"
-            >
-              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing} className="gap-2">
+              <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
               Refresh
             </Button>
           </div>
         </div>
 
-        {/* Period Selector */}
         <div className="flex items-center gap-2">
-          {["24h", "7d", "30d", "90d", "1y"].map((period) => (
+          {Object.keys(periodDaysMap).map((period) => (
             <Button
               key={period}
               variant={selectedPeriod === period ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedPeriod(period)}
             >
-              {period === "24h" ? "Last 24 hours" : 
-               period === "7d" ? "Last 7 days" :
-               period === "30d" ? "Last 30 days" :
-               period === "90d" ? "Last 90 days" : "Last year"}
+              {period === "24h"
+                ? "Last 24 hours"
+                : period === "7d"
+                ? "Last 7 days"
+                : period === "30d"
+                ? "Last 30 days"
+                : period === "90d"
+                ? "Last 90 days"
+                : "Last year"}
             </Button>
           ))}
         </div>
 
-        {/* Analytics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {analyticsCards.map((card, index) => (
-            <Card key={index} className="border-0 shadow-lg">
+          {analyticsCards.map((card) => (
+            <Card key={card.title} className="border-0 shadow-lg">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <p className="text-sm font-medium text-muted-foreground">{card.title}</p>
                     <p className="text-2xl font-bold">{card.value}</p>
                     <p className="text-xs text-muted-foreground mt-1">{card.description}</p>
-                    {card.change && (
+                    {typeof card.change === "number" && (
                       <div className="flex items-center gap-1 mt-2">
                         {card.changeType === "increase" ? (
                           <ArrowUpRight className="h-3 w-3 text-green-600" />
                         ) : (
                           <ArrowDownRight className="h-3 w-3 text-red-600" />
                         )}
-                        <span className={`text-xs font-medium ${
-                          card.changeType === "increase" ? "text-green-600" : "text-red-600"
-                        }`}>
-                          {Math.abs(card.change)}% from last period
+                        <span
+                          className={`text-xs font-medium ${
+                            card.changeType === "increase" ? "text-green-600" : "text-red-600"
+                          }`}
+                        >
+                          {card.change}% from previous period
                         </span>
                       </div>
                     )}
                   </div>
-                  <div className="rounded-full bg-muted p-3">
-                    {card.icon}
-                  </div>
+                  <div className="rounded-full bg-muted p-3">{card.icon}</div>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Main Analytics Content */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -259,84 +328,72 @@ const Analytics = () => {
             <TabsTrigger value="companies">Companies</TabsTrigger>
           </TabsList>
 
-          {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Booking Trends */}
               <Card className="border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Activity className="h-5 w-5" />
                     Booking Trends
                   </CardTitle>
-                  <CardDescription>
-                    Daily booking activity for the selected period
-                  </CardDescription>
+                  <CardDescription>Daily bookings for selected period</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {bookingTrends.map((day, index) => (
-                      <div key={index} className="flex items-center gap-4">
-                        <div className="w-12 text-sm font-medium">{day.name}</div>
-                        <div className="flex-1">
-                          <Progress value={(day.value / 100) * 100} className="h-2" />
+                    {bookingTrends.map((day) => {
+                      const maxValue = Math.max(...bookingTrends.map((d) => d.value), 1)
+                      const pct = Math.round((day.value / maxValue) * 100)
+                      return (
+                        <div key={`${day.name}-${day.value}`} className="flex items-center gap-4">
+                          <div className="w-12 text-sm font-medium">{day.name}</div>
+                          <div className="flex-1">
+                            <Progress value={pct} className="h-2" />
+                          </div>
+                          <div className="w-16 text-right text-sm font-medium">{day.value}</div>
                         </div>
-                        <div className="w-16 text-right">
-                          <div className="text-sm font-medium">{day.value}</div>
-                          {day.change && (
-                            <div className={`text-xs ${
-                              day.change > 0 ? "text-green-600" : "text-red-600"
-                            }`}>
-                              {day.change > 0 ? "+" : ""}{day.change}%
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Quick Stats */}
               <Card className="border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <BarChart3 className="h-5 w-5" />
                     Quick Stats
                   </CardTitle>
-                  <CardDescription>
-                    Key performance indicators
-                  </CardDescription>
+                  <CardDescription>Live totals from database</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 border rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
                         <Bus className="h-4 w-4 text-blue-600" />
-                        <span className="text-sm font-medium">Active Buses</span>
+                        <span className="text-sm font-medium">Buses</span>
                       </div>
-                      <p className="text-2xl font-bold">{buses?.length || 0}</p>
+                      <p className="text-2xl font-bold">{busesData.length}</p>
                     </div>
                     <div className="p-4 border rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
                         <MapPin className="h-4 w-4 text-green-600" />
-                        <span className="text-sm font-medium">Total Routes</span>
+                        <span className="text-sm font-medium">Routes</span>
                       </div>
-                      <p className="text-2xl font-bold">{routes?.length || 0}</p>
+                      <p className="text-2xl font-bold">{routesData.length}</p>
                     </div>
                     <div className="p-4 border rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
                         <Calendar className="h-4 w-4 text-purple-600" />
                         <span className="text-sm font-medium">Schedules</span>
                       </div>
-                      <p className="text-2xl font-bold">{schedules?.length || 0}</p>
+                      <p className="text-2xl font-bold">{schedulesData.length}</p>
                     </div>
                     <div className="p-4 border rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
                         <Users className="h-4 w-4 text-orange-600" />
                         <span className="text-sm font-medium">Companies</span>
                       </div>
-                      <p className="text-2xl font-bold">{busCompanies?.length || 0}</p>
+                      <p className="text-2xl font-bold">{companiesData.length}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -344,53 +401,54 @@ const Analytics = () => {
             </div>
           </TabsContent>
 
-          {/* Bookings Tab */}
           <TabsContent value="bookings" className="space-y-6">
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle>Booking Analytics</CardTitle>
-                <CardDescription>
-                  Detailed booking performance metrics
-                </CardDescription>
+                <CardDescription>Status distribution for selected period</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-12">
-                  <Ticket className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Booking Analytics</h3>
-                  <p className="text-muted-foreground">
-                    Advanced booking analytics and charts would be displayed here
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-4 border rounded-lg">
+                    <p className="text-sm text-muted-foreground">Confirmed</p>
+                    <p className="text-2xl font-bold">
+                      {currentBookings.filter((b) => b.status === "CONFIRMED").length}
+                    </p>
+                  </div>
+                  <div className="p-4 border rounded-lg">
+                    <p className="text-sm text-muted-foreground">Pending/Held</p>
+                    <p className="text-2xl font-bold">
+                      {currentBookings.filter((b) => b.status === "PENDING" || b.status === "HELD").length}
+                    </p>
+                  </div>
+                  <div className="p-4 border rounded-lg">
+                    <p className="text-sm text-muted-foreground">Cancelled</p>
+                    <p className="text-2xl font-bold">
+                      {currentBookings.filter((b) => b.status === "CANCELLED").length}
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* Routes Tab */}
           <TabsContent value="routes" className="space-y-6">
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle>Route Performance</CardTitle>
-                <CardDescription>
-                  Top performing routes and metrics
-                </CardDescription>
+                <CardDescription>Top routes by bookings in selected period</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {routePerformance.map((route, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  {routePerformance.map((route) => (
+                    <div key={route.name} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex-1">
                         <h4 className="font-semibold">{route.name}</h4>
                         <div className="flex items-center gap-4 mt-1">
+                          <span className="text-sm text-muted-foreground">{route.bookings} bookings</span>
                           <span className="text-sm text-muted-foreground">
-                            {route.bookings} bookings
+                            TZS {Math.round(route.revenue).toLocaleString()}
                           </span>
-                          <span className="text-sm text-muted-foreground">
-                            TZS {route.revenue.toLocaleString()}
-                          </span>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 text-yellow-500" />
-                            <span className="text-sm">{route.rating}</span>
-                          </div>
                         </div>
                       </div>
                       <Button variant="ghost" size="sm">
@@ -403,31 +461,24 @@ const Analytics = () => {
             </Card>
           </TabsContent>
 
-          {/* Companies Tab */}
           <TabsContent value="companies" className="space-y-6">
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle>Bus Company Performance</CardTitle>
-                <CardDescription>
-                  Top performing bus companies
-                </CardDescription>
+                <CardDescription>Top companies by bookings in selected period</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {topBusCompanies.map((company, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  {topBusCompanies.map((company) => (
+                    <div key={company.name} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex-1">
                         <h4 className="font-semibold">{company.name}</h4>
                         <div className="flex items-center gap-4 mt-1">
+                          <span className="text-sm text-muted-foreground">{company.totalBookings} bookings</span>
                           <span className="text-sm text-muted-foreground">
-                            {company.totalBookings} bookings
+                            TZS {Math.round(company.revenue).toLocaleString()}
                           </span>
-                          <span className="text-sm text-muted-foreground">
-                            TZS {company.revenue.toLocaleString()}
-                          </span>
-                          <span className="text-sm text-muted-foreground">
-                            {company.buses} buses
-                          </span>
+                          <span className="text-sm text-muted-foreground">{company.buses} buses</span>
                         </div>
                       </div>
                       <Button variant="ghost" size="sm">

@@ -154,7 +154,7 @@ export function NavigationMenuHome() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem >
-                    <Button className="cursor-pointer text-black dark:text-white " onClick={() => navigate("/schedule")} >
+                    <Button className="cursor-pointer border-primary-foreground/35 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20" onClick={() => navigate("/schedule")} >
                         Schedule
                     </Button>
                 </NavigationMenuItem>
